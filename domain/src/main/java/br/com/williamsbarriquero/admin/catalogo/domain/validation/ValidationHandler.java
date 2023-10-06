@@ -5,6 +5,7 @@ import java.util.List;
 public interface ValidationHandler {
 
     ValidationHandler append(Error anError);
+
     ValidationHandler append(ValidationHandler anHandler);
 
     ValidationHandler validate(Validation aValidation);
@@ -16,6 +17,7 @@ public interface ValidationHandler {
     List<Error> getErrors();
 
     public interface Validation {
+
         void validate();
     }
 }
