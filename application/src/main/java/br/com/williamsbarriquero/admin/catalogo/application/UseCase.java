@@ -1,11 +1,6 @@
 package br.com.williamsbarriquero.admin.catalogo.application;
 
-import br.com.williamsbarriquero.admin.catalogo.domain.Category;
+public abstract class UseCase<IN, OUT> {
 
-public class UseCase {
-
-    public Category execute() {
-        return new Category();
-    }
-
+    public abstract OUT execute(IN anIn);
 }
