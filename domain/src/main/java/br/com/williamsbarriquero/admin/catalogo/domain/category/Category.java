@@ -14,7 +14,6 @@ public class Category extends AggregateRoot<CategoryID> {
     private Instant updatedAt;
     private Instant deletedAt;
 
-
     private Category(
             final CategoryID anId,
             final String aName,
