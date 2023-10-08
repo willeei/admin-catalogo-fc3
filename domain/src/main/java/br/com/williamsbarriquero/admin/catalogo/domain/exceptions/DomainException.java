@@ -2,11 +2,14 @@ package br.com.williamsbarriquero.admin.catalogo.domain.exceptions;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 
+import java.io.Serial;
 import java.util.List;
 
 public class DomainException extends NoStacktraceException {
 
-    private final List<Error> errors;
+    @Serial
+    private static final long serialVersionUID = -2089073722810137743L;
+    private final transient List<Error> errors;
 
     private DomainException(final String aMessage, final List<Error> anErrors) {
         super(aMessage);

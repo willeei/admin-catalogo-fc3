@@ -99,7 +99,7 @@ class CreateCategoryUseCaseTest {
     }
 
     @Test
-    void givenAValidCommand_whenGatewayThrowsRandomExcption_shouldReturnAExcption() {
+    void givenAValidCommand_whenGatewayThrowsRandomExcption_shouldReturnAException() {
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais essistida";
         final var expectedIsActive = true;
