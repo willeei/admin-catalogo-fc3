@@ -1,8 +1,6 @@
 package br.com.williamsbarriquero.admin.catalogo.application.category.create;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
-import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
-import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
