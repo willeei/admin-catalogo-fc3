@@ -34,7 +34,6 @@ class UpdateCategoryUseCaseTest {
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais essistida";
         final var expectedIsActive = true;
-
         final var expectedId = aCategory.getId();
 
         final var aCommand = UpdateCategoryCommand.with(
@@ -44,9 +43,11 @@ class UpdateCategoryUseCaseTest {
                 expectedIsActive
         );
 
-        when(categoryGateway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory));
+        when(categoryGateway.findById(eq(expectedId)))
+                .thenReturn(Optional.of(Category.with(aCategory)));
 
-        when(categoryGateway.update(any())).thenAnswer(returnsFirstArg());
+        when(categoryGateway.update(any()))
+                .thenAnswer(returnsFirstArg());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
@@ -55,14 +56,15 @@ class UpdateCategoryUseCaseTest {
 
         Mockito.verify(categoryGateway, times(1)).findById(eq(expectedId));
 
-        Mockito.verify(categoryGateway, times(1)).update(argThat(aUpdatedCategory ->
-                Objects.equals(expectedName, aCategory.getName())
-                        && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
-                        && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
-                        && Objects.equals(expectedId, aUpdatedCategory.getId())
-                        && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
-                        && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt()) // TODO fix assertion
-                        && Objects.isNull(aUpdatedCategory.getDeletedAt())
+        Mockito.verify(categoryGateway, times(1)).update(argThat(
+                aUpdatedCategory ->
+                        Objects.equals(expectedName, aUpdatedCategory.getName())
+                                && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
+                                && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
+                                && Objects.equals(expectedId, aUpdatedCategory.getId())
+                                && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
+                                && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt()) // TODO fix assertion
+                                && Objects.isNull(aUpdatedCategory.getDeletedAt())
         ));
     }
 }
