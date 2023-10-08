@@ -5,7 +5,6 @@ import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -20,7 +19,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdateCategoryUseCaseTest {
+class UpdateCategoryUseCaseTest {
 
     @InjectMocks
     private DefaultUpdateCategoryUseCase useCase;
@@ -62,7 +61,7 @@ public class UpdateCategoryUseCaseTest {
                         && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
                         && Objects.equals(expectedId, aUpdatedCategory.getId())
                         && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
-                        && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
+                        && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt()) // TODO fix assertion
                         && Objects.isNull(aUpdatedCategory.getDeletedAt())
         ));
     }
