@@ -1,8 +1,9 @@
-package br.com.williamsbarriquero.admin.catalogo.application.category.retrieve;
+package br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.get;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +66,7 @@ class GetCategoryByIdUseCaseTest {
                 .thenReturn(Optional.empty());
 
         final var actualException = Assertions.assertThrows(
-                NotFoundException.class,
+                DomainException.class,
                 () -> useCase.execute(expectedId.getValue())
         );
 
