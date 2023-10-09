@@ -22,7 +22,7 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
         this.categoryGateway = Objects.requireNonNull(aCatedoryGateway);
     }
 
-    private static Supplier<DomainException> notFound(CategoryID anId) {
+    private static Supplier<DomainException> notFound(final CategoryID anId) {
         return () -> DomainException.with(
                 new Error("Category with ID %s was not found".formatted(anId.getValue()))
         );
