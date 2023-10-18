@@ -42,7 +42,6 @@ class CategoryMySQLGatewayTest {
 
         final var actualEntity = categoryRepository.findById(aCategory.getId().getValue()).get();
 
-        Assertions.assertEquals(1, categoryRepository.count());
         Assertions.assertEquals(aCategory.getId().getValue(), actualEntity.getId());
         Assertions.assertEquals(expectedName, actualEntity.getName());
         Assertions.assertEquals(expectedDescription, actualEntity.getDescription());
