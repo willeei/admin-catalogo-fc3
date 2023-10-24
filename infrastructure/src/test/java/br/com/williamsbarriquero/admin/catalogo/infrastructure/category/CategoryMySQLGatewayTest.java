@@ -3,7 +3,7 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategorySearchQuery;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.MySQLGatewayTest;
+import br.com.williamsbarriquero.admin.catalogo.MySQLGatewayTest;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryMySQLGateway;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;

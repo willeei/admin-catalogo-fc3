@@ -43,6 +43,7 @@ public class CategoryUseCaseConfig {
         return new DefaultListCategoriesUseCase(categoryGateway);
     }
 
+    @Bean
     public DeleteCategoryUseCase deleteCategoryUseCase() {
         return new DefaultDeleteCategoryUseCase(categoryGateway);
     }

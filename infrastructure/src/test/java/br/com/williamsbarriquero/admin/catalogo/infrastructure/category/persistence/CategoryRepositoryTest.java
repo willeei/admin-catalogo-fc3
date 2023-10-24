@@ -1,7 +1,7 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.MySQLGatewayTest;
+import br.com.williamsbarriquero.admin.catalogo.MySQLGatewayTest;
 import org.hibernate.PropertyValueException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
