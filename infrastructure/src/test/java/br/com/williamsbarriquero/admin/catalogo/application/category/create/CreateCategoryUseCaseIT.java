@@ -1,33 +1,32 @@
 package br.com.williamsbarriquero.admin.catalogo.application.category.create;
 
+import br.com.williamsbarriquero.admin.catalogo.IntegrationTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Objects;
 
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 
-@ExtendWith(MockitoExtension.class)
-class CreateCategoryUseCaseTest {
+@IntegrationTest
+class CreateCategoryUseCaseIT {
 
-    @InjectMocks
-    private DefaultCreateCategoryUseCase useCase;
+    @Autowired
+    private CreateCategoryUseCase useCase;
 
-    @Mock
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @SpyBean
     private CategoryGateway categoryGateway;
-
-    @BeforeEach
-    void cleanUp() {
-        Mockito.reset(categoryGateway);
-    }
 
     @Test
     void givenAValidCommand_whenCallsCreateCategory_shouldReturnCategoryId() {
@@ -35,26 +34,27 @@ class CreateCategoryUseCaseTest {
         final var expectedDescription = "A categoria mais essistida";
         final var expectedIsActive = true;
 
+        Assertions.assertEquals(0, categoryRepository.count());
+
         final var aCommand =
                 CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
-
-        when(categoryGateway.create(any()))
-                .thenAnswer(returnsFirstArg());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(categoryGateway, times(1)).create(argThat(aCategory ->
-                Objects.equals(expectedName, aCategory.getName())
-                        && Objects.equals(expectedDescription, aCategory.getDescription())
-                        && Objects.equals(expectedIsActive, aCategory.isActive())
-                        && Objects.nonNull(aCategory.getId())
-                        && Objects.nonNull(aCategory.getCreatedAt())
-                        && Objects.nonNull(aCategory.getUpdatedAt())
-                        && Objects.isNull(aCategory.getDeletedAt())
-        ));
+        Assertions.assertEquals(1, categoryRepository.count());
+
+        final var actualCategory =
+                categoryRepository.findById(actualOutput.id().getValue()).get();
+
+        Assertions.assertEquals(expectedName, actualCategory.getName());
+        Assertions.assertEquals(expectedDescription, actualCategory.getDescription());
+        Assertions.assertEquals(expectedIsActive, actualCategory.isActive());
+        Assertions.assertNotNull(actualCategory.getCreatedAt());
+        Assertions.assertNotNull(actualCategory.getUpdatedAt());
+        Assertions.assertNull(actualCategory.getDeletedAt());
     }
 
     @Test
@@ -65,6 +65,8 @@ class CreateCategoryUseCaseTest {
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
 
+        Assertions.assertEquals(0, categoryRepository.count());
+
         final var aCommand =
                 CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
@@ -72,6 +74,8 @@ class CreateCategoryUseCaseTest {
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
+
+        Assertions.assertEquals(0, categoryRepository.count());
 
         Mockito.verify(categoryGateway, times(0)).create(any());
     }
@@ -85,23 +89,24 @@ class CreateCategoryUseCaseTest {
         final var aCommand =
                 CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGateway.create(any()))
-                .thenAnswer(returnsFirstArg());
+        Assertions.assertEquals(0, categoryRepository.count());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(categoryGateway, times(1)).create(argThat(aCategory ->
-                Objects.equals(expectedName, aCategory.getName())
-                        && Objects.equals(expectedDescription, aCategory.getDescription())
-                        && Objects.equals(expectedIsActive, aCategory.isActive())
-                        && Objects.nonNull(aCategory.getId())
-                        && Objects.nonNull(aCategory.getCreatedAt())
-                        && Objects.nonNull(aCategory.getUpdatedAt())
-                        && Objects.nonNull(aCategory.getDeletedAt())
-        ));
+        Assertions.assertEquals(1, categoryRepository.count());
+
+        final var actualCategory =
+                categoryRepository.findById(actualOutput.id().getValue()).get();
+
+        Assertions.assertEquals(expectedName, actualCategory.getName());
+        Assertions.assertEquals(expectedDescription, actualCategory.getDescription());
+        Assertions.assertEquals(expectedIsActive, actualCategory.isActive());
+        Assertions.assertNotNull(actualCategory.getCreatedAt());
+        Assertions.assertNotNull(actualCategory.getUpdatedAt());
+        Assertions.assertNotNull(actualCategory.getDeletedAt());
     }
 
     @Test
@@ -115,8 +120,8 @@ class CreateCategoryUseCaseTest {
         final var aCommand =
                 CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGateway.create(any()))
-                .thenThrow(new IllegalStateException(expectedErrorMessage));
+        doThrow(new IllegalStateException(expectedErrorMessage))
+                .when(categoryGateway).create(any());
 
         final var notification = useCase.execute(aCommand).getLeft();
 
