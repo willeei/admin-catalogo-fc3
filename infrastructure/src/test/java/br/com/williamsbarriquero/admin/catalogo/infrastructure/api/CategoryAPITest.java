@@ -12,11 +12,9 @@ import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.CreateCategoryApiInput;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.vavr.API;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,6 +23,7 @@ import java.util.Objects;
 import static io.vavr.API.Left;
 import static io.vavr.API.Right;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -169,7 +168,9 @@ public class CategoryAPITest {
                 .thenReturn(CategoryOutput.from(aCategory));
 
         // when
-        final var request = get("/categories/{id}", expectedId);
+        final var request = get("/categories/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
 
         final var response = this.mvc.perform(request)
                 .andDo(print());
@@ -195,10 +196,14 @@ public class CategoryAPITest {
         final var expectedId = CategoryID.from("123");
 
         when(getCategoryByIdUseCase.execute(any()))
-                .thenThrow(DomainException.with(Category.class, expectedId));
+                .thenThrow(DomainException.with(
+                        new Error("Category with ID %s was not found".formatted(expectedId))
+                ));
 
         // when
-        final var request = get("/categories/{id}", expectedId.getValue());
+        final var request = get("/categories/{id}", expectedId.getValue())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
 
         final var response = this.mvc.perform(request)
                 .andDo(print());
