@@ -8,6 +8,7 @@ import br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.ge
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
+import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.CreateCategoryApiInput;
@@ -196,9 +197,7 @@ public class CategoryAPITest {
         final var expectedId = CategoryID.from("123");
 
         when(getCategoryByIdUseCase.execute(any()))
-                .thenThrow(DomainException.with(
-                        new Error("Category with ID %s was not found".formatted(expectedId))
-                ));
+                .thenThrow(NotFoundException.with(Category.class, expectedId));
 
         // when
         final var request = get("/categories/{id}", expectedId.getValue())

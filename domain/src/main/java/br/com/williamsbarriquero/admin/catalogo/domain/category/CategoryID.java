@@ -26,6 +26,7 @@ public class CategoryID extends Identifier {
         return new CategoryID(anId.randomUUID().toString());
     }
 
+    @Override
     public String getValue() {
         return value;
     }
