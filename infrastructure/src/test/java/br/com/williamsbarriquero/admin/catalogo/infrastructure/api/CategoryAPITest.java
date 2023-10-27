@@ -3,6 +3,10 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.api;
 import br.com.williamsbarriquero.admin.catalogo.ControllerTest;
 import br.com.williamsbarriquero.admin.catalogo.application.category.create.CreateCategoryOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.category.create.CreateCategoryUseCase;
+import br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.get.CategoryOutput;
+import br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.get.GetCategoryByIdUseCase;
+import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
+import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
@@ -19,8 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Objects;
 
 import static io.vavr.API.Left;
+import static io.vavr.API.Right;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -37,33 +43,41 @@ public class CategoryAPITest {
     @MockBean
     private CreateCategoryUseCase createCategoryUseCase;
 
+    @MockBean
+    private GetCategoryByIdUseCase getCategoryByIdUseCase;
+
     @Test
     void givenAValidCommand_whenCallsCreateCategory_shouldReturnCategoryId() throws Exception {
+        // given
         final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
 
         final var aInput =
                 new CreateCategoryApiInput(expectedName, expectedDescription, expectedIsActive);
 
         when(createCategoryUseCase.execute(any()))
-                .thenReturn(API.Right(CreateCategoryOutput.from("123")));
+                .thenReturn(Right(CreateCategoryOutput.from("123")));
 
+        // when
         final var request = post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aInput));
 
-        this.mvc.perform(request)
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string(HttpHeaders.LOCATION, "/categories/123"))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+        final var response = this.mvc.perform(request)
+                .andDo(print());
+
+        // then
+        response.andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/categories/123"))
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", equalTo("123")));
 
         verify(createCategoryUseCase, times(1)).execute(argThat(cmd ->
                 Objects.equals(expectedName, cmd.name())
                         && Objects.equals(expectedDescription, cmd.description())
-                        && Objects.equals(expectedIsActive, cmd.isActive())));
+                        && Objects.equals(expectedIsActive, cmd.isActive())
+        ));
     }
 
     @Test
@@ -137,5 +151,60 @@ public class CategoryAPITest {
                         && Objects.equals(expectedDescription, cmd.description())
                         && Objects.equals(expectedIsActive, cmd.isActive())
         ));
+    }
+
+    @Test
+    public void givenAValidId_whenCallsGetCategory_shouldReturnCategory() throws Exception {
+        // given
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = true;
+
+        final var aCategory =
+                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+
+        final var expectedId = aCategory.getId().getValue();
+
+        when(getCategoryByIdUseCase.execute(any()))
+                .thenReturn(CategoryOutput.from(aCategory));
+
+        // when
+        final var request = get("/categories/{id}", expectedId);
+
+        final var response = this.mvc.perform(request)
+                .andDo(print());
+
+        // then
+        response.andExpect(status().isOk())
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.id", equalTo(expectedId)))
+                .andExpect(jsonPath("$.name", equalTo(expectedName)))
+                .andExpect(jsonPath("$.description", equalTo(expectedDescription)))
+                .andExpect(jsonPath("$.is_active", equalTo(expectedIsActive)))
+                .andExpect(jsonPath("$.created_at", equalTo(aCategory.getCreatedAt().toString())))
+                .andExpect(jsonPath("$.updated_at", equalTo(aCategory.getUpdatedAt().toString())))
+                .andExpect(jsonPath("$.deleted_at", equalTo(aCategory.getDeletedAt())));
+
+        verify(getCategoryByIdUseCase, times(1)).execute(eq(expectedId));
+    }
+
+    @Test
+    public void givenAInvalidId_whenCallsGetCategory_shouldReturnNotFound() throws Exception {
+        // given
+        final var expectedErrorMessage = "Category with ID 123 was not found";
+        final var expectedId = CategoryID.from("123");
+
+        when(getCategoryByIdUseCase.execute(any()))
+                .thenThrow(DomainException.with(Category.class, expectedId));
+
+        // when
+        final var request = get("/categories/{id}", expectedId.getValue());
+
+        final var response = this.mvc.perform(request)
+                .andDo(print());
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", equalTo(expectedErrorMessage)));
     }
 }
