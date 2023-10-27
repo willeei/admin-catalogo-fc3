@@ -22,8 +22,8 @@ public class CategoryID extends Identifier {
         return new CategoryID(anId);
     }
 
-    public static CategoryID from(final UUID anId) {
-        return new CategoryID(anId.randomUUID().toString());
+    public static CategoryID from() {
+        return new CategoryID(UUID.randomUUID().toString());
     }
 
     @Override

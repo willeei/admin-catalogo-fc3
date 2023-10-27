@@ -3,9 +3,7 @@ package br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.g
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
-import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
-import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 
 import java.util.Objects;
 import java.util.function.Supplier;
