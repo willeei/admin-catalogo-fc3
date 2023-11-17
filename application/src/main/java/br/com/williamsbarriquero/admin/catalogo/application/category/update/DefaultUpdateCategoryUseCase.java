@@ -4,6 +4,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
+import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
 import io.vavr.control.Either;
@@ -22,10 +23,8 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
         this.categoryGateway = Objects.requireNonNull(aCatedoryGateway);
     }
 
-    private static Supplier<DomainException> notFound(final CategoryID anId) {
-        return () -> DomainException.with(
-                new Error("Category with ID %s was not found".formatted(anId.getValue()))
-        );
+    private static Supplier<NotFoundException> notFound(final CategoryID anId) {
+        return () -> NotFoundException.with(Category.class, anId);
     }
 
     @Override
