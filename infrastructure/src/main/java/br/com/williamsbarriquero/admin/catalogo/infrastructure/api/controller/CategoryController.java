@@ -3,6 +3,7 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.api.controller;
 import br.com.williamsbarriquero.admin.catalogo.application.category.create.CreateCategoryCommand;
 import br.com.williamsbarriquero.admin.catalogo.application.category.create.CreateCategoryOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.category.create.CreateCategoryUseCase;
+import br.com.williamsbarriquero.admin.catalogo.application.category.delete.DeleteCategoryUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.get.GetCategoryByIdUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.category.update.UpdateCategoryCommand;
 import br.com.williamsbarriquero.admin.catalogo.application.category.update.UpdateCategoryOutput;
@@ -27,15 +28,18 @@ public class CategoryController implements CategoryAPI {
     private final CreateCategoryUseCase createCategoryUseCase;
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;
     private final UpdateCategoryUseCase updateCategoryUseCase;
+    private final DeleteCategoryUseCase deleteCategoryUseCase;
 
     public CategoryController(
             final CreateCategoryUseCase createCategoryUseCase,
             final GetCategoryByIdUseCase getCategoryByIdUseCase,
-            final UpdateCategoryUseCase updateCategoryUseCase
+            final UpdateCategoryUseCase updateCategoryUseCase,
+            final DeleteCategoryUseCase deleteCategoryUseCase
     ) {
         this.createCategoryUseCase = Objects.requireNonNull(createCategoryUseCase);
         this.getCategoryByIdUseCase = Objects.requireNonNull(getCategoryByIdUseCase);
-        this.updateCategoryUseCase = updateCategoryUseCase;
+        this.updateCategoryUseCase = Objects.requireNonNull(updateCategoryUseCase);
+        this.deleteCategoryUseCase = Objects.requireNonNull(deleteCategoryUseCase);
     }
 
     @Override
@@ -83,5 +87,10 @@ public class CategoryController implements CategoryAPI {
         final Function<UpdateCategoryOutput, ResponseEntity<?>> onSuccess = ResponseEntity::ok;
 
         return this.updateCategoryUseCase.execute(aCommand).fold(onError, onSuccess);
+    }
+
+    @Override
+    public void deletedById(final String anId) {
+        this.deleteCategoryUseCase.execute(anId);
     }
 }
