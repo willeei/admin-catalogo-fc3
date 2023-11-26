@@ -280,6 +280,43 @@ public class CategoryE2ETest {
         Assertions.assertNull(actualCategory.getDeletedAt());
     }
 
+    @Test
+    void asACatalogAdminIShouldBeAbleToDeleteACategoryByItsIdentifier() throws Exception {
+        Assertions.assertTrue(MYSQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, categoryRepository.count());
+
+        final var actualId = givenACategory("Filmes", null, true);
+
+        this.mvc.perform(
+                        delete("/categories/" + actualId.getValue())
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNoContent());
+
+//        deleteACategory(actualId)
+//                .andExpect(status().isNoContent());
+
+        //Poderia usar o get-by-id fazendo um assert no not found
+        Assertions.assertFalse(this.categoryRepository.existsById(actualId.getValue()));
+    }
+
+    @Test
+    void asACatalogAdminIShouldNotSeeAnErrorByDeletingANotExistentCategory() throws Exception {
+        Assertions.assertTrue(MYSQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, categoryRepository.count());
+
+        this.mvc.perform(
+                        delete("/categories/" + CategoryID.from("12313").getValue())
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNoContent());
+
+//        deleteACategory(CategoryID.from("12313"))
+//                .andExpect(status().isNoContent());
+
+        Assertions.assertEquals(0, categoryRepository.count());
+    }
+
     private ResultActions listCategories(final int page, final int perPage) throws Exception {
         return listCategories(page, perPage, "", "", "");
     }
