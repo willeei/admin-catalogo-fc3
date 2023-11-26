@@ -8,10 +8,10 @@ import java.util.Objects;
 
 public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
+    private final Instant createdAt;
     private String name;
     private String description;
     private boolean active;
-    private Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
 
@@ -134,7 +134,6 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
     public Instant getDeletedAt() {
         return deletedAt;
     }
-
 
     @Override
     public Category clone() {

@@ -2,8 +2,8 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.category.present
 
 import br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.get.CategoryOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.list.CategoryListOutput;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.CategoryResponse;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.CategoryListResponse;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.CategoryResponse;
 
 public interface CategoryApiPresenter {
 
@@ -37,6 +37,7 @@ public interface CategoryApiPresenter {
                 output.description(),
                 output.isActive(),
                 output.createdAt(),
+                output.updatedAt(),
                 output.deletedAt()
         );
     }
