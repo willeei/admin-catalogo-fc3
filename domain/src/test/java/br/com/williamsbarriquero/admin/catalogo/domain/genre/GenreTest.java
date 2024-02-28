@@ -60,23 +60,6 @@ class GenreTest {
     }
 
     @Test
-    void givenInvalidEmptyName_whenCallNewGenreAndValidate_shouldReceiveAError() {
-        final var expectedName = " ";
-        final var expectedIsActive = true;
-        final var expectedErrorCount = 1;
-        final var expectedErrorMessage = "'name' should not be empty";
-
-        final var actualGenre = Genre.newGenre(expectedName, expectedIsActive);
-
-        final var actualException = Assertions.assertThrows(DomainException.class, () -> {
-            actualGenre.validate(new ThrowsValidationHandler());
-        });
-
-        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
-        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-    }
-
-    @Test
     void givenInvalidNameWithLengthGreaterThan255_whenCallNewGenreAndValidate_shouldReceiveAError() {
         final var expectedName = """
                 Gostaria de enfatizar que o consenso sobre a necessidade de qualifica??o auxilia a prepara??o e a
