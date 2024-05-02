@@ -77,6 +77,15 @@ public class Genre extends AggregateRoot<GenreID> {
         new GenreValidator(this, handler).validate();
     }
 
+    public Genre addCategory(final CategoryID aCategoryID) {
+        if (aCategoryID == null) {
+            return this;
+        }
+        this.categories.add(aCategoryID);
+        this.updatedAt = InstantUtils.now();
+        return this;
+    }
+
     public Genre update(final String aName, final boolean isActive, final List<CategoryID> aCategories) {
         if (isActive) activate();
         else deactivate();
@@ -86,6 +95,15 @@ public class Genre extends AggregateRoot<GenreID> {
         this.updatedAt = InstantUtils.now();
 
         selfValidate();
+        return this;
+    }
+
+    public Genre removeCategory(final CategoryID aCategoryID) {
+        if (aCategoryID == null) {
+            return this;
+        }
+        this.categories.remove(aCategoryID);
+        this.updatedAt = InstantUtils.now();
         return this;
     }
 
