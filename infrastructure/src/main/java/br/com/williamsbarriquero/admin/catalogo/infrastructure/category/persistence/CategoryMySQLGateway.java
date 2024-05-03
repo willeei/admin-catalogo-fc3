@@ -3,7 +3,7 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persist
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
-import br.com.williamsbarriquero.admin.catalogo.domain.category.CategorySearchQuery;
+import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -48,7 +48,7 @@ public class CategoryMySQLGateway implements CategoryGateway {
     }
 
     @Override
-    public Pagination<Category> findAll(final CategorySearchQuery aQuery) {
+    public Pagination<Category> findAll(final SearchQuery aQuery) {
 
         final var sort = Sort.by(Direction.fromString(aQuery.direction()), aQuery.sort());
 

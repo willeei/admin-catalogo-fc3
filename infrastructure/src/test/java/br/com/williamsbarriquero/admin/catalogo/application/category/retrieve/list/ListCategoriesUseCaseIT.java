@@ -2,7 +2,7 @@ package br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.l
 
 import br.com.williamsbarriquero.admin.catalogo.IntegrationTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
-import br.com.williamsbarriquero.admin.catalogo.domain.category.CategorySearchQuery;
+import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
@@ -51,7 +51,7 @@ import java.util.stream.Stream;
         final var expectedTotal = 0;
 
         final var aQuery =
-                new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         final var actualResult = useCase.execute(aQuery);
 
@@ -82,7 +82,7 @@ import java.util.stream.Stream;
         final var expectedDirection = "asc";
 
         final var aQuery =
-                new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         final var actualResult = useCase.execute(aQuery);
 
@@ -112,7 +112,7 @@ import java.util.stream.Stream;
         final var expectedTerms = "";
 
         final var aQuery =
-                new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         final var actualResult = useCase.execute(aQuery);
 
@@ -142,7 +142,7 @@ import java.util.stream.Stream;
         final var expectedTerms = "";
 
         final var aQuery =
-                new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         final var actualResult = useCase.execute(aQuery);
 

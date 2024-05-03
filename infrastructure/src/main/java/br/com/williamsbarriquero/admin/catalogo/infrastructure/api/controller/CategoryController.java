@@ -9,7 +9,7 @@ import br.com.williamsbarriquero.admin.catalogo.application.category.retrieve.li
 import br.com.williamsbarriquero.admin.catalogo.application.category.update.UpdateCategoryCommand;
 import br.com.williamsbarriquero.admin.catalogo.application.category.update.UpdateCategoryOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.category.update.UpdateCategoryUseCase;
-import br.com.williamsbarriquero.admin.catalogo.domain.category.CategorySearchQuery;
+import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.api.CategoryAPI;
@@ -73,7 +73,7 @@ public class CategoryController implements CategoryAPI {
             final String direction
     ) {
         return this.listCategoriesUseCase
-                .execute(new CategorySearchQuery(page, perPage, search, sort, direction))
+                .execute(new SearchQuery(page, perPage, search, sort, direction))
                 .map(CategoryApiPresenter::present);
     }
 

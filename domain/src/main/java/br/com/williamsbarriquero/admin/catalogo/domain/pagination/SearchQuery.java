@@ -1,11 +1,10 @@
-package br.com.williamsbarriquero.admin.catalogo.domain.category;
+package br.com.williamsbarriquero.admin.catalogo.domain.pagination;
 
-public record CategorySearchQuery(
+public record SearchQuery(
         int page,
         int perPage,
         String terms,
         String sort,
         String direction
 ) {
-
 }

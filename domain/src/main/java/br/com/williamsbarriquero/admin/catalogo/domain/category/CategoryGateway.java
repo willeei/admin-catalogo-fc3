@@ -1,5 +1,6 @@
 package br.com.williamsbarriquero.admin.catalogo.domain.category;
 
+import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 
 import java.util.Optional;
@@ -14,5 +15,5 @@ public interface CategoryGateway {
 
     Category update(Category aCategory);
 
-    Pagination<Category> findAll(CategorySearchQuery aQuery);
+    Pagination<Category> findAll(SearchQuery aQuery);
 }
