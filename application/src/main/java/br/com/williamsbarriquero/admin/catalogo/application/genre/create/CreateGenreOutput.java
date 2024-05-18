@@ -1,16 +1,16 @@
-package br.com.williamsbarriquero.admin.catalogo.application.category.create;
+package br.com.williamsbarriquero.admin.catalogo.application.genre.create;
 
-import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
+import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
 
-public record CreateCategoryOutput(
+public record CreateGenreOutput(
         String id
 ) {
 
-    public static CreateCategoryOutput from(final String anId) {
-        return new CreateCategoryOutput(anId);
+    public static CreateGenreOutput from(final String anId) {
+        return new CreateGenreOutput(anId);
     }
 
-    public static CreateCategoryOutput from(final Category category) {
-        return new CreateCategoryOutput(category.getId().getValue());
+    public static CreateGenreOutput from(final Genre aGenre) {
+        return new CreateGenreOutput(aGenre.getId().getValue());
     }
 }
