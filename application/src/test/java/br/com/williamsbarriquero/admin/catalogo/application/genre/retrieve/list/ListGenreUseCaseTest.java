@@ -47,7 +47,7 @@ class ListGenreUseCaseTest extends UseCaseTest {
         final var expectedTotal = 2;
 
         final var expectedItems = genres.stream()
-                .map(GenreListOutupt::from)
+                .map(GenreListOutput::from)
                 .toList();
 
         final var expectedPagination = new Pagination<>(
@@ -115,7 +115,7 @@ class ListGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    void givneAValidQuery_whenCallsListGenreAndResultIsEmpty_shouldReturnGenres() {
+    void givneAValidQuery_whenCallsListGenreAndGatewayThrowsRandomError_shouldReturnException() {
         // given
         final var expectedPage = 0;
         final var expectedPerPage = 10;
