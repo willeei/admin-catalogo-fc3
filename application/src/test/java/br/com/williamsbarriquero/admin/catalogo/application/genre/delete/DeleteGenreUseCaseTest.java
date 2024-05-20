@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-public class DeleteGenreUseCaseTest extends UseCaseTest {
+class DeleteGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultDeleteGenreUseCase useCase;
@@ -39,7 +39,7 @@ public class DeleteGenreUseCaseTest extends UseCaseTest {
                 .when(genreGateway).deleteById(any());
 
         // when
-        assertDoesNotThrow(() -> useCase.execute(expectedId));
+        assertDoesNotThrow(() -> useCase.execute(expectedId.getValue()));
 
         // then
         verify(genreGateway, times(1)).deleteById(eq(expectedId));
