@@ -1,6 +1,6 @@
 package br.com.williamsbarriquero.admin.catalogo.application;
 
-public abstract class UseCase<IN, OUT> {
+public abstract class UseCase<I, O> {
 
-    public abstract OUT execute(IN anIn);
+    public abstract O execute(I anId);
 }

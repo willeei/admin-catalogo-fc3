@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-public class GetGenreByIdUseCaseTest extends UseCaseTest {
+class GetGenreByIdUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultGetGenreByIdUseCase useCase;

@@ -15,8 +15,8 @@ public class DefaultListCategoriesUseCase extends ListCategoriesUseCase {
     }
 
     @Override
-    public Pagination<CategoryListOutput> execute(final SearchQuery aQuery) {
-        return this.categoryGateway.findAll(aQuery)
+    public Pagination<CategoryListOutput> execute(final SearchQuery anId) {
+        return this.categoryGateway.findAll(anId)
                 .map(CategoryListOutput::from);
     }
 }
