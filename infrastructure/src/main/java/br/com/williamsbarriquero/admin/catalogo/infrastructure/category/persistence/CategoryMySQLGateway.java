@@ -8,6 +8,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import static br.com.williamsbarriquero.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
 import static org.springframework.data.domain.Sort.Direction;
 
-@Service
+@Component
 public class CategoryMySQLGateway implements CategoryGateway {
 
     private final CategoryRepository categoryRepository;
