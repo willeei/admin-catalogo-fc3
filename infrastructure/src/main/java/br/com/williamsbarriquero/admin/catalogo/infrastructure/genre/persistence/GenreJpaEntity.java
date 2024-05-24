@@ -7,6 +7,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
@@ -77,9 +78,7 @@ public class GenreJpaEntity {
                 GenreID.from(getId()),
                 getName(),
                 isActive(),
-                getCategories().stream()
-                        .map(gc -> CategoryID.from(gc.getId().getCategoryId()))
-                        .toList(),
+                getCategoryIDs(),
                 getCreatedAt(),
                 getUpdatedAt(),
                 getDeletedAt()
@@ -116,6 +115,12 @@ public class GenreJpaEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<CategoryID> getCategoryIDs() {
+        return getCategories().stream()
+                .map(gc -> CategoryID.from(gc.getId().getCategoryId()))
+                .toList();
     }
 
     public Set<GenreCategoryJpaEntity> getCategories() {
