@@ -4,6 +4,7 @@ import br.com.williamsbarriquero.admin.catalogo.MySQLGatewayTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
+import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryMySQLGateway;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.persistence.GenreJpaEntity;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.persistence.GenreMySQLGateway;
@@ -305,6 +306,40 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(aGenre.getCreatedAt(), persistedGenre.getCreatedAt());
         Assertions.assertTrue(aGenre.getUpdatedAt().isBefore(persistedGenre.getUpdatedAt()));
         Assertions.assertNotNull(persistedGenre.getDeletedAt());
+    }
+
+    @Test
+    void givenAPrePersistedGenre_whenCallsDeleteById_shouldDeleteGenre() {
+        // given
+        final var aGenre = Genre.newGenre("Action", true);
+
+        genreRepository.saveAndFlush(GenreJpaEntity.from(aGenre));
+
+        Assertions.assertEquals(1, genreRepository.count());
+
+        // when
+        genreGateway.deleteById(aGenre.getId());
+
+        // then
+        Assertions.assertEquals(0, genreRepository.count());
+
+    }
+
+    @Test
+    void givenANInvalideGenre_whenCallsDeleteById_shouldReturnOK() {
+        // given
+        final var aGenre = Genre.newGenre("Action", true);
+
+        genreRepository.saveAndFlush(GenreJpaEntity.from(aGenre));
+
+        Assertions.assertEquals(1, genreRepository.count());
+
+        // when
+        genreGateway.deleteById(GenreID.from("123"));
+
+        // then
+        Assertions.assertEquals(0, genreRepository.count());
+
     }
 
     private List<CategoryID> sorted(final List<CategoryID> expectedCategories) {
