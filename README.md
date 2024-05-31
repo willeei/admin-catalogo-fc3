@@ -19,19 +19,19 @@
 ## Como executar?
 
 1. Clonar o repositório:
-```sh
-git clone https://github.com/willbrr/codeflix-admin-catalogo-java.git
-```
+   ```sh
+      git clone https://github.com/willbrr/codeflix-admin-catalogo-java.git
+   ```
 
 2. Subir o banco de dados MySQL com Docker:
-```sh
-docker-compose up -d
-```
+   ```sh
+   docker-compose up -d
+   ```
 
 3. Executar as migrações do MySQL com o Flyway:
-```shell
-./gradlew flywayMigrate
-```
+   ```shell
+   ./gradlew flywayMigrate
+   ```
 
 > Também é possível executar como uma aplicação Java através do
 > método main() na classe Main.java
@@ -88,6 +88,7 @@ Quando isso acontecer o flyway ficará num estado de reparação
 com um registro na tabela `flyway_schema_history` com erro (`sucesso = 0`).
 
 Para executar a reparação, corrija os arquivos e execute:
+
 ```shell
 ./gradlew flywayRepair
 ```
