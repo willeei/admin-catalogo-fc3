@@ -20,31 +20,31 @@ public class GenreMySQLGateway implements GenreGateway {
     }
 
     @Override
-    public Genre create(Genre aGenre) {
+    public Genre create(final Genre aGenre) {
         return save(aGenre);
     }
 
     @Override
-    public void deleteById(GenreID anId) {
+    public void deleteById(final GenreID anId) {
         // TODO document why this method is empty
     }
 
     @Override
-    public Optional<Genre> findById(GenreID anId) {
+    public Optional<Genre> findById(final GenreID anId) {
         return Optional.empty();
     }
 
     @Override
-    public Genre update(Genre aGenre) {
-        return null;
+    public Genre update(final Genre aGenre) {
+        return save(aGenre);
     }
 
     @Override
-    public Pagination<Genre> findAll(SearchQuery aSearchQuery) {
+    public Pagination<Genre> findAll(final SearchQuery aSearchQuery) {
         return null;
     }
 
-    private Genre save(Genre aGenre) {
+    private Genre save(final Genre aGenre) {
         return this.genreRepository.save(GenreJpaEntity.from(aGenre))
                 .toAggregate();
     }
