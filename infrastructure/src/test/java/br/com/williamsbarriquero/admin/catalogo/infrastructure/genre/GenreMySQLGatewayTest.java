@@ -326,13 +326,9 @@ class GenreMySQLGatewayTest {
     }
 
     @Test
-    void givenANInvalideGenre_whenCallsDeleteById_shouldReturnOK() {
+    void givenAnInvalidGenre_whenCallsDeleteById_shouldReturnOK() {
         // given
-        final var aGenre = Genre.newGenre("Action", true);
-
-        genreRepository.saveAndFlush(GenreJpaEntity.from(aGenre));
-
-        Assertions.assertEquals(1, genreRepository.count());
+        Assertions.assertEquals(0, genreRepository.count());
 
         // when
         genreGateway.deleteById(GenreID.from("123"));
