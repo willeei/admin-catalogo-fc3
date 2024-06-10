@@ -7,4 +7,5 @@ public record SearchQuery(
         String sort,
         String direction
 ) {
+
 }

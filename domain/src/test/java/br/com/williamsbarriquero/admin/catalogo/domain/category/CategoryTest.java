@@ -36,7 +36,6 @@ class CategoryTest {
 
         final var actualCategory = Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
-
         final var actualException =
                 assertThrows(DomainException.class, () -> actualCategory.validate(new ThrowsValidationHandler()));
 
