@@ -23,6 +23,7 @@ class MySQLCleanUpExtension implements BeforeEachCallback {
         ));
     }
 
+    @SuppressWarnings("rawtypes")
     private void cleanUp(final Collection<CrudRepository> repositories) {
         repositories.forEach(CrudRepository::deleteAll);
     }
