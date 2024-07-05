@@ -1,19 +1,18 @@
 package br.com.williamsbarriquero.admin.catalogo.application.genre.create;
 
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.List;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
@@ -75,7 +74,7 @@ class CreateGenreUseCaseTest extends UseCaseTest {
                 CategoryID.from("123"),
                 CategoryID.from("456"));
 
-        final var aCommand = new CreateGenreCommand(expectedName, expectedIsActive, asString(expectedCategories));
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         when(categoryGateway.existsByIds(any()))
                 .thenReturn(expectedCategories);
