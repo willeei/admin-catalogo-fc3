@@ -1,21 +1,22 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence;
 
+import static br.com.williamsbarriquero.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static br.com.williamsbarriquero.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
-import static org.springframework.data.domain.Sort.Direction;
 
 @Component
 public class CategoryMySQLGateway implements CategoryGateway {
@@ -65,8 +66,8 @@ public class CategoryMySQLGateway implements CategoryGateway {
                 .map(this::assembleSpecification)
                 .orElse(null);
 
-        final var pageResult =
-                this.categoryRepository.findAll(Specification.where(specifications), page);
+        final var pageResult
+                = this.categoryRepository.findAll(Specification.where(specifications), page);
         return new Pagination<>(
                 pageResult.getNumber(),
                 pageResult.getSize(),
@@ -76,9 +77,13 @@ public class CategoryMySQLGateway implements CategoryGateway {
     }
 
     @Override
-    public List<CategoryID> existsByIds(final Iterable<CategoryID> ids) {
-        // TODO: Implementar quando chegar na camada de infraestrutura de genre
-        return Collections.emptyList();
+    public List<CategoryID> existsByIds(final Iterable<CategoryID> categoryIDs) {
+        final var ids = StreamSupport.stream(categoryIDs.spliterator(), false)
+                .map(CategoryID::getValue)
+                .toList();
+        return this.categoryRepository.existsByIds(ids).stream()
+                .map(CategoryID::from)
+                .toList();
     }
 
     private Category save(final Category aCategory) {

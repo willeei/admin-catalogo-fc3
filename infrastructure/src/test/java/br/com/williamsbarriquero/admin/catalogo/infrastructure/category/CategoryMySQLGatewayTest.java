@@ -1,17 +1,19 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.category;
 
-import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
-import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
-import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
-import br.com.williamsbarriquero.admin.catalogo.MySQLGatewayTest;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryMySQLGateway;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
+import java.util.Comparator;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import br.com.williamsbarriquero.admin.catalogo.MySQLGatewayTest;
+import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
+import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryMySQLGateway;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 
 @MySQLGatewayTest
 class CategoryMySQLGatewayTest {
@@ -329,5 +331,42 @@ class CategoryMySQLGatewayTest {
         Assertions.assertEquals(expectedTotal, actualResult.total());
         Assertions.assertEquals(expectedPerPage, actualResult.items().size());
         Assertions.assertEquals(filmes.getId(), actualResult.items().get(0).getId());
+    }
+
+    @Test
+    void givenPrePersistedCategories_whenCallsExistsByIds_shouldReturnIds() {
+        // given
+        final var filmes
+                = Category.newCategory("Filmes", "A categoria mais assistida", true);
+        final var series
+                = Category.newCategory("Série", "Uma categoria assistida", true);
+        final var documentarios
+                = Category.newCategory("Documentários", "a ctegoria menos assistida", true);
+
+        Assertions.assertEquals(0, categoryRepository.count());
+
+        categoryRepository.saveAll(List.of(
+                CategoryJpaEntity.from(filmes),
+                CategoryJpaEntity.from(series),
+                CategoryJpaEntity.from(documentarios)
+        ));
+
+        Assertions.assertEquals(3, categoryRepository.count());
+
+        final var expectedIds = List.of(filmes.getId(), series.getId());
+
+        final var ids = List.of(filmes.getId(), series.getId(), CategoryID.from("123"));
+
+        // when
+        final var actualResult = categoryGateway.existsByIds(ids);
+
+        // then
+        Assertions.assertEquals(sorted(actualResult), sorted(expectedIds));
+    }
+
+    private List<CategoryID> sorted(final List<CategoryID> expectedCategories) {
+        return expectedCategories.stream()
+                .sorted(Comparator.comparing(CategoryID::getValue))
+                .toList();
     }
 }

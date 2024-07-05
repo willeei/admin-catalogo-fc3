@@ -1,15 +1,16 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence;
 
-import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
-import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.Instant;
 
-@Entity
+import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
+import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+
+@Entity(name = "Category")
 @Table(name = "category")
 public class CategoryJpaEntity {
 
