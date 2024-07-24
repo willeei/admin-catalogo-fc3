@@ -3,6 +3,7 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.api;
 import br.com.williamsbarriquero.admin.catalogo.ControllerTest;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.create.CreateGenreOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.create.CreateGenreUseCase;
+import br.com.williamsbarriquero.admin.catalogo.application.genre.delete.DeleteGenreUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.get.GenreOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.get.GetGenreByIdUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.update.UpdateGenreOutput;
@@ -51,6 +52,9 @@ class GenreAPITest {
 
     @MockBean
     private UpdateGenreUseCase updateGenreUseCase;
+
+    @MockBean
+    private DeleteGenreUseCase deleteGenreUseCase;
 
     @Test
     void givenAValidCommand_whenCallsCreateGenre_shouldReturnGenreId() throws Exception {
@@ -253,5 +257,23 @@ class GenreAPITest {
                         && Objects.equals(expectedCategories, cmd.categories())
                         && Objects.equals(expectedIsActive, cmd.isActive())
         ));
+    }
+
+    @Test
+    void givenAValidId_whenCallsDeleteGenre_shouldBeOk() throws Exception {
+        // given
+        final var expectedId = "123";
+
+        doNothing().when(deleteGenreUseCase).execute(any());
+
+        // when
+        final var aRequest = delete("/genres/{id}", expectedId)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        final var result = this.mvc.perform(aRequest);
+
+        result.andExpect(status().isNoContent());
+
+        verify(deleteGenreUseCase).execute(eq(expectedId));
     }
 }
