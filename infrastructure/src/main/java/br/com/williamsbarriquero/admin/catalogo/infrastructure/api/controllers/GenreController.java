@@ -2,6 +2,7 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.api.controllers;
 
 import br.com.williamsbarriquero.admin.catalogo.application.genre.create.CreateGenreCommand;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.create.CreateGenreUseCase;
+import br.com.williamsbarriquero.admin.catalogo.application.genre.delete.DeleteGenreUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.get.GetGenreByIdUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.update.UpdateGenreCommand;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.update.UpdateGenreUseCase;
@@ -13,6 +14,7 @@ import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.Genr
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.presenters.GenreApiPresenter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -23,15 +25,18 @@ public class GenreController implements GenreAPI {
     private final CreateGenreUseCase createGenreUseCase;
     private final GetGenreByIdUseCase getGenreByIdUseCase;
     private final UpdateGenreUseCase updateGenreUseCase;
+    private final DeleteGenreUseCase deleteGenreUseCase;
 
     public GenreController(
             final CreateGenreUseCase createGenreUseCase,
             final GetGenreByIdUseCase getGenreByIdUseCase,
-            final UpdateGenreUseCase updateGenreUseCase
+            final UpdateGenreUseCase updateGenreUseCase,
+            final DeleteGenreUseCase deleteGenreUseCase
     ) {
         this.createGenreUseCase = createGenreUseCase;
         this.getGenreByIdUseCase = getGenreByIdUseCase;
         this.updateGenreUseCase = updateGenreUseCase;
+        this.deleteGenreUseCase = deleteGenreUseCase;
     }
 
     @Override
@@ -79,6 +84,6 @@ public class GenreController implements GenreAPI {
 
     @Override
     public void deleteById(final String id) {
-        // TODO document why this method is empty
+        this.deleteGenreUseCase.execute(id);
     }
 }

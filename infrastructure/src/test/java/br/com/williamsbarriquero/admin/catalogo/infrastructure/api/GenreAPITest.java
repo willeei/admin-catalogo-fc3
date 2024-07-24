@@ -6,6 +6,8 @@ import br.com.williamsbarriquero.admin.catalogo.application.genre.create.CreateG
 import br.com.williamsbarriquero.admin.catalogo.application.genre.delete.DeleteGenreUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.get.GenreOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.get.GetGenreByIdUseCase;
+import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.list.GenreListOutput;
+import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.list.ListGenreUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.update.UpdateGenreOutput;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.update.UpdateGenreUseCase;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
@@ -13,6 +15,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundExcept
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotificationException;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
+import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.CreateGenreRequest;
@@ -55,6 +58,9 @@ class GenreAPITest {
 
     @MockBean
     private DeleteGenreUseCase deleteGenreUseCase;
+
+    @MockBean
+    private ListGenreUseCase listGenreUseCase;
 
     @Test
     void givenAValidCommand_whenCallsCreateGenre_shouldReturnGenreId() throws Exception {
@@ -275,5 +281,56 @@ class GenreAPITest {
         result.andExpect(status().isNoContent());
 
         verify(deleteGenreUseCase).execute(eq(expectedId));
+    }
+
+    @Test
+    void givenValidParams_whenCallsListGenres_shouldReturnGenres() throws Exception {
+        // given
+        final var aGenre = Genre.newGenre("Action", false);
+
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "Ac";
+        final var expectedSort = "name";
+        final var expectedDirection = "asc";
+
+        final var expectedItemsCount = 1;
+        final var expectedTotal = 1;
+
+        final var expectedItems = List.of(GenreListOutput.from(aGenre));
+
+        when(listGenreUseCase.execute(any()))
+                .thenReturn(new Pagination<>(expectedPage, expectedPerPage, expectedTotal, expectedItems));
+
+        // when
+        final var aRequest = get("/genres")
+                .queryParam("page", String.valueOf(expectedPage))
+                .queryParam("perPage", String.valueOf(expectedPerPage))
+                .queryParam("sort", expectedSort)
+                .queryParam("dir", expectedDirection)
+                .queryParam("search", expectedTerms)
+                .accept(MediaType.APPLICATION_JSON);
+
+        final var response = this.mvc.perform(aRequest);
+
+        // then
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.current_page", equalTo(expectedPage)))
+                .andExpect(jsonPath("$.per_page", equalTo(expectedPerPage)))
+                .andExpect(jsonPath("$.total", equalTo(expectedTotal)))
+                .andExpect(jsonPath("$.items", hasSize(expectedItemsCount)))
+                .andExpect(jsonPath("$.items[0].id", equalTo(aGenre.getId().getValue())))
+                .andExpect(jsonPath("$.items[0].name", equalTo(aGenre.getName())))
+                .andExpect(jsonPath("$.items[0].is_active", equalTo(aGenre.isActive())))
+                .andExpect(jsonPath("$.items[0].created_at", equalTo(aGenre.getCreatedAt().toString())))
+                .andExpect(jsonPath("$.items[0].updated_at", equalTo(aGenre.getUpdatedAt().toString())));
+
+        verify(listGenreUseCase).execute(argThat(query ->
+                Objects.equals(expectedPage, query.page())
+                        && Objects.equals(expectedPerPage, query.perPage())
+                        && Objects.equals(expectedTerms, query.terms())
+                        && Objects.equals(expectedSort, query.sort())
+                        && Objects.equals(expectedDirection, query.direction())
+        ));
     }
 }
