@@ -6,7 +6,6 @@ import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.Genr
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.GenreResponse;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +27,7 @@ public interface GenreAPI {
             @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
-    ResponseEntity<?> create(@RequestBody CreateGenreRequest input);
+    ResponseEntity<?> createGenre(@RequestBody CreateGenreRequest input);
 
     @GetMapping
     @Operation(summary = "List all genres paginated")

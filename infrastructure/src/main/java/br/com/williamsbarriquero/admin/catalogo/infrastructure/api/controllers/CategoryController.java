@@ -39,7 +39,8 @@ public class CategoryController implements CategoryAPI {
             final GetCategoryByIdUseCase getCategoryByIdUseCase,
             final UpdateCategoryUseCase updateCategoryUseCase,
             final DeleteCategoryUseCase deleteCategoryUseCase,
-            final ListCategoriesUseCase listCategoriesUseCase) {
+            final ListCategoriesUseCase listCategoriesUseCase
+    ) {
         this.createCategoryUseCase = Objects.requireNonNull(createCategoryUseCase);
         this.getCategoryByIdUseCase = Objects.requireNonNull(getCategoryByIdUseCase);
         this.updateCategoryUseCase = Objects.requireNonNull(updateCategoryUseCase);
