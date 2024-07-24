@@ -32,7 +32,7 @@ import java.util.Objects;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -164,7 +164,7 @@ class GenreAPITest {
                 .andExpect(jsonPath("$.updated_at", equalTo(aGenre.getUpdatedAt().toString())))
                 .andExpect(jsonPath("$.deleted_at", equalTo(aGenre.getDeletedAt().toString())));
 
-        verify(getGenreByIdUseCase).execute(eq(expectedId));
+        verify(getGenreByIdUseCase).execute(expectedId);
     }
 
     @Test
@@ -188,7 +188,7 @@ class GenreAPITest {
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.message", equalTo(expectedErrorMessage)));
 
-        verify(getGenreByIdUseCase).execute(eq(expectedId.getValue()));
+        verify(getGenreByIdUseCase).execute(expectedId.getValue());
     }
 
     @Test
@@ -280,7 +280,7 @@ class GenreAPITest {
 
         result.andExpect(status().isNoContent());
 
-        verify(deleteGenreUseCase).execute(eq(expectedId));
+        verify(deleteGenreUseCase).execute(expectedId);
     }
 
     @Test
@@ -323,7 +323,8 @@ class GenreAPITest {
                 .andExpect(jsonPath("$.items[0].name", equalTo(aGenre.getName())))
                 .andExpect(jsonPath("$.items[0].is_active", equalTo(aGenre.isActive())))
                 .andExpect(jsonPath("$.items[0].created_at", equalTo(aGenre.getCreatedAt().toString())))
-                .andExpect(jsonPath("$.items[0].updated_at", equalTo(aGenre.getUpdatedAt().toString())));
+                .andExpect(jsonPath("$.items[0].updated_at", equalTo(aGenre.getUpdatedAt().toString())))
+                .andExpect(jsonPath("$.items[0].deleted_at", equalTo(aGenre.getDeletedAt().toString())));
 
         verify(listGenreUseCase).execute(argThat(query ->
                 Objects.equals(expectedPage, query.page())

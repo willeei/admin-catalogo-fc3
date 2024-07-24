@@ -12,7 +12,8 @@ public record GenreListOutput(
         boolean isActive,
         List<String> categories,
         Instant createdAt,
-        Instant updatedAt
+        Instant updatedAt,
+        Instant deletedAt
 ) {
 
     public static GenreListOutput from(final Genre aGenre) {
@@ -23,8 +24,9 @@ public record GenreListOutput(
                 aGenre.getCategories().stream()
                         .map(CategoryID::getValue)
                         .toList(),
+                aGenre.getCreatedAt(),
                 aGenre.getUpdatedAt(),
-                aGenre.getCreatedAt()
+                aGenre.getDeletedAt()
         );
     }
 }
