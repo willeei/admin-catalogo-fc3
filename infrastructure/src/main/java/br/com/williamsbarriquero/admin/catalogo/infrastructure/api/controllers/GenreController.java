@@ -3,6 +3,8 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.api.controllers;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.create.CreateGenreCommand;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.create.CreateGenreUseCase;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.get.GetGenreByIdUseCase;
+import br.com.williamsbarriquero.admin.catalogo.application.genre.update.UpdateGenreCommand;
+import br.com.williamsbarriquero.admin.catalogo.application.genre.update.UpdateGenreUseCase;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.api.GenreAPI;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.CreateGenreRequest;
@@ -20,12 +22,16 @@ public class GenreController implements GenreAPI {
 
     private final CreateGenreUseCase createGenreUseCase;
     private final GetGenreByIdUseCase getGenreByIdUseCase;
+    private final UpdateGenreUseCase updateGenreUseCase;
 
     public GenreController(
             final CreateGenreUseCase createGenreUseCase,
-            final GetGenreByIdUseCase getGenreByIdUseCase) {
+            final GetGenreByIdUseCase getGenreByIdUseCase,
+            final UpdateGenreUseCase updateGenreUseCase
+    ) {
         this.createGenreUseCase = createGenreUseCase;
         this.getGenreByIdUseCase = getGenreByIdUseCase;
+        this.updateGenreUseCase = updateGenreUseCase;
     }
 
     @Override
@@ -59,7 +65,16 @@ public class GenreController implements GenreAPI {
 
     @Override
     public ResponseEntity<?> updateById(final String id, final UpdateGenreRequest input) {
-        return null;
+        final var aCommand = UpdateGenreCommand.with(
+                id,
+                input.name(),
+                input.isActive(),
+                input.categories()
+        );
+
+        final var output = this.updateGenreUseCase.execute(aCommand);
+
+        return ResponseEntity.ok(output);
     }
 
     @Override

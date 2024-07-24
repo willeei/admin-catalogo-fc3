@@ -30,8 +30,7 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -199,7 +198,7 @@ class GenreAPITest {
         when(updateGenreUseCase.execute(any())).thenReturn(UpdateGenreOutput.from(aGenre));
 
         // when
-        final var aRequest = post("/genres/{id}", expectedId)
+        final var aRequest = put("/genres/{id}", expectedId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
 
@@ -207,7 +206,7 @@ class GenreAPITest {
 
         // then
         aResponse
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", equalTo(expectedId)));
 
@@ -225,7 +224,7 @@ class GenreAPITest {
         final var expectedIsActive = true;
         final var expectedErrorMessage = "'name' should not be null";
 
-        final var aGenre = Genre.newGenre(null, expectedIsActive)
+        final var aGenre = Genre.newGenre("Action", expectedIsActive)
                 .addCategories(expectedCategories.stream().map(CategoryID::from).toList());
         final var expectedId = aGenre.getId().getValue();
 
@@ -236,7 +235,7 @@ class GenreAPITest {
                 .thenThrow(new NotificationException("Error", Notification.create(new Error(expectedErrorMessage))));
 
         // when
-        final var aRequest = post("/genres/{id}", expectedId)
+        final var aRequest = put("/genres/{id}", expectedId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
 
@@ -255,6 +254,4 @@ class GenreAPITest {
                         && Objects.equals(expectedIsActive, cmd.isActive())
         ));
     }
-
-
 }
