@@ -1,4 +1,4 @@
-package br.com.williamsbarriquero.admin.catalogo.infrastructure.api.controller;
+package br.com.williamsbarriquero.admin.catalogo.infrastructure.api.controllers;
 
 import br.com.williamsbarriquero.admin.catalogo.application.category.create.CreateCategoryCommand;
 import br.com.williamsbarriquero.admin.catalogo.application.category.create.CreateCategoryOutput;

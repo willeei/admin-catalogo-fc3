@@ -1,4 +1,4 @@
-package br.com.williamsbarriquero.admin.catalogo.infrastructure.api.controller;
+package br.com.williamsbarriquero.admin.catalogo.infrastructure.api.controllers;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
