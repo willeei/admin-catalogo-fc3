@@ -40,6 +40,6 @@ public class GenreController implements GenreAPI {
 
     @Override
     public void deleteById(final String id) {
-
+        // TODO document why this method is empty
     }
 }

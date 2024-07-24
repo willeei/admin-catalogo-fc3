@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record CreateGenreRequest(
         @JsonProperty("name") String name,
         @JsonProperty("category_id") List<String> categories,
-        @JsonProperty("is_active") String active
+        @JsonProperty("is_active") Boolean active
 ) {
 
 }
