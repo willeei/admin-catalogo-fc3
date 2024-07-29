@@ -2,8 +2,8 @@ package br.com.williamsbarriquero.admin.catalogo.e2e.category;
 
 import br.com.williamsbarriquero.admin.catalogo.E2ETest;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+import br.com.williamsbarriquero.admin.catalogo.e2e.MockDsl;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.CategoryResponse;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.CreateCategoryRequest;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.configuration.json.Json;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @E2ETest
 @Testcontainers
-public class CategoryE2ETest {
+public class CategoryE2ETest implements MockDsl {
 
     @Container
     private static final MySQLContainer MYSQL_CONTAINER =
@@ -44,6 +44,11 @@ public class CategoryE2ETest {
     @DynamicPropertySource
     public static void setDatasourceProperties(final DynamicPropertyRegistry registry) {
         registry.add("mysql.port", () -> MYSQL_CONTAINER.getMappedPort(3306));
+    }
+
+    @Override
+    public MockMvc mvc() {
+        return this.mvc;
     }
 
     @Test
@@ -341,26 +346,6 @@ public class CategoryE2ETest {
                 .contentType(MediaType.APPLICATION_JSON);
 
         return this.mvc.perform(aRequest);
-    }
-
-    private CategoryID givenACategory(
-            final String aName,
-            final String aDescription,
-            final boolean isActive
-    ) throws Exception {
-        final var aRequestBody = new CreateCategoryRequest(aName, aDescription, isActive);
-
-        final var aRequest = post("/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValueAsString(aRequestBody));
-
-        final var actualId = this.mvc.perform(aRequest)
-                .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse().getHeader("Location")
-                .replace("/categories/", "");
-
-        return CategoryID.from(actualId);
     }
 
     private CategoryResponse retrieveACategory(final CategoryID anId) throws Exception {
