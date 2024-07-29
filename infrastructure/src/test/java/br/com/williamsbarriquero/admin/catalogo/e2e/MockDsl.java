@@ -41,6 +41,10 @@ public interface MockDsl {
         return listCategories(page, perPage, "", "", "");
     }
 
+    default ResultActions listCategories(final int page, final int perPage, final String search) throws Exception {
+        return listCategories(page, perPage, search, "", "");
+    }
+
     default ResultActions listCategories(
             final int page,
             final int perPage,
@@ -49,10 +53,6 @@ public interface MockDsl {
             final String direction
     ) throws Exception {
         return this.list("/categories", page, perPage, search, sort, direction);
-    }
-
-    default ResultActions listCategories(final int page, final int perPage, final String search) throws Exception {
-        return listCategories(page, perPage, search, "", "");
     }
 
     default CategoryResponse retrieveACategory(final CategoryID anId) throws Exception {
@@ -73,6 +73,23 @@ public interface MockDsl {
         return GenreID.from(actualId);
     }
 
+    default ResultActions listGenres(final int page, final int perPage) throws Exception {
+        return listGenres(page, perPage, "", "", "");
+    }
+
+    default ResultActions listGenres(final int page, final int perPage, final String search) throws Exception {
+        return listGenres(page, perPage, search, "", "");
+    }
+
+    default ResultActions listGenres(
+            final int page,
+            final int perPage,
+            final String search,
+            final String sort,
+            final String direction
+    ) throws Exception {
+        return this.list("/genres", page, perPage, search, sort, direction);
+    }
 
     default <A, D> List<D> mapTo(final List<A> actual, final Function<A, D> mapper) {
         return actual.stream()
