@@ -9,6 +9,7 @@ import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.U
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.configuration.json.Json;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.CreateGenreRequest;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.GenreResponse;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -94,6 +95,10 @@ public interface MockDsl {
 
     default GenreResponse retrieveAGenre(final GenreID anId) throws Exception {
         return retrieve("/genres/", anId, GenreResponse.class);
+    }
+
+    default ResultActions updateAGenre(final Identifier anId, final UpdateGenreRequest aRequestBody) throws Exception {
+        return update("/genres/", anId, aRequestBody);
     }
 
     default <A, D> List<D> mapTo(final List<A> actual, final Function<A, D> mapper) {
