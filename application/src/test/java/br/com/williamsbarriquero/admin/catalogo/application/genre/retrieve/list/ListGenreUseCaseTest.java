@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
@@ -72,7 +71,7 @@ class ListGenreUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
+        Mockito.verify(genreGateway, times(1)).findAll(aQuery);
     }
 
     @Test
@@ -111,7 +110,7 @@ class ListGenreUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
+        Mockito.verify(genreGateway, times(1)).findAll(aQuery);
     }
 
     @Test
@@ -132,13 +131,13 @@ class ListGenreUseCaseTest extends UseCaseTest {
                 new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> {
-            useCase.execute(aQuery);
-        });
+        final var actualException = Assertions.assertThrows(
+                IllegalStateException.class, () -> useCase.execute(aQuery)
+        );
 
         // then
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
+        Mockito.verify(genreGateway, times(1)).findAll(aQuery);
     }
 }

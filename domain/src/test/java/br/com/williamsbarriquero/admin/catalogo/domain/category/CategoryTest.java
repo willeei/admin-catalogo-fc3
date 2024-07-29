@@ -36,8 +36,9 @@ class CategoryTest {
 
         final var actualCategory = Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
+        final var throwsValidationHandler = new ThrowsValidationHandler();
         final var actualException =
-                assertThrows(DomainException.class, () -> actualCategory.validate(new ThrowsValidationHandler()));
+                assertThrows(DomainException.class, () -> actualCategory.validate(throwsValidationHandler));
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
@@ -53,9 +54,9 @@ class CategoryTest {
 
         final var actualCategory = Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
-
+        final var throwsValidationHandler = new ThrowsValidationHandler();
         final var actualException =
-                assertThrows(DomainException.class, () -> actualCategory.validate(new ThrowsValidationHandler()));
+                assertThrows(DomainException.class, () -> actualCategory.validate(throwsValidationHandler));
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
@@ -71,9 +72,9 @@ class CategoryTest {
 
         final var actualCategory = Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
-
+        final var throwsValidationHandler = new ThrowsValidationHandler();
         final var actualException =
-                assertThrows(DomainException.class, () -> actualCategory.validate(new ThrowsValidationHandler()));
+                assertThrows(DomainException.class, () -> actualCategory.validate(throwsValidationHandler));
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
@@ -95,8 +96,9 @@ class CategoryTest {
         final var actualCategory =
                 Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
+        final var throwsValidationHandler = new ThrowsValidationHandler();
         final var actualException =
-                assertThrows(DomainException.class, () -> actualCategory.validate(new ThrowsValidationHandler()));
+                assertThrows(DomainException.class, () -> actualCategory.validate(throwsValidationHandler));
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
@@ -263,7 +265,6 @@ class CategoryTest {
 
     @Test
     void givenAValidCategory_whenCallUpdateWithInvalidParams_thenReturnCategoryUpdated() {
-        final String expectedName = null;
         final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
 
@@ -275,10 +276,10 @@ class CategoryTest {
         final var createdAt = aCategory.getCreatedAt();
         final var updatedAt = aCategory.getUpdatedAt();
 
-        final var actualCategory = aCategory.update(expectedName, expectedDescription, expectedIsActive);
+        final var actualCategory = aCategory.update(null, expectedDescription, expectedIsActive);
 
         assertEquals(aCategory.getId(), actualCategory.getId());
-        assertEquals(expectedName, actualCategory.getName());
+        assertNull(actualCategory.getName());
         assertEquals(expectedDescription, actualCategory.getDescription());
         assertTrue(aCategory.isActive());
         assertEquals(createdAt, actualCategory.getCreatedAt());
