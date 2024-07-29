@@ -65,6 +65,10 @@ public interface MockDsl {
         return update("/categories/", anId, aRequestBody);
     }
 
+    default ResultActions deleteAGenre(final Identifier anId) throws Exception {
+        return delete("/genres/", anId);
+    }
+
     default GenreID givenAGenre(
             final String aName,
             final boolean isActive,

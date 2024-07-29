@@ -2,6 +2,7 @@ package br.com.williamsbarriquero.admin.catalogo.e2e.genre;
 
 import br.com.williamsbarriquero.admin.catalogo.E2ETest;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
 import br.com.williamsbarriquero.admin.catalogo.e2e.MockDsl;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.persistence.GenreRepository;
@@ -311,5 +312,29 @@ class GenreE2ETest implements MockDsl {
         Assertions.assertNotNull(actualGenre.getCreatedAt());
         Assertions.assertNotNull(actualGenre.getUpdatedAt());
         Assertions.assertNull(actualGenre.getDeletedAt());
+    }
+
+    @Test
+    void asACatalogAdminIShouldBeAbleToDeleteAGenreByItsIdentifier() throws Exception {
+        Assertions.assertTrue(MYSQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        final var actualId = givenAGenre("Drama", true, List.of());
+
+        deleteAGenre(actualId).andExpect(status().isNoContent());
+
+        //Poderia usar o get-by-id fazendo um assert no not found
+        Assertions.assertFalse(this.genreRepository.existsById(actualId.getValue()));
+        Assertions.assertEquals(0, genreRepository.count());
+    }
+
+    @Test
+    void asACatalogAdminIShouldNotSeeAnErrorByDeletingANotExistentGenre() throws Exception {
+        Assertions.assertTrue(MYSQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        deleteAGenre(GenreID.from("12313")).andExpect(status().isNoContent());
+
+        Assertions.assertEquals(0, genreRepository.count());
     }
 }
