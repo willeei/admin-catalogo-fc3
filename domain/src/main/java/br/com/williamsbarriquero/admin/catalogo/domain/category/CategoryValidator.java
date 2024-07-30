@@ -6,8 +6,9 @@ import br.com.williamsbarriquero.admin.catalogo.domain.validation.Validator;
 
 public class CategoryValidator extends Validator {
 
-    public static final int NAME_MAX_LENGTH = 255;
-    public static final int NAME_MIN_LENGTH = 3;
+    private static final int NAME_MAX_LENGTH = 255;
+    private static final int NAME_MIN_LENGTH = 3;
+
     private final Category category;
 
     protected CategoryValidator(final Category aCategory, ValidationHandler aHandler) {
