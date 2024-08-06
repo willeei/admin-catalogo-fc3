@@ -2,8 +2,6 @@ package br.com.williamsbarriquero.admin.catalogo.application.castmember.update;
 
 import br.com.williamsbarriquero.admin.catalogo.application.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
-import br.com.williamsbarriquero.admin.catalogo.application.castmember.update.create.DefaultUpdateCastMemberUseCase;
-import br.com.williamsbarriquero.admin.catalogo.application.castmember.update.create.UpdateCastMemberCommand;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;

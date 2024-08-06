@@ -1,4 +1,4 @@
-package br.com.williamsbarriquero.admin.catalogo.application.castmember.update.create;
+package br.com.williamsbarriquero.admin.catalogo.application.castmember.update;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
 
