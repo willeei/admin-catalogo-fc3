@@ -31,7 +31,7 @@ class CreateCategoryUseCaseIT {
     @Test
     void givenAValidCommand_whenCallsCreateCategory_shouldReturnCategoryId() {
         final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
 
         Assertions.assertEquals(0, categoryRepository.count());
@@ -60,7 +60,7 @@ class CreateCategoryUseCaseIT {
     @Test
     void givenAInvalidName_whenCallsCreateCategory_thenShouldReturnDomainException() {
         final String expectedName = null;
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
@@ -83,7 +83,7 @@ class CreateCategoryUseCaseIT {
     @Test
     void givenAValidCommandWithInactiveCategory_whenCallsCreateCategory_shouldReturnInactiveCategoryId() {
         final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = false;
 
         final var aCommand =
@@ -110,9 +110,9 @@ class CreateCategoryUseCaseIT {
     }
 
     @Test
-    void givenAValidCommand_whenGatewayThrowsRandomExcption_shouldReturnAException() {
+    void givenAValidCommand_whenGatewayThrowsRandomException_shouldReturnAException() {
         final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
         final var expectedErrorMessage = "Gateway error";
         final var expectedErrorCount = 1;
