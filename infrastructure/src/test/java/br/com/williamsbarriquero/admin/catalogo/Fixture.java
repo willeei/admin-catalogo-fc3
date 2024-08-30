@@ -11,7 +11,7 @@ public final class Fixture {
         return FAKER.name().fullName();
     }
 
-    public static final class CastMember {
+    public static final class CastMembers {
 
         public static CastMemberType type() {
             return FAKER.options().option(CastMemberType.values());

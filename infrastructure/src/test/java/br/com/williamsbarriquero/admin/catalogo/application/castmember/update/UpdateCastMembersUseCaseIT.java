@@ -20,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
-class UpdateCastMemberUseCaseIT {
+class UpdateCastMembersUseCaseIT {
 
     @Autowired
     private UpdateCastMemberUseCase useCase;
@@ -129,7 +129,7 @@ class UpdateCastMemberUseCaseIT {
         // given
         final var expectedId = CastMemberID.from("123");
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var expectedErrorMessages = "CastMember with ID 123 was not found";
 

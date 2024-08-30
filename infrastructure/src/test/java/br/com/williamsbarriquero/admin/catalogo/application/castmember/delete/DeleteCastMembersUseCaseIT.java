@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
-class DeleteCastMemberUseCaseIT {
+class DeleteCastMembersUseCaseIT {
 
     @Autowired
     private DeleteCastMemberUseCase useCase;
@@ -32,8 +32,8 @@ class DeleteCastMemberUseCaseIT {
     @Test
     void givenAValidId_whenCallsDeleteCastMember_shouldDeleteIt() {
         // given
-        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMember.type());
-        final var aMemberTwo = CastMember.newMember(Fixture.name(), Fixture.CastMember.type());
+        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
+        final var aMemberTwo = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedId = aMember.getId();
 
@@ -56,7 +56,7 @@ class DeleteCastMemberUseCaseIT {
     @Test
     void givenAnInvalidId_whenCallsDeleteCastMember_shouldBeOk() {
         // given
-        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMember.type());
+        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedId = CastMemberID.from("123");
 
@@ -76,7 +76,7 @@ class DeleteCastMemberUseCaseIT {
     @Test
     void givenAValidId_whenCallsDeleteCastMemberAndGatewayThrowsException_shouldReceiveException() {
         // given
-        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMember.type());
+        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedId = CastMemberID.from("123");
 

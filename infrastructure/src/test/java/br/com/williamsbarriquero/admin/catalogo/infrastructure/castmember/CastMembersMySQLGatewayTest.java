@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static br.com.williamsbarriquero.admin.catalogo.Fixture.CastMember.type;
+import static br.com.williamsbarriquero.admin.catalogo.Fixture.CastMembers.type;
 import static br.com.williamsbarriquero.admin.catalogo.Fixture.name;
 
 @MySQLGatewayTest
-class CastMemberMySQLGatewayTest {
+class CastMembersMySQLGatewayTest {
 
     @Autowired
     private CastMemberMySQLGateway castMemberMySQLGateway;
