@@ -17,6 +17,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundExcept
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotificationException;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.models.CreateCastMemberRequest;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.models.UpdateCastMemberRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
