@@ -11,7 +11,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notifi
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public final class DefaultUpdateCastMemberUseCase extends UpdateCastMemberUseCase {
+public non-sealed class DefaultUpdateCastMemberUseCase extends UpdateCastMemberUseCase {
 
     private final CastMemberGateway castMemberGateway;
 

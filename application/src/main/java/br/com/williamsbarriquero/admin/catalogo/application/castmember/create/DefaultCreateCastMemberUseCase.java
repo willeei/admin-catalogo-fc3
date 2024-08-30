@@ -7,7 +7,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notifi
 
 import java.util.Objects;
 
-public final class DefaultCreateCastMemberUseCase extends CreateCastMemberUseCase {
+public non-sealed class DefaultCreateCastMemberUseCase extends CreateCastMemberUseCase {
 
     private final CastMemberGateway castMemberGateway;
 

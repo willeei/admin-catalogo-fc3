@@ -7,7 +7,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundExcept
 
 import java.util.Objects;
 
-public final class DefaultGetCastMemberByIdUseCase extends GetCastMemberByIdUseCase {
+public non-sealed class DefaultGetCastMemberByIdUseCase extends GetCastMemberByIdUseCase {
 
     private final CastMemberGateway castMemberGateway;
 
