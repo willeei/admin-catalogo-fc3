@@ -72,10 +72,7 @@ public interface GenreAPI {
     ResponseEntity<?> updateById(@PathVariable(name = "id") String id, @RequestBody UpdateGenreRequest input);
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(
-            value = "{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @DeleteMapping(value = "{id}")
     @Operation(summary = "Delete a genre by it's identifier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Deleted successfully"),
