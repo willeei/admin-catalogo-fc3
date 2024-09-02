@@ -87,7 +87,6 @@ class VideoTest extends UnitTest {
         final var expectedOpened = false;
         final var expectedPublished = false;
         final var expectedRating = Rating.L;
-        final var expectedEventCount = 1;
         final var expectedCategories = Set.of(CategoryID.unique());
         final var expectedGenres = Set.of(GenreID.unique());
         final var expectedMembers = Set.of(CastMemberID.unique());
@@ -161,7 +160,6 @@ class VideoTest extends UnitTest {
         final var expectedCategories = Set.of(CategoryID.unique());
         final var expectedGenres = Set.of(GenreID.unique());
         final var expectedMembers = Set.of(CastMemberID.unique());
-        final var expectedDomainEventSize = 1;
 
         final var aVideo = Video.newVideo(
                 expectedTitle,
@@ -224,7 +222,6 @@ class VideoTest extends UnitTest {
         final var expectedCategories = Set.of(CategoryID.unique());
         final var expectedGenres = Set.of(GenreID.unique());
         final var expectedMembers = Set.of(CastMemberID.unique());
-        final var expectedDomainEventSize = 1;
 
         final var aVideo = Video.newVideo(
                 expectedTitle,

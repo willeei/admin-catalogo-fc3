@@ -15,6 +15,8 @@ import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Throws
 
 class VideoValidatorTest extends UnitTest {
 
+    private final Class<DomainException> domainExceptionClazz = DomainException.class;
+
     @Test
     void givenNullTitle_whenCallsValidate_shouldReceiveError() {
         // given
@@ -52,7 +54,7 @@ class VideoValidatorTest extends UnitTest {
 
         // when
         final var actualError = Assertions.assertThrows(
-                DomainException.class,
+                domainExceptionClazz,
                 () -> actualVideo.validate(new ThrowsValidationHandler())
         );
 
@@ -98,7 +100,7 @@ class VideoValidatorTest extends UnitTest {
 
         // when
         final var actualError = Assertions.assertThrows(
-                DomainException.class,
+                domainExceptionClazz,
                 () -> actualVideo.validate(new ThrowsValidationHandler())
         );
 
@@ -150,7 +152,7 @@ class VideoValidatorTest extends UnitTest {
 
         // when
         final var actualError = Assertions.assertThrows(
-                DomainException.class,
+                domainExceptionClazz,
                 () -> actualVideo.validate(new ThrowsValidationHandler())
         );
 
@@ -191,7 +193,7 @@ class VideoValidatorTest extends UnitTest {
 
         // when
         final var actualError = Assertions.assertThrows(
-                DomainException.class,
+                domainExceptionClazz,
                 () -> actualVideo.validate(new ThrowsValidationHandler())
         );
 
@@ -250,7 +252,7 @@ class VideoValidatorTest extends UnitTest {
 
         // when
         final var actualError = Assertions.assertThrows(
-                DomainException.class,
+                domainExceptionClazz,
                 () -> actualVideo.validate(new ThrowsValidationHandler())
         );
 
@@ -291,7 +293,7 @@ class VideoValidatorTest extends UnitTest {
 
         // when
         final var actualError = Assertions.assertThrows(
-                DomainException.class,
+                domainExceptionClazz,
                 () -> actualVideo.validate(new ThrowsValidationHandler())
         );
 
@@ -332,7 +334,7 @@ class VideoValidatorTest extends UnitTest {
 
         // when
         final var actualError = Assertions.assertThrows(
-                DomainException.class,
+                domainExceptionClazz,
                 () -> actualVideo.validate(new ThrowsValidationHandler())
         );
 
