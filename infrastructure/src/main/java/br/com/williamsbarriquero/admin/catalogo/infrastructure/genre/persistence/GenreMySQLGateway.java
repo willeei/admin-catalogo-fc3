@@ -1,21 +1,22 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.persistence;
 
+import static org.springframework.data.jpa.domain.Specification.where;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.utils.SpecificationUtils;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import static org.springframework.data.jpa.domain.Specification.where;
 
 @Component
 public class GenreMySQLGateway implements GenreGateway {
@@ -84,7 +85,7 @@ public class GenreMySQLGateway implements GenreGateway {
     }
 
     @Override
-    public List<Genre> existsByIds(List<GenreID> anIds) {
+    public List<GenreID> existsByIds(Iterable<GenreID> anIds) {
         throw new UnsupportedOperationException("Unimplemented method 'existsByIds'");
     }
 }

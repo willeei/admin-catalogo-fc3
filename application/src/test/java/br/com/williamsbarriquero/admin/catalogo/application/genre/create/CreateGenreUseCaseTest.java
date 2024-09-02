@@ -1,18 +1,19 @@
 package br.com.williamsbarriquero.admin.catalogo.application.genre.create;
 
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
@@ -56,12 +57,12 @@ class CreateGenreUseCaseTest extends UseCaseTest {
 
         verify(genreGateway, times(1))
                 .create(argThat(aGenre -> Objects.equals(expectedName, aGenre.getName())
-                        && Objects.equals(expectedIsActive, aGenre.isActive())
-                        && Objects.equals(expectedCategories, aGenre.getCategories())
-                        && Objects.nonNull(aGenre.getId())
-                        && Objects.nonNull(aGenre.getCreatedAt())
-                        && Objects.nonNull(aGenre.getUpdatedAt())
-                        && Objects.isNull(aGenre.getDeletedAt())));
+                && Objects.equals(expectedIsActive, aGenre.isActive())
+                && Objects.equals(expectedCategories, aGenre.getCategories())
+                && Objects.nonNull(aGenre.getId())
+                && Objects.nonNull(aGenre.getCreatedAt())
+                && Objects.nonNull(aGenre.getUpdatedAt())
+                && Objects.isNull(aGenre.getDeletedAt())));
 
     }
 
@@ -93,12 +94,12 @@ class CreateGenreUseCaseTest extends UseCaseTest {
 
         verify(genreGateway, times(1))
                 .create(argThat(aGenre -> Objects.equals(expectedName, aGenre.getName())
-                        && Objects.equals(expectedIsActive, aGenre.isActive())
-                        && Objects.equals(expectedCategories, aGenre.getCategories())
-                        && Objects.nonNull(aGenre.getId())
-                        && Objects.nonNull(aGenre.getCreatedAt())
-                        && Objects.nonNull(aGenre.getUpdatedAt())
-                        && Objects.isNull(aGenre.getDeletedAt())));
+                && Objects.equals(expectedIsActive, aGenre.isActive())
+                && Objects.equals(expectedCategories, aGenre.getCategories())
+                && Objects.nonNull(aGenre.getId())
+                && Objects.nonNull(aGenre.getCreatedAt())
+                && Objects.nonNull(aGenre.getUpdatedAt())
+                && Objects.isNull(aGenre.getDeletedAt())));
 
     }
 
@@ -122,12 +123,12 @@ class CreateGenreUseCaseTest extends UseCaseTest {
 
         verify(genreGateway, times(1))
                 .create(argThat(aGenre -> Objects.equals(expectedName, aGenre.getName())
-                        && Objects.equals(expectedIsActive, aGenre.isActive())
-                        && Objects.equals(expectedCategories, aGenre.getCategories())
-                        && Objects.nonNull(aGenre.getId())
-                        && Objects.nonNull(aGenre.getCreatedAt())
-                        && Objects.nonNull(aGenre.getUpdatedAt())
-                        && Objects.nonNull(aGenre.getDeletedAt())));
+                && Objects.equals(expectedIsActive, aGenre.isActive())
+                && Objects.equals(expectedCategories, aGenre.getCategories())
+                && Objects.nonNull(aGenre.getId())
+                && Objects.nonNull(aGenre.getCreatedAt())
+                && Objects.nonNull(aGenre.getUpdatedAt())
+                && Objects.nonNull(aGenre.getDeletedAt())));
 
     }
 
@@ -248,11 +249,5 @@ class CreateGenreUseCaseTest extends UseCaseTest {
 
         verify(categoryGateway, times(1)).existsByIds(any());
         verify(genreGateway, times(0)).create(any());
-    }
-
-    private List<String> asString(List<CategoryID> categoryIDs) {
-        return categoryIDs.stream()
-                .map(CategoryID::getValue)
-                .toList();
     }
 }

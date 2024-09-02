@@ -12,7 +12,7 @@ public interface GenreGateway {
 
     void deleteById(GenreID anId);
 
-    List<Genre> existsByIds(List<GenreID> anIds);
+    List<GenreID> existsByIds(Iterable<GenreID> anIds);
 
     Optional<Genre> findById(GenreID anId);
 

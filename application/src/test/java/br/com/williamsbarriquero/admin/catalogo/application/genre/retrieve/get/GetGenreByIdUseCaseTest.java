@@ -1,24 +1,25 @@
 package br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.get;
 
-import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
-import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
-import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
-import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
-import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreGateway;
-import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
+import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
+import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
+import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreGateway;
+import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
 
 class GetGenreByIdUseCaseTest extends UseCaseTest {
 
@@ -35,23 +36,23 @@ class GetGenreByIdUseCaseTest extends UseCaseTest {
 
     @Test
     void givenAValidId_whenCallsGetGenre_thenShouldReturnGenre() {
-        // given
+        // given 
         final var expectedName = "Acao";
         final var expectedIsActive = true;
         final var expectedCategories = List.of(
                 CategoryID.from("123"),
                 CategoryID.from("456")
         );
-
+         
         final var aGenre = Genre.newGenre(expectedName, expectedIsActive)
                 .addCategories(expectedCategories);
-
+         
         final var expectedId = aGenre.getId();
 
         when(genreGateway.findById(any()))
                 .thenReturn(Optional.of(aGenre));
 
-        // when
+        // when 
         final var actualGenre = useCase.execute(expectedId.getValue());
 
         // then
@@ -68,13 +69,13 @@ class GetGenreByIdUseCaseTest extends UseCaseTest {
 
     @Test
     void givenAValidId_whenCallsGetGenreAndDoesNotExists_thenShouldReturnNotFound() {
-        // given
+        // given 
         final var expectedErrorMessage = "Genre with ID 123 was not found";
         final var expectedId = GenreID.from("123");
 
         when(genreGateway.findById(eq(expectedId)))
                 .thenReturn(Optional.empty());
-        // when
+        // when 
         final var actualException = Assertions.assertThrows(
                 NotFoundException.class,
                 () -> useCase.execute(expectedId.getValue())
@@ -82,11 +83,5 @@ class GetGenreByIdUseCaseTest extends UseCaseTest {
 
         // then
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
-    }
-
-    private List<String> asString(List<CategoryID> ids) {
-        return ids.stream()
-                .map(CategoryID::getValue)
-                .toList();
     }
 }

@@ -1,5 +1,7 @@
 package br.com.williamsbarriquero.admin.catalogo.application;
 
+import java.util.Arrays;
+
 import com.github.javafaker.Faker;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
@@ -7,6 +9,8 @@ import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Rating;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.Resource;
+import static io.vavr.API.*;
 
 public final class Fixture {
 
@@ -74,6 +78,20 @@ public final class Fixture {
 
     public static final class Videos {
 
+        public static Rating rating() {
+            return FAKER.options().option(Rating.values());
+        }
+
+        public static Resource resource(final Resource.Type type) {
+            final String contentType = Match(type).of(
+                    Case($(List(Resource.Type.VIDEO, Resource.Type.TRAILER)::contains), "video/mp4"),
+                    Case($(), "image/jpg"));
+
+            final byte[] content = "Conteudo".getBytes();
+
+            return Resource.with(content, contentType, type.name().toLowerCase(), type);
+        }
+
         public static String description() {
             return FAKER.options().option(
                     """
@@ -87,21 +105,6 @@ public final class Fixture {
                             bem como sua importância para criar aplicações com alta qualidade.
                             """
             );
-        }
-
-        public static Rating rating() {
-            return FAKER.options().option(Rating.values());
-        }
-
-        public static Resource resource(final Resource.Type type) {
-            final String contentType = Match(type).of(
-                    Case($(List(Type.VIDEO, Type.TRAILER)), "video/mp4"),
-                    Case($(), "image/jpg")
-            );
-
-            final byte[] content = "Conteudo".getBytes();
-
-            return Resource.of(content, contentType, type.name().toLowerCase(), type);
         }
     }
 }

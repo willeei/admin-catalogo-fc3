@@ -1,5 +1,14 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
@@ -8,14 +17,6 @@ import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.persistence.CastMemberJpaEntity;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.persistence.CastMemberRepository;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.utils.SpecificationUtils;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Component
 public class CastMemberMySQLGateway implements CastMemberGateway {
@@ -80,7 +81,7 @@ public class CastMemberMySQLGateway implements CastMemberGateway {
     }
 
     @Override
-    public List<CastMember> existsByIds(List<CastMemberID> anIds) {
+    public List<CastMemberID> existsByIds(Iterable<CastMemberID> anIds) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'existsByIds'");
     }
