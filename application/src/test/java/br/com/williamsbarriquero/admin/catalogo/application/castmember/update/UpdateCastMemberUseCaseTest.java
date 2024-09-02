@@ -59,12 +59,12 @@ class UpdateCastMemberUseCaseTest extends UseCaseTest {
 
         verify(castMemberGateway).findById(expectedId);
 
-        verify(castMemberGateway).update(argThat(aUpdatedMember ->
-                Objects.equals(expectedId, aUpdatedMember.getId())
-                        && Objects.equals(expectedName, aUpdatedMember.getName())
-                        && Objects.equals(expectedType, aUpdatedMember.getType())
-                        && Objects.equals(aMember.getCreatedAt(), aUpdatedMember.getCreatedAt())
-                        && aMember.getUpdatedAt().isBefore(aUpdatedMember.getUpdatedAt())
+        verify(castMemberGateway).update(argThat(aUpdatedMember
+                -> Objects.equals(expectedId, aUpdatedMember.getId())
+                && Objects.equals(expectedName, aUpdatedMember.getName())
+                && Objects.equals(expectedType, aUpdatedMember.getType())
+                && Objects.equals(aMember.getCreatedAt(), aUpdatedMember.getCreatedAt())
+                && aMember.getUpdatedAt().isBefore(aUpdatedMember.getUpdatedAt())
         ));
     }
 
@@ -137,7 +137,7 @@ class UpdateCastMemberUseCaseTest extends UseCaseTest {
 
         final var expectedId = CastMemberID.from("123");
         final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = Fixture.CastMembers.type();
 
         final var expectedErrorMessages = "CastMember with ID 123 was not found";
 

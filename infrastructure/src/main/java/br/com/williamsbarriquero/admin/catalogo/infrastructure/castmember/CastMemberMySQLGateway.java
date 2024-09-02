@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -76,5 +77,11 @@ public class CastMemberMySQLGateway implements CastMemberGateway {
 
     private Specification<CastMemberJpaEntity> assembleSpecification(final String terms) {
         return SpecificationUtils.like("name", terms);
+    }
+
+    @Override
+    public List<CastMember> existsByIds(List<CastMemberID> anIds) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'existsByIds'");
     }
 }

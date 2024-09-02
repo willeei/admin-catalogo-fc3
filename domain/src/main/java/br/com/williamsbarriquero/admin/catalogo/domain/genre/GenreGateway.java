@@ -1,15 +1,18 @@
 package br.com.williamsbarriquero.admin.catalogo.domain.genre;
 
+import java.util.List;
+import java.util.Optional;
+
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
-
-import java.util.Optional;
 
 public interface GenreGateway {
 
     Genre create(Genre aGenre);
 
     void deleteById(GenreID anId);
+
+    List<Genre> existsByIds(List<GenreID> anIds);
 
     Optional<Genre> findById(GenreID anId);
 
