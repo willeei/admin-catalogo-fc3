@@ -1,10 +1,7 @@
 package br.com.williamsbarriquero.admin.catalogo.e2e.category;
 
-import br.com.williamsbarriquero.admin.catalogo.E2ETest;
-import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
-import br.com.williamsbarriquero.admin.catalogo.e2e.MockDsl;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,23 +9,26 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import br.com.williamsbarriquero.admin.catalogo.E2ETest;
+import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
+import br.com.williamsbarriquero.admin.catalogo.e2e.MockDsl;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 
 @E2ETest
 @Testcontainers
 public class CategoryE2ETest implements MockDsl {
 
     @Container
-    private static final MySQLContainer MYSQL_CONTAINER =
-            new MySQLContainer("mysql:latest")
+    private static final MySQLContainer MYSQL_CONTAINER
+            = new MySQLContainer("mysql:latest")
                     .withPassword("123456")
                     .withUsername("root")
                     .withDatabaseName("adm_videos");

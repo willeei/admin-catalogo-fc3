@@ -1,5 +1,17 @@
 package br.com.williamsbarriquero.admin.catalogo.e2e;
 
+import java.util.List;
+import java.util.function.Function;
+
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.com.williamsbarriquero.admin.catalogo.domain.Identifier;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType;
@@ -15,16 +27,6 @@ import br.com.williamsbarriquero.admin.catalogo.infrastructure.configuration.jso
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.CreateGenreRequest;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.GenreResponse;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.List;
-import java.util.function.Function;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public interface MockDsl {
 
@@ -85,7 +87,6 @@ public interface MockDsl {
     /**
      * Category
      */
-
     default ResultActions deleteACategory(final CategoryID anId) throws Exception {
         return this.delete("/categories/", anId);
     }
@@ -132,7 +133,6 @@ public interface MockDsl {
     /**
      * Genre
      */
-
     default ResultActions deleteAGenre(final GenreID anId) throws Exception {
         return this.delete("/genres/", anId);
     }
@@ -184,11 +184,18 @@ public interface MockDsl {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Json.writeValueAsString(body));
 
-        final var actualId = this.mvc().perform(aRequest)
+        final var response = this.mvc().perform(aRequest)
                 .andExpect(status().isCreated())
                 .andReturn()
-                .getResponse().getHeader("Location")
-                .replace("%s/".formatted(url), "");
+                .getResponse();
+
+        final var header = response.getHeader("Location");
+        String actualId = null;
+        if (header == null) {
+            throw new IllegalStateException("Location header not found");
+        } else {
+            actualId = header.replace("%s/".formatted(url), "");
+        }
 
         return actualId;
     }
@@ -223,8 +230,8 @@ public interface MockDsl {
 
     private <T> T retrieve(final String url, final Identifier anId, final Class<T> clazz) throws Exception {
         final var aRequest = get(url + anId.getValue())
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .contentType(MediaType.APPLICATION_JSON_UTF8);
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
 
         final var json = this.mvc().perform(aRequest)
                 .andExpect(status().isOk())
@@ -236,8 +243,8 @@ public interface MockDsl {
 
     private ResultActions retrieveResult(final String url, final Identifier anId) throws Exception {
         final var aRequest = get(url + anId.getValue())
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .contentType(MediaType.APPLICATION_JSON_UTF8);
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
 
         return this.mvc().perform(aRequest);
     }

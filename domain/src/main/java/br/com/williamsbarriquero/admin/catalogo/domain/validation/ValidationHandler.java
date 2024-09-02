@@ -19,7 +19,9 @@ public interface ValidationHandler {
         if (getErrors() != null && !getErrors().isEmpty()) {
             Optional<Error> first = getErrors().stream().findFirst();
             return first.orElse(null);
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     List<Error> getErrors();
@@ -29,4 +31,3 @@ public interface ValidationHandler {
         T validate();
     }
 }
-
