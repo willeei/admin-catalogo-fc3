@@ -50,7 +50,8 @@ public class AudioVideoMedia extends ValueObject {
             final String name,
             final String rawLocation,
             final String encodedLocation,
-            final MediaStatus status) {
+            final MediaStatus status
+    ) {
         return new AudioVideoMedia(id, checksum, name, rawLocation, encodedLocation, status);
     }
 

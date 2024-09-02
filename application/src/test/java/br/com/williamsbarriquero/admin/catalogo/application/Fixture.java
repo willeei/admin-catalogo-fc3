@@ -89,7 +89,7 @@ public final class Fixture {
 
             final byte[] content = "Conteudo".getBytes();
 
-            return Resource.with(content, contentType, type.name().toLowerCase(), type);
+            return Resource.with(content, contentType, type.name().toLowerCase(), type.name());
         }
 
         public static String description() {

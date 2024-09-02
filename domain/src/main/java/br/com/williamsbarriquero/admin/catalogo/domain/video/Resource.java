@@ -9,22 +9,22 @@ public class Resource extends ValueObject {
     private final byte[] content;
     private final String checksum;
     private final String contentType;
-    private final Type type;
+    private final String name;
 
-    private Resource(final byte[] content, final String checksum, final String contentType, final Type type) {
+    private Resource(final byte[] content, final String checksum, final String contentType, final String name) {
         this.content = Objects.requireNonNull(content);
         this.checksum = Objects.requireNonNull(checksum);
         this.contentType = Objects.requireNonNull(contentType);
-        this.type = Objects.requireNonNull(type);
+        this.name = Objects.requireNonNull(name);
     }
 
     public static Resource with(
             final byte[] content,
             final String checksum,
             final String contentType,
-            final Type type
+            final String name
     ) {
-        return new Resource(content, checksum, contentType, type);
+        return new Resource(content, checksum, contentType, name);
     }
 
     public String checksum() {
@@ -39,8 +39,8 @@ public class Resource extends ValueObject {
         return contentType;
     }
 
-    public Type type() {
-        return type;
+    public String name() {
+        return name;
     }
 
     public enum Type {

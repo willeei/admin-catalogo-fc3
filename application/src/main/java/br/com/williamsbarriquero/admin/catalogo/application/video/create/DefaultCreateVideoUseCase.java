@@ -15,12 +15,14 @@ import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.DomainException;
+import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.InternalErrorException;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotificationException;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.Error;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.ValidationHandler;
 import br.com.williamsbarriquero.admin.catalogo.domain.validation.handler.Notification;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.MediaResourceGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Rating;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Video;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.VideoGateway;
@@ -30,17 +32,20 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
     private final CategoryGateway categoryGateway;
     private final CastMemberGateway castMemberGateway;
     private final GenreGateway genreGateway;
+    private final MediaResourceGateway mediaResourceGateway;
     private final VideoGateway videoGateway;
 
     public DefaultCreateVideoUseCase(
             final CategoryGateway categoryGateway,
             final CastMemberGateway castMemberGateway,
             final GenreGateway genreGateway,
+            final MediaResourceGateway mediaResourceGateway,
             final VideoGateway videoGateway
     ) {
         this.categoryGateway = Objects.requireNonNull(categoryGateway);
         this.castMemberGateway = Objects.requireNonNull(castMemberGateway);
         this.genreGateway = Objects.requireNonNull(genreGateway);
+        this.mediaResourceGateway = Objects.requireNonNull(mediaResourceGateway);
         this.videoGateway = Objects.requireNonNull(videoGateway);
     }
 
@@ -79,7 +84,43 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
     }
 
     private Video create(final CreateVideoCommand aCommand, final Video aVideo) {
-        return videoGateway.create(aVideo);
+        final var anId = aVideo.getId();
+
+        try {
+            final var aVideoMedia = aCommand.getVideo()
+                    .map(it -> this.mediaResourceGateway.storeAudioVideo(anId, it))
+                    .orElse(null);
+
+            final var aTrailerMedia = aCommand.getTrailer()
+                    .map(it -> this.mediaResourceGateway.storeAudioVideo(anId, it))
+                    .orElse(null);
+
+            final var aBannerMedia = aCommand.getBanner()
+                    .map(it -> this.mediaResourceGateway.storeImage(anId, it))
+                    .orElse(null);
+
+            final var aThumbnailMedia = aCommand.getThumbnail()
+                    .map(it -> this.mediaResourceGateway.storeImage(anId, it))
+                    .orElse(null);
+
+            final var aThumbHalfMedia = aCommand.getThumbnailHalf()
+                    .map(it -> this.mediaResourceGateway.storeImage(anId, it))
+                    .orElse(null);
+
+            return videoGateway.create(
+                    aVideo
+                            .updateVideoMedia(aVideoMedia)
+                            .updateTrailerMedia(aTrailerMedia)
+                            .updateBannerMedia(aBannerMedia)
+                            .updateThumbnailMedia(aThumbnailMedia)
+                            .updateThumbnailHalfMedia(aThumbHalfMedia)
+            );
+        } catch (Throwable t) {
+            this.mediaResourceGateway.clearResources(anId);
+            throw InternalErrorException.with(
+                    "An error on create video was observed [videoID:%s]".formatted(anId.getValue()), t
+            );
+        }
     }
 
     private ValidationHandler validateCategories(final Set<CategoryID> ids) {
