@@ -1,6 +1,5 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.genre.persistence;
 
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
