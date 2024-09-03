@@ -5,6 +5,8 @@ import static io.vavr.API.Case;
 import static io.vavr.API.List;
 import static io.vavr.API.Match;
 
+import java.time.Year;
+import java.util.Set;
 import java.util.UUID;
 
 import com.github.javafaker.Faker;
@@ -18,6 +20,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.video.ImageMedia;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.MediaStatus;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Rating;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Resource;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.Video;
 
 public final class Fixture {
 
@@ -84,6 +87,23 @@ public final class Fixture {
     }
 
     public static final class Videos {
+
+        private static final Video SYSTEM_DESIGN = Video.newVideo(
+                "System Design no Mercado Livre na prática",
+                description(),
+                Year.of(2022),
+                Fixture.duration(),
+                Fixture.bool(),
+                Fixture.bool(),
+                rating(),
+                Set.of(Categories.aulas().getId()),
+                Set.of(Genres.tech().getId()),
+                Set.of(CastMembers.williams().getId(), CastMembers.maju().getId())
+        );
+
+        public static Video systemDesign() {
+            return Video.with(SYSTEM_DESIGN);
+        }
 
         public static Rating rating() {
             return FAKER.options().option(Rating.values());
