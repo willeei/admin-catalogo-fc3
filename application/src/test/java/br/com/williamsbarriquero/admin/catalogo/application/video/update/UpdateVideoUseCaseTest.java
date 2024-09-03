@@ -1053,7 +1053,7 @@ class UpdateVideoUseCaseTest extends UseCaseTest {
     void givenAValidCommand_whenCallsCreateVideoThrowsException_shouldCallClearResources() {
         // given
         final var aVideo = Fixture.Videos.systemDesign();
-        final var expectedErrorMessage = "An error on create video was observed [videoId:";
+        final var expectedErrorMessage = "An error on update video was observed [videoID:";
 
         final var expectedTitle = Fixture.title();
         final var expectedDescription = Fixture.Videos.description();
