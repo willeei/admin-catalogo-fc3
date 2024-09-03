@@ -1,6 +1,11 @@
 package br.com.williamsbarriquero.admin.catalogo.application;
 
-import java.util.Arrays;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.List;
+import static io.vavr.API.Match;
+
+import java.util.UUID;
 
 import com.github.javafaker.Faker;
 
@@ -8,9 +13,11 @@ import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.AudioVideoMedia;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.ImageMedia;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.MediaStatus;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Rating;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Resource;
-import static io.vavr.API.*;
 
 public final class Fixture {
 
@@ -101,9 +108,29 @@ public final class Fixture {
                             https://imersao.fullcycle.com.br/
                             """,
                     """
-                            Nesse vídeo você entenderá o que é DTO (Data Transfer Object), quando e como utilizar no dia a dia, 
+                            Nesse vídeo você entenderá o que é DTO (Data Transfer Object), quando e como utilizar no dia a dia,
                             bem como sua importância para criar aplicações com alta qualidade.
-                            """
+                            """);
+        }
+
+        public static AudioVideoMedia audioVideo(final Resource.Type type) {
+            final var checksum = UUID.randomUUID().toString();
+            return AudioVideoMedia.with(
+                    UUID.randomUUID().toString(),
+                    checksum,
+                    type.name().toLowerCase(),
+                    "/videos/" + checksum,
+                    "",
+                    MediaStatus.PENDING
+            );
+        }
+
+        public static ImageMedia image(final Resource.Type type) {
+            final var checksum = UUID.randomUUID().toString();
+            return ImageMedia.with(
+                    checksum,
+                    type.name().toLowerCase(),
+                    "/images/" + checksum
             );
         }
     }

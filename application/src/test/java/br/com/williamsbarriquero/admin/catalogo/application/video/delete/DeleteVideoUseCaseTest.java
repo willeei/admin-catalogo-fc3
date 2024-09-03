@@ -75,12 +75,14 @@ class DeleteVideoUseCaseTest extends UseCaseTest {
                 .when(videoGateway).deleteById(any());
 
         // when
-        Assertions.assertThrows(
-                InternalErrorException.class,
+        final var internalErrorException = InternalErrorException.class;
+        final var expectedException = Assertions.assertThrows(
+                internalErrorException,
                 () -> this.useCase.execute(expectedId.getValue())
         );
 
         // then
+        Assertions.assertNotNull(expectedException);
         verify(videoGateway).deleteById(eq(expectedId));
     }
 }
