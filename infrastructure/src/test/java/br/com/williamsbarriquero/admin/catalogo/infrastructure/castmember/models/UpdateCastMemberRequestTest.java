@@ -1,6 +1,6 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.models;
 
-import br.com.williamsbarriquero.admin.catalogo.Fixture;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.JacksonTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

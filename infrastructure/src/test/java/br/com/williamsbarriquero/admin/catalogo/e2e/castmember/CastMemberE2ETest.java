@@ -1,11 +1,12 @@
 package br.com.williamsbarriquero.admin.catalogo.e2e.castmember;
 
-import br.com.williamsbarriquero.admin.catalogo.E2ETest;
-import br.com.williamsbarriquero.admin.catalogo.Fixture;
-import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
-import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType;
-import br.com.williamsbarriquero.admin.catalogo.e2e.MockDsl;
-import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.persistence.CastMemberRepository;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,12 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import br.com.williamsbarriquero.admin.catalogo.E2ETest;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
+import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
+import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType;
+import br.com.williamsbarriquero.admin.catalogo.e2e.MockDsl;
+import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.persistence.CastMemberRepository;
 
 @E2ETest
 @Testcontainers

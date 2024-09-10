@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import br.com.williamsbarriquero.admin.catalogo.application.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
 import br.com.williamsbarriquero.admin.catalogo.application.genre.retrieve.list.GenreListOutput;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.Pagination;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.VideoGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.VideoPreview;

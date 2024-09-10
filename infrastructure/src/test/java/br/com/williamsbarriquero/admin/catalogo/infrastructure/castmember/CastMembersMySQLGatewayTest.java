@@ -1,5 +1,16 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember;
 
+import static br.com.williamsbarriquero.admin.catalogo.domain.Fixture.name;
+import static br.com.williamsbarriquero.admin.catalogo.domain.Fixture.CastMembers.type;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import br.com.williamsbarriquero.admin.catalogo.MySQLGatewayTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
@@ -7,16 +18,6 @@ import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType
 import br.com.williamsbarriquero.admin.catalogo.domain.pagination.SearchQuery;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.persistence.CastMemberJpaEntity;
 import br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.persistence.CastMemberRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static br.com.williamsbarriquero.admin.catalogo.Fixture.CastMembers.type;
-import static br.com.williamsbarriquero.admin.catalogo.Fixture.name;
 
 @MySQLGatewayTest
 class CastMembersMySQLGatewayTest {
@@ -185,8 +186,8 @@ class CastMembersMySQLGatewayTest {
         final var expectedDirection = "asc";
         final var expectedTotal = 0;
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
         final var actualPage = castMemberMySQLGateway.findAll(aQuery);
@@ -200,12 +201,11 @@ class CastMembersMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-            "vin,0,10,1,1,Vin Diesel",
-            "taran,0,10,1,1,Quentin Tarantino",
-            "jas,0,10,1,1,Jason Momoa",
-            "har,0,10,1,1,Kit Harington",
-            "MAR,0,10,1,1,Martin Scorsese",
-    })
+        "vin,0,10,1,1,Vin Diesel",
+        "taran,0,10,1,1,Quentin Tarantino",
+        "jas,0,10,1,1,Jason Momoa",
+        "har,0,10,1,1,Kit Harington",
+        "MAR,0,10,1,1,Martin Scorsese",})
     void givenAValidTerm_whenCallsFindAll_shouldReturnFiltered(
             final String expectedTerms,
             final int expectedPage,
@@ -217,8 +217,8 @@ class CastMembersMySQLGatewayTest {
         // given
         mockMembers();
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, "name", "asc");
+        final var aQuery
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, "name", "asc");
 
         // when
         final var actualPage = castMemberMySQLGateway.findAll(aQuery);
@@ -233,11 +233,10 @@ class CastMembersMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-            "name,asc,0,10,5,5,Jason Momoa",
-            "name,desc,0,10,5,5,Vin Diesel",
-            "createdAt,asc,0,10,5,5,Kit Harington",
-            "createdAt,desc,0,10,5,5,Martin Scorsese",
-    })
+        "name,asc,0,10,5,5,Jason Momoa",
+        "name,desc,0,10,5,5,Vin Diesel",
+        "createdAt,asc,0,10,5,5,Kit Harington",
+        "createdAt,desc,0,10,5,5,Martin Scorsese",})
     void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnSorted(
             final String expectedSort,
             final String expectedDirection,
@@ -252,8 +251,8 @@ class CastMembersMySQLGatewayTest {
 
         final var expectedTerms = "";
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
         final var actualPage = castMemberMySQLGateway.findAll(aQuery);
@@ -268,10 +267,9 @@ class CastMembersMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-            "0,2,2,5,Jason Momoa;Kit Harington",
-            "1,2,2,5,Martin Scorsese;Quentin Tarantino",
-            "2,2,1,5,Vin Diesel",
-    })
+        "0,2,2,5,Jason Momoa;Kit Harington",
+        "1,2,2,5,Martin Scorsese;Quentin Tarantino",
+        "2,2,1,5,Vin Diesel",})
     void givenAValidPagination_whenCallsFindAll_shouldReturnPaginated(
             final int expectedPage,
             final int expectedPerPage,
@@ -286,8 +284,8 @@ class CastMembersMySQLGatewayTest {
         final var expectedSort = "name";
         final var expectedDirection = "asc";
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
         final var actualPage = castMemberMySQLGateway.findAll(aQuery);

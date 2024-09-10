@@ -13,15 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import br.com.williamsbarriquero.admin.catalogo.application.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;

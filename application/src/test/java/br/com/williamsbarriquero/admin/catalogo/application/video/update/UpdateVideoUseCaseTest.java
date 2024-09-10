@@ -20,8 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import br.com.williamsbarriquero.admin.catalogo.application.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryGateway;

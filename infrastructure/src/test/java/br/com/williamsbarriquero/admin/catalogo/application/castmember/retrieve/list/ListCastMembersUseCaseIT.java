@@ -1,6 +1,6 @@
 package br.com.williamsbarriquero.admin.catalogo.application.castmember.retrieve.list;
 
-import br.com.williamsbarriquero.admin.catalogo.Fixture;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.IntegrationTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
@@ -29,7 +29,6 @@ class ListCastMembersUseCaseIT {
 
     @SpyBean
     private CastMemberGateway castMemberGateway;
-
 
     @Test
     void giveAValidQuery_whenCallsListCastMembers_shouldReturnAll() {
@@ -70,7 +69,7 @@ class ListCastMembersUseCaseIT {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertTrue(
                 expectedItems.size() == actualOutput.items().size()
-                        && expectedItems.containsAll(actualOutput.items())
+                && expectedItems.containsAll(actualOutput.items())
         );
 
         verify(castMemberGateway).findAll(any());
@@ -90,8 +89,8 @@ class ListCastMembersUseCaseIT {
 
         Assertions.assertEquals(0, this.castMemberRepository.count());
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
         final var actualOutput = useCase.execute(aQuery);
@@ -119,8 +118,8 @@ class ListCastMembersUseCaseIT {
 
         doThrow(new IllegalStateException(expectedErrorMessage)).when(castMemberGateway).findAll(any());
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
         final var actualException = Assertions.assertThrows(

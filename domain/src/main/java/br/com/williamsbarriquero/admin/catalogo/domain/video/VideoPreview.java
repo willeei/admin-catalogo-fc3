@@ -7,8 +7,7 @@ public record VideoPreview(
         String title,
         String description,
         Instant createdAt,
-        Instant updatedAt
-) {
+        Instant updatedAt) {
 
     public VideoPreview(final Video aVideo) {
         this(

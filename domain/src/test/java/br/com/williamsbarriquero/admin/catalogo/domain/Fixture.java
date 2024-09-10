@@ -1,4 +1,4 @@
-package br.com.williamsbarriquero.admin.catalogo.application;
+package br.com.williamsbarriquero.admin.catalogo.domain;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
@@ -17,7 +17,6 @@ import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
 import br.com.williamsbarriquero.admin.catalogo.domain.utils.IdUtils;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.AudioVideoMedia;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.ImageMedia;
-import br.com.williamsbarriquero.admin.catalogo.domain.video.MediaStatus;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Rating;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Resource;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Video;
@@ -46,7 +45,12 @@ public final class Fixture {
         return FAKER.options().option(
                 "System Design no Mercado Livre na prática",
                 "Não cometa esses erros ao trabalhar com Microsserviços",
-                "Testes de Mutação. Você não testa seu software corretamente");
+                "Testes de Mutação. Você não testa seu software corretamente"
+        );
+    }
+
+    public static String checksum() {
+        return "03fe62de";
     }
 
     public static Video video() {
@@ -66,17 +70,28 @@ public final class Fixture {
 
     public static final class Categories {
 
-        private static final Category AULAS = Category.newCategory("Aulas", "Some description", true);
+        private static final Category AULAS
+                = Category.newCategory("Aulas", "Some description", true);
+
+        private static final Category LIVES
+                = Category.newCategory("Lives", "Some description", true);
 
         public static Category aulas() {
             return AULAS.clone();
+        }
+
+        public static Category lives() {
+            return LIVES.clone();
         }
     }
 
     public static final class CastMembers {
 
-        private static final CastMember WILLIAMS = CastMember.newMember("Williams Barriquero", CastMemberType.ACTOR);
-        private static final CastMember MAJU = CastMember.newMember("Maria Júlia", CastMemberType.ACTOR);
+        private static final CastMember WILLIAMS
+                = CastMember.newMember("Williams Barriquero", CastMemberType.ACTOR);
+
+        private static final CastMember MAJU
+                = CastMember.newMember("Maria Júlia", CastMemberType.ACTOR);
 
         public static CastMemberType type() {
             return FAKER.options().option(CastMemberType.values());
@@ -93,10 +108,18 @@ public final class Fixture {
 
     public static final class Genres {
 
-        private static final Genre TECH = Genre.newGenre("Technology", true);
+        private static final Genre TECH
+                = Genre.newGenre("Technology", true);
+
+        private static final Genre BUSINESS
+                = Genre.newGenre("Business", true);
 
         public static Genre tech() {
             return Genre.with(TECH);
+        }
+
+        public static Genre business() {
+            return Genre.with(BUSINESS);
         }
     }
 
@@ -123,14 +146,20 @@ public final class Fixture {
             return FAKER.options().option(Rating.values());
         }
 
+        public static Resource.Type mediaType() {
+            return FAKER.options().option(Resource.Type.values());
+        }
+
         public static Resource resource(final Resource.Type type) {
             final String contentType = Match(type).of(
                     Case($(List(Resource.Type.VIDEO, Resource.Type.TRAILER)::contains), "video/mp4"),
-                    Case($(), "image/jpg"));
+                    Case($(), "image/jpg")
+            );
 
+            final String checksum = IdUtils.uuid();
             final byte[] content = "Conteudo".getBytes();
 
-            return Resource.with(content, contentType, type.name().toLowerCase(), type.name());
+            return Resource.with(content, checksum, contentType, type.name().toLowerCase());
         }
 
         public static String description() {
@@ -142,25 +171,23 @@ public final class Fixture {
                             https://imersao.fullcycle.com.br/
                             """,
                     """
-                            Nesse vídeo você entenderá o que é DTO (Data Transfer Object), quando e como utilizar no dia a dia,
+                            Nesse vídeo você entenderá o que é DTO (Data Transfer Object), quando e como utilizar no dia a dia, 
                             bem como sua importância para criar aplicações com alta qualidade.
-                            """);
+                            """
+            );
         }
 
         public static AudioVideoMedia audioVideo(final Resource.Type type) {
-            final var checksum = IdUtils.uuid();
+            final var checksum = Fixture.checksum();
             return AudioVideoMedia.with(
-                    IdUtils.uuid(),
                     checksum,
                     type.name().toLowerCase(),
-                    "/videos/" + checksum,
-                    "",
-                    MediaStatus.PENDING
+                    "/videos/" + checksum
             );
         }
 
         public static ImageMedia image(final Resource.Type type) {
-            final var checksum = IdUtils.uuid();
+            final var checksum = Fixture.checksum();
             return ImageMedia.with(
                     checksum,
                     type.name().toLowerCase(),

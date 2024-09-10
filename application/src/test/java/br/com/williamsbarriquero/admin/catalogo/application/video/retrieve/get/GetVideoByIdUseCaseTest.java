@@ -1,5 +1,7 @@
 package br.com.williamsbarriquero.admin.catalogo.application.video.retrieve.get;
 
+import static br.com.williamsbarriquero.admin.catalogo.domain.Fixture.Videos.audioVideo;
+import static br.com.williamsbarriquero.admin.catalogo.domain.Fixture.Videos.image;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -13,10 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import br.com.williamsbarriquero.admin.catalogo.application.Fixture;
-import static br.com.williamsbarriquero.admin.catalogo.application.Fixture.Videos.audioVideo;
-import static br.com.williamsbarriquero.admin.catalogo.application.Fixture.Videos.image;
 import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Resource;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.Video;

@@ -1,23 +1,23 @@
 package br.com.williamsbarriquero.admin.catalogo.application.castmember.retrieve.get;
 
-import br.com.williamsbarriquero.admin.catalogo.application.Fixture;
-import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
-import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
-import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
-import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
-import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import br.com.williamsbarriquero.admin.catalogo.application.UseCaseTest;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
+import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
+import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
+import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
+import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotFoundException;
 
 class GetCastMemberByIdUseCaseTest extends UseCaseTest {
 
@@ -55,7 +55,7 @@ class GetCastMemberByIdUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(aMember.getCreatedAt(), actualOutput.createdAt());
         Assertions.assertEquals(aMember.getUpdatedAt(), actualOutput.updatedAt());
 
-        verify(castMemberGateway).findById(eq(expectedId));
+        verify(castMemberGateway).findById(expectedId);
     }
 
     @Test
@@ -68,14 +68,16 @@ class GetCastMemberByIdUseCaseTest extends UseCaseTest {
         when(castMemberGateway.findById(any())).thenReturn(Optional.empty());
 
         // when
+        final var notFoundException = NotFoundException.class;
+
         final var actualException = Assertions.assertThrows(
-                NotFoundException.class, () -> useCase.execute(expectedId.getValue())
+                notFoundException, () -> useCase.execute(expectedId.getValue())
         );
 
         // then
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expecteErrorMessage, actualException.getMessage());
 
-        verify(castMemberGateway).findById(eq(expectedId));
+        verify(castMemberGateway).findById(expectedId);
     }
 }

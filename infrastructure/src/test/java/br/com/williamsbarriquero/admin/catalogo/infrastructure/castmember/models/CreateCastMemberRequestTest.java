@@ -1,11 +1,12 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.castmember.models;
 
-import br.com.williamsbarriquero.admin.catalogo.Fixture;
-import br.com.williamsbarriquero.admin.catalogo.JacksonTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
+
+import br.com.williamsbarriquero.admin.catalogo.JacksonTest;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 
 @JacksonTest
 class CreateCastMemberRequestTest {
@@ -14,7 +15,7 @@ class CreateCastMemberRequestTest {
     private JacksonTester<CreateCastMemberRequest> json;
 
     @Test
-    public void testUnmarshall() throws Exception {
+    void testUnmarshall() throws Exception {
         final var expectedName = Fixture.name();
         final var expectedType = Fixture.CastMembers.type();
 

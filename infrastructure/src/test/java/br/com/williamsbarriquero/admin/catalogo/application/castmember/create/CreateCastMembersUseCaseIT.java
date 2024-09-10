@@ -1,6 +1,6 @@
 package br.com.williamsbarriquero.admin.catalogo.application.castmember.create;
 
-import br.com.williamsbarriquero.admin.catalogo.Fixture;
+import br.com.williamsbarriquero.admin.catalogo.domain.Fixture;
 import br.com.williamsbarriquero.admin.catalogo.IntegrationTest;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType;
