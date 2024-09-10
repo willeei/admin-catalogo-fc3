@@ -362,6 +362,10 @@ class CategoryMySQLGatewayTest {
 
         // then
         Assertions.assertEquals(sorted(actualResult), sorted(expectedIds));
+        Assertions.assertTrue(
+                expectedIds.size() == actualResult.size()
+                && expectedIds.containsAll(actualResult)
+        );
     }
 
     private List<CategoryID> sorted(final List<CategoryID> expectedCategories) {

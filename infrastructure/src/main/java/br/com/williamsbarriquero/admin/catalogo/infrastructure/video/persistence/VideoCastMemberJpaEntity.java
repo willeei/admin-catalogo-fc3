@@ -1,9 +1,13 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.video.persistence;
 
 import java.util.Objects;
-import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
 
@@ -28,7 +32,7 @@ public class VideoCastMemberJpaEntity {
 
     public static VideoCastMemberJpaEntity from(final VideoJpaEntity entity, final CastMemberID castMemberID) {
         return new VideoCastMemberJpaEntity(
-                VideoCastMemberID.from(entity.getId(), UUID.fromString(castMemberID.getValue())),
+                VideoCastMemberID.from(entity.getId(), castMemberID.getValue()),
                 entity
         );
     }

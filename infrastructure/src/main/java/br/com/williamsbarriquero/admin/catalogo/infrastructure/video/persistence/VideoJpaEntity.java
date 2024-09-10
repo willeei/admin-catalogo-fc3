@@ -2,23 +2,38 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.video.persistenc
 
 import java.time.Instant;
 import java.time.Year;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberID;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
 import br.com.williamsbarriquero.admin.catalogo.domain.utils.CollectionUtils;
-import br.com.williamsbarriquero.admin.catalogo.domain.video.*;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.Rating;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.Video;
+import br.com.williamsbarriquero.admin.catalogo.domain.video.VideoID;
 
 @Table(name = "videos")
 @Entity(name = "Video")
 public class VideoJpaEntity {
 
     @Id
-    private UUID id;
+    @Column(name = "id", nullable = false)
+    private String id;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -81,7 +96,7 @@ public class VideoJpaEntity {
     }
 
     private VideoJpaEntity(
-            final UUID id,
+            final String id,
             final String title,
             final String description,
             final int yearLaunched,
@@ -119,7 +134,7 @@ public class VideoJpaEntity {
 
     public static VideoJpaEntity from(final Video aVideo) {
         final var entity = new VideoJpaEntity(
-                UUID.fromString(aVideo.getId().getValue()),
+                aVideo.getId().getValue(),
                 aVideo.getTitle(),
                 aVideo.getDescription(),
                 aVideo.getLaunchedAt().getValue(),
@@ -148,7 +163,7 @@ public class VideoJpaEntity {
 
     public Video toAggregate() {
         return Video.with(
-                VideoID.from(getId().toString()),
+                VideoID.from(getId()),
                 getTitle(),
                 getDescription(),
                 Year.of(getYearLaunched()),
@@ -164,13 +179,13 @@ public class VideoJpaEntity {
                 Optional.ofNullable(getTrailer()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
                 Optional.ofNullable(getVideo()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
                 getCategories().stream()
-                        .map(it -> CategoryID.from(it.getId().getCategoryId().toString()))
+                        .map(it -> CategoryID.from(it.getId().getCategoryId()))
                         .collect(Collectors.toSet()),
                 getGenres().stream()
-                        .map(it -> GenreID.from(it.getId().getGenreId().toString()))
+                        .map(it -> GenreID.from(it.getId().getGenreId()))
                         .collect(Collectors.toSet()),
                 getCastMembers().stream()
-                        .map(it -> CastMemberID.from(it.getId().getCastMemberId().toString()))
+                        .map(it -> CastMemberID.from(it.getId().getCastMemberId()))
                         .collect(Collectors.toSet())
         );
     }
@@ -187,11 +202,11 @@ public class VideoJpaEntity {
         this.castMembers.add(VideoCastMemberJpaEntity.from(this, anId));
     }
 
-    public UUID getId() {
+    public String getId() {
         return this.id;
     }
 
-    public VideoJpaEntity setId(final UUID id) {
+    public VideoJpaEntity setId(final String id) {
         this.id = id;
         return this;
     }
@@ -350,16 +365,16 @@ public class VideoJpaEntity {
     }
 
     public Set<CategoryID> getCategoriesID() {
-        return CollectionUtils.mapTo(getCategories(), it -> CategoryID.from(it.getId().getCategoryId().toString()));
+        return CollectionUtils.mapTo(getCategories(), it -> CategoryID.from(it.getId().getCategoryId()));
     }
 
     public Set<GenreID> getGenresID() {
-        return CollectionUtils.mapTo(getGenres(), it -> GenreID.from(it.getId().getGenreId().toString()));
+        return CollectionUtils.mapTo(getGenres(), it -> GenreID.from(it.getId().getGenreId()));
     }
 
     public Set<CastMemberID> getCastMembersID() {
         return CollectionUtils.mapTo(
-                getCastMembers(), it -> CastMemberID.from(it.getId().getCastMemberId().toString())
+                getCastMembers(), it -> CastMemberID.from(it.getId().getCastMemberId())
         );
     }
 }

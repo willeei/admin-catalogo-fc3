@@ -1,7 +1,5 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.video.persistence;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import br.com.williamsbarriquero.admin.catalogo.domain.utils.IdUtils;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.AudioVideoMedia;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.MediaStatus;
 
@@ -62,7 +61,7 @@ public class AudioVideoMediaJpaEntity {
     public AudioVideoMedia toDomain() {
         return AudioVideoMedia.with(
                 getId(),
-                UUID.randomUUID().toString(),
+                IdUtils.uuid(),
                 getName(),
                 getFilePath(),
                 getEncodedPath(),

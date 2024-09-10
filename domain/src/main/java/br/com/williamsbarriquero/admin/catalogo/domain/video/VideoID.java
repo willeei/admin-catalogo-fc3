@@ -1,9 +1,9 @@
 package br.com.williamsbarriquero.admin.catalogo.domain.video;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.Identifier;
+import br.com.williamsbarriquero.admin.catalogo.domain.utils.IdUtils;
 
 public class VideoID extends Identifier {
 
@@ -18,7 +18,7 @@ public class VideoID extends Identifier {
     }
 
     public static VideoID unique() {
-        return VideoID.from(UUID.randomUUID().toString().toLowerCase());
+        return VideoID.from(IdUtils.uuid());
     }
 
     @Override

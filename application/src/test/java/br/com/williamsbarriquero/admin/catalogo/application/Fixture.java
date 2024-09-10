@@ -7,7 +7,6 @@ import static io.vavr.API.Match;
 
 import java.time.Year;
 import java.util.Set;
-import java.util.UUID;
 
 import com.github.javafaker.Faker;
 
@@ -15,6 +14,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMember;
 import br.com.williamsbarriquero.admin.catalogo.domain.castmember.CastMemberType;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.Genre;
+import br.com.williamsbarriquero.admin.catalogo.domain.utils.IdUtils;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.AudioVideoMedia;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.ImageMedia;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.MediaStatus;
@@ -148,9 +148,9 @@ public final class Fixture {
         }
 
         public static AudioVideoMedia audioVideo(final Resource.Type type) {
-            final var checksum = UUID.randomUUID().toString();
+            final var checksum = IdUtils.uuid();
             return AudioVideoMedia.with(
-                    UUID.randomUUID().toString(),
+                    IdUtils.uuid(),
                     checksum,
                     type.name().toLowerCase(),
                     "/videos/" + checksum,
@@ -160,7 +160,7 @@ public final class Fixture {
         }
 
         public static ImageMedia image(final Resource.Type type) {
-            final var checksum = UUID.randomUUID().toString();
+            final var checksum = IdUtils.uuid();
             return ImageMedia.with(
                     checksum,
                     type.name().toLowerCase(),

@@ -1,9 +1,13 @@
 package br.com.williamsbarriquero.admin.catalogo.infrastructure.video.persistence;
 
 import java.util.Objects;
-import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
 
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 
@@ -28,7 +32,7 @@ public class VideoCategoryJpaEntity {
 
     public static VideoCategoryJpaEntity from(final VideoJpaEntity video, final CategoryID category) {
         return new VideoCategoryJpaEntity(
-                VideoCategoryID.from(video.getId(), UUID.fromString(category.getValue())),
+                VideoCategoryID.from(video.getId(), category.getValue()),
                 video
         );
     }

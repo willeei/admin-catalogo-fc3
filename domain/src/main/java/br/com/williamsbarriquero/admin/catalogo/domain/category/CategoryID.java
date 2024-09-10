@@ -1,21 +1,20 @@
 package br.com.williamsbarriquero.admin.catalogo.domain.category;
 
-import br.com.williamsbarriquero.admin.catalogo.domain.Identifier;
-
 import java.util.Objects;
-import java.util.UUID;
+
+import br.com.williamsbarriquero.admin.catalogo.domain.Identifier;
+import br.com.williamsbarriquero.admin.catalogo.domain.utils.IdUtils;
 
 public class CategoryID extends Identifier {
 
     private final String value;
 
     private CategoryID(final String value) {
-        Objects.requireNonNull(value);
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
     }
 
     public static CategoryID unique() {
-        return CategoryID.from(UUID.randomUUID().toString().toLowerCase());
+        return CategoryID.from(IdUtils.uuid());
     }
 
     public static CategoryID from(final String anId) {
@@ -23,7 +22,7 @@ public class CategoryID extends Identifier {
     }
 
     public static CategoryID from() {
-        return new CategoryID(UUID.randomUUID().toString());
+        return new CategoryID(IdUtils.uuid());
     }
 
     @Override
@@ -33,8 +32,12 @@ public class CategoryID extends Identifier {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         final CategoryID that = (CategoryID) o;
         return Objects.equals(getValue(), that.getValue());
     }

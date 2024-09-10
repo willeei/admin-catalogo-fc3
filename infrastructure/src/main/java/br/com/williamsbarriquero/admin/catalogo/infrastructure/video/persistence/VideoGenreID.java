@@ -2,7 +2,6 @@ package br.com.williamsbarriquero.admin.catalogo.infrastructure.video.persistenc
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -11,20 +10,20 @@ import javax.persistence.Embeddable;
 public class VideoGenreID implements Serializable {
 
     @Column(name = "video_id", nullable = false)
-    private UUID videoId;
+    private String videoId;
 
     @Column(name = "genre_id", nullable = false)
-    private UUID genreId;
+    private String genreId;
 
     public VideoGenreID() {
     }
 
-    private VideoGenreID(final UUID videoId, final UUID genreId) {
+    private VideoGenreID(final String videoId, final String genreId) {
         this.videoId = videoId;
         this.genreId = genreId;
     }
 
-    public static VideoGenreID from(final UUID videoId, final UUID genreId) {
+    public static VideoGenreID from(final String videoId, final String genreId) {
         return new VideoGenreID(videoId, genreId);
     }
 
@@ -45,20 +44,20 @@ public class VideoGenreID implements Serializable {
         return Objects.hash(videoId, genreId);
     }
 
-    public UUID getVideoId() {
+    public String getVideoId() {
         return videoId;
     }
 
-    public VideoGenreID setVideoId(UUID videoId) {
+    public VideoGenreID setVideoId(String videoId) {
         this.videoId = videoId;
         return this;
     }
 
-    public UUID getGenreId() {
+    public String getGenreId() {
         return genreId;
     }
 
-    public VideoGenreID setGenreId(UUID genreId) {
+    public VideoGenreID setGenreId(String genreId) {
         this.genreId = genreId;
         return this;
     }

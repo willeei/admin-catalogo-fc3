@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,6 +31,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.InternalErrorE
 import br.com.williamsbarriquero.admin.catalogo.domain.exceptions.NotificationException;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreGateway;
 import br.com.williamsbarriquero.admin.catalogo.domain.genre.GenreID;
+import br.com.williamsbarriquero.admin.catalogo.domain.utils.IdUtils;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.AudioVideoMedia;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.ImageMedia;
 import br.com.williamsbarriquero.admin.catalogo.domain.video.MediaResourceGateway;
@@ -1126,7 +1126,7 @@ class UpdateVideoUseCaseTest extends UseCaseTest {
     private void mockImageMedia() {
         when(mediaResourceGateway.storeImage(any(), any())).thenAnswer(t -> {
             final var resource = t.getArgument(1, Resource.class);
-            return ImageMedia.with(UUID.randomUUID().toString(), resource.name(), "/img");
+            return ImageMedia.with(IdUtils.uuid(), resource.name(), "/img");
         });
     }
 
@@ -1134,7 +1134,7 @@ class UpdateVideoUseCaseTest extends UseCaseTest {
         when(mediaResourceGateway.storeAudioVideo(any(), any())).thenAnswer(t -> {
             final var resource = t.getArgument(1, Resource.class);
             return AudioVideoMedia.with(
-                    UUID.randomUUID().toString(),
+                    IdUtils.uuid(),
                     resource.checksum(),
                     resource.name(),
                     "/img",
