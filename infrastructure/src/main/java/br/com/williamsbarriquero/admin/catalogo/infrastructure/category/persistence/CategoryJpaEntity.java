@@ -15,6 +15,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 public class CategoryJpaEntity {
 
     @Id
+    @Column(name = "id", nullable = false)
     private String id;
 
     @Column(name = "name", nullable = false)
