@@ -11,7 +11,7 @@ import br.com.williamsbarriquero.admin.catalogo.domain.category.Category;
 import br.com.williamsbarriquero.admin.catalogo.domain.category.CategoryID;
 
 @Entity(name = "Category")
-@Table(name = "category")
+@Table(name = "categories")
 public class CategoryJpaEntity {
 
     @Id
