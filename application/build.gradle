@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'br.com.williamsbarriquero.admin.catalogo.application'
+group = 'tech.willeei.admin.catalogo.application'
 version = '1.0-SNAPSHOT'
 
 repositories {
