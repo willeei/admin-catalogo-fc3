@@ -48,20 +48,26 @@ class UpdateCastMemberUseCaseTest extends UseCaseTest {
         final var expectedName = Fixture.name();
         final var expectedType = CastMemberType.ACTOR;
 
-        final var aCommand = UpdateCastMemberCommand.with(expectedId.getValue(), expectedName, expectedType);
+        final var aCommand = UpdateCastMemberCommand.with(
+                expectedId.getValue(),
+                expectedName,
+                expectedType
+        );
 
-        when(castMemberGateway.findById(any())).thenReturn(Optional.of(CastMember.with(aMember)));
+        when(castMemberGateway.findById(any()))
+                .thenReturn(Optional.of(CastMember.with(aMember)));
 
-        when(castMemberGateway.update(any())).thenAnswer(returnsFirstArg());
+        when(castMemberGateway.update(any()))
+                .thenAnswer(returnsFirstArg());
 
         // when
         final var actualOutput = useCase.execute(aCommand);
 
-        //then
+        // then
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.getValue(), actualOutput.id());
 
-        verify(castMemberGateway).findById(expectedId);
+        verify(castMemberGateway).findById(eq(expectedId));
 
         verify(castMemberGateway).update(argThat(aUpdatedMember
                 -> Objects.equals(expectedId, aUpdatedMember.getId())
@@ -73,7 +79,7 @@ class UpdateCastMemberUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    void givenAnInvalidName_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
+    void givenAInvalidName_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
         // given
         final var aMember = CastMember.newMember("vin diesel", CastMemberType.DIRECTOR);
 
@@ -82,29 +88,34 @@ class UpdateCastMemberUseCaseTest extends UseCaseTest {
         final var expectedType = CastMemberType.ACTOR;
 
         final var expectedErrorCount = 1;
-        final var expectedErrorMessages = "'name' should not be null";
+        final var expectedErrorMessage = "'name' should not be null";
 
-        final var aCommand = UpdateCastMemberCommand.with(expectedId.getValue(), expectedName, expectedType);
-
-        when(castMemberGateway.findById(any())).thenReturn(Optional.of(aMember));
-
-        // when
-        final var actualException = Assertions.assertThrows(
-                NotificationException.class, () -> useCase.execute(aCommand)
+        final var aCommand = UpdateCastMemberCommand.with(
+                expectedId.getValue(),
+                expectedName,
+                expectedType
         );
 
-        //then
+        when(castMemberGateway.findById(any()))
+                .thenReturn(Optional.of(aMember));
+
+        // when
+        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
+            useCase.execute(aCommand);
+        });
+
+        // then
         Assertions.assertNotNull(actualException);
+
         Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
-        Assertions.assertEquals(expectedErrorMessages, actualException.getErrors().get(0).message());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
 
-        verify(castMemberGateway).findById(expectedId);
-
+        verify(castMemberGateway).findById(eq(expectedId));
         verify(castMemberGateway, times(0)).update(any());
     }
 
     @Test
-    void givenAnInvalidType_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
+    void givenAInvalidType_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
         // given
         final var aMember = CastMember.newMember("vin diesel", CastMemberType.DIRECTOR);
 
@@ -113,29 +124,34 @@ class UpdateCastMemberUseCaseTest extends UseCaseTest {
         final CastMemberType expectedType = null;
 
         final var expectedErrorCount = 1;
-        final var expectedErrorMessages = "'type' should not be null";
+        final var expectedErrorMessage = "'type' should not be null";
 
-        final var aCommand = UpdateCastMemberCommand.with(expectedId.getValue(), expectedName, expectedType);
-
-        when(castMemberGateway.findById(any())).thenReturn(Optional.of(aMember));
-
-        // when
-        final var actualException = Assertions.assertThrows(
-                NotificationException.class, () -> useCase.execute(aCommand)
+        final var aCommand = UpdateCastMemberCommand.with(
+                expectedId.getValue(),
+                expectedName,
+                expectedType
         );
 
-        //then
+        when(castMemberGateway.findById(any()))
+                .thenReturn(Optional.of(aMember));
+
+        // when
+        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
+            useCase.execute(aCommand);
+        });
+
+        // then
         Assertions.assertNotNull(actualException);
+
         Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
-        Assertions.assertEquals(expectedErrorMessages, actualException.getErrors().get(0).message());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
 
-        verify(castMemberGateway).findById(expectedId);
-
+        verify(castMemberGateway).findById(eq(expectedId));
         verify(castMemberGateway, times(0)).update(any());
     }
 
     @Test
-    void givenAnInvalidId_whenCallsUpdateCastMember_shouldThrowsNotFoundException() {
+    void givenAInvalidId_whenCallsUpdateCastMember_shouldThrowsNotFoundException() {
         // given
         final var aMember = CastMember.newMember("vin diesel", CastMemberType.DIRECTOR);
 
@@ -143,23 +159,28 @@ class UpdateCastMemberUseCaseTest extends UseCaseTest {
         final var expectedName = Fixture.name();
         final var expectedType = Fixture.CastMembers.type();
 
-        final var expectedErrorMessages = "CastMember with ID 123 was not found";
+        final var expectedErrorMessage = "CastMember with ID 123 was not found";
 
-        final var aCommand = UpdateCastMemberCommand.with(expectedId.getValue(), expectedName, expectedType);
-
-        when(castMemberGateway.findById(any())).thenReturn(Optional.empty());
-
-        // when
-        final var actualException = Assertions.assertThrows(
-                NotFoundException.class, () -> useCase.execute(aCommand)
+        final var aCommand = UpdateCastMemberCommand.with(
+                expectedId.getValue(),
+                expectedName,
+                expectedType
         );
 
-        //then
+        when(castMemberGateway.findById(any()))
+                .thenReturn(Optional.empty());
+
+        // when
+        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> {
+            useCase.execute(aCommand);
+        });
+
+        // then
         Assertions.assertNotNull(actualException);
-        Assertions.assertEquals(expectedErrorMessages, actualException.getMessage());
+
+        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
         verify(castMemberGateway).findById(eq(expectedId));
-
         verify(castMemberGateway, times(0)).update(any());
     }
 }

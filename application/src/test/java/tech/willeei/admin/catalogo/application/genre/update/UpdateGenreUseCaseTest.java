@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import tech.willeei.admin.catalogo.application.UseCaseTest;
 import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
@@ -43,10 +43,10 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
     @Test
     void givenAValidCommand_whenCallsUpdateGenre_shouldReturnGenreId() {
         // given
-        final var aGenre = Genre.newGenre("atc", true);
+        final var aGenre = Genre.newGenre("acao", true);
 
         final var expectedId = aGenre.getId();
-        final var expectedName = "Action";
+        final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.<CategoryID>of();
 
@@ -69,26 +69,26 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.getValue(), actualOutput.id());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
+        Mockito.verify(genreGateway, times(1)).findById(eq(expectedId));
 
-        verify(genreGateway, times(1)).update(argThat(aUpdateGenre
-                -> Objects.equals(expectedId, aUpdateGenre.getId())
-                && Objects.equals(expectedName, aUpdateGenre.getName())
-                && Objects.equals(expectedIsActive, aUpdateGenre.isActive())
-                && Objects.equals(expectedCategories, aUpdateGenre.getCategories())
-                && Objects.equals(aGenre.getCreatedAt(), aUpdateGenre.getCreatedAt())
-                && aGenre.getUpdatedAt().isBefore(aUpdateGenre.getUpdatedAt())
-                && Objects.isNull(aUpdateGenre.getDeletedAt())
+        Mockito.verify(genreGateway, times(1)).update(argThat(aUpdatedGenre
+                -> Objects.equals(expectedId, aUpdatedGenre.getId())
+                && Objects.equals(expectedName, aUpdatedGenre.getName())
+                && Objects.equals(expectedIsActive, aUpdatedGenre.isActive())
+                && Objects.equals(expectedCategories, aUpdatedGenre.getCategories())
+                && Objects.equals(aGenre.getCreatedAt(), aUpdatedGenre.getCreatedAt())
+                && aGenre.getUpdatedAt().isBefore(aUpdatedGenre.getUpdatedAt())
+                && Objects.isNull(aUpdatedGenre.getDeletedAt())
         ));
     }
 
     @Test
     void givenAValidCommandWithCategories_whenCallsUpdateGenre_shouldReturnGenreId() {
         // given
-        final var aGenre = Genre.newGenre("atc", true);
+        final var aGenre = Genre.newGenre("acao", true);
 
         final var expectedId = aGenre.getId();
-        final var expectedName = "Action";
+        final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.of(
                 CategoryID.from("123"),
@@ -117,27 +117,28 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.getValue(), actualOutput.id());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
-        verify(categoryGateway, times(1)).existsByIds(eq(expectedCategories));
+        Mockito.verify(genreGateway, times(1)).findById(eq(expectedId));
 
-        verify(genreGateway, times(1)).update(argThat(aUpdateGenre
-                -> Objects.equals(expectedId, aUpdateGenre.getId())
-                && Objects.equals(expectedName, aUpdateGenre.getName())
-                && Objects.equals(expectedIsActive, aUpdateGenre.isActive())
-                && Objects.equals(expectedCategories, aUpdateGenre.getCategories())
-                && Objects.equals(aGenre.getCreatedAt(), aUpdateGenre.getCreatedAt())
-                && aGenre.getUpdatedAt().isBefore(aUpdateGenre.getUpdatedAt())
-                && Objects.isNull(aUpdateGenre.getDeletedAt())
+        Mockito.verify(categoryGateway, times(1)).existsByIds(eq(expectedCategories));
+
+        Mockito.verify(genreGateway, times(1)).update(argThat(aUpdatedGenre
+                -> Objects.equals(expectedId, aUpdatedGenre.getId())
+                && Objects.equals(expectedName, aUpdatedGenre.getName())
+                && Objects.equals(expectedIsActive, aUpdatedGenre.isActive())
+                && Objects.equals(expectedCategories, aUpdatedGenre.getCategories())
+                && Objects.equals(aGenre.getCreatedAt(), aUpdatedGenre.getCreatedAt())
+                && aGenre.getUpdatedAt().isBefore(aUpdatedGenre.getUpdatedAt())
+                && Objects.isNull(aUpdatedGenre.getDeletedAt())
         ));
     }
 
     @Test
     void givenAValidCommandWithInactiveGenre_whenCallsUpdateGenre_shouldReturnGenreId() {
         // given
-        final var aGenre = Genre.newGenre("atc", true);
+        final var aGenre = Genre.newGenre("acao", true);
 
         final var expectedId = aGenre.getId();
-        final var expectedName = "Action";
+        final var expectedName = "Ação";
         final var expectedIsActive = false;
         final var expectedCategories = List.<CategoryID>of();
 
@@ -156,6 +157,7 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
 
         Assertions.assertTrue(aGenre.isActive());
         Assertions.assertNull(aGenre.getDeletedAt());
+
         // when
         final var actualOutput = useCase.execute(aCommand);
 
@@ -163,23 +165,23 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.getValue(), actualOutput.id());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
+        Mockito.verify(genreGateway, times(1)).findById(eq(expectedId));
 
-        verify(genreGateway, times(1)).update(argThat(aUpdateGenre
-                -> Objects.equals(expectedId, aUpdateGenre.getId())
-                && Objects.equals(expectedName, aUpdateGenre.getName())
-                && Objects.equals(expectedIsActive, aUpdateGenre.isActive())
-                && Objects.equals(expectedCategories, aUpdateGenre.getCategories())
-                && Objects.equals(aGenre.getCreatedAt(), aUpdateGenre.getCreatedAt())
-                && aGenre.getUpdatedAt().isBefore(aUpdateGenre.getUpdatedAt())
-                && Objects.nonNull(aUpdateGenre.getDeletedAt())
+        Mockito.verify(genreGateway, times(1)).update(argThat(aUpdatedGenre
+                -> Objects.equals(expectedId, aUpdatedGenre.getId())
+                && Objects.equals(expectedName, aUpdatedGenre.getName())
+                && Objects.equals(expectedIsActive, aUpdatedGenre.isActive())
+                && Objects.equals(expectedCategories, aUpdatedGenre.getCategories())
+                && Objects.equals(aGenre.getCreatedAt(), aUpdatedGenre.getCreatedAt())
+                && aGenre.getUpdatedAt().isBefore(aUpdatedGenre.getUpdatedAt())
+                && Objects.nonNull(aUpdatedGenre.getDeletedAt())
         ));
     }
 
     @Test
     void givenAnInvalidName_whenCallsUpdateGenre_shouldReturnNotificationException() {
         // given
-        final var aGenre = Genre.newGenre("atc", true);
+        final var aGenre = Genre.newGenre("acao", true);
 
         final var expectedId = aGenre.getId();
         final String expectedName = null;
@@ -200,16 +202,19 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
                 .thenReturn(Optional.of(Genre.with(aGenre)));
 
         // when
-        final var actualException
-                = Assertions.assertThrows(NotificationException.class, () -> useCase.execute(aCommand));
+        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
+            useCase.execute(aCommand);
+        });
 
         // then
         Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
-        verify(categoryGateway, times(0)).existsByIds(any());
-        verify(genreGateway, times(0)).update(any());
+        Mockito.verify(genreGateway, times(1)).findById(eq(expectedId));
+
+        Mockito.verify(categoryGateway, times(0)).existsByIds(any());
+
+        Mockito.verify(genreGateway, times(0)).update(any());
     }
 
     @Test
@@ -219,7 +224,7 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
         final var series = CategoryID.from("456");
         final var documentarios = CategoryID.from("789");
 
-        final var aGenre = Genre.newGenre("atc", true);
+        final var aGenre = Genre.newGenre("acao", true);
 
         final var expectedId = aGenre.getId();
         final String expectedName = null;
@@ -244,16 +249,19 @@ class UpdateGenreUseCaseTest extends UseCaseTest {
                 .thenReturn(List.of(filmes));
 
         // when
-        final var actualException
-                = Assertions.assertThrows(NotificationException.class, () -> useCase.execute(aCommand));
+        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
+            useCase.execute(aCommand);
+        });
 
         // then
         Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
         Assertions.assertEquals(expectedErrorMessageOne, actualException.getErrors().get(0).message());
         Assertions.assertEquals(expectedErrorMessageTwo, actualException.getErrors().get(1).message());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
-        verify(categoryGateway, times(1)).existsByIds(eq(expectedCategories));
-        verify(genreGateway, times(0)).update(any());
+        Mockito.verify(genreGateway, times(1)).findById(eq(expectedId));
+
+        Mockito.verify(categoryGateway, times(1)).existsByIds(eq(expectedCategories));
+
+        Mockito.verify(genreGateway, times(0)).update(any());
     }
 }

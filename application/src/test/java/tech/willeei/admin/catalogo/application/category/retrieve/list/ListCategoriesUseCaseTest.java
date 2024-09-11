@@ -76,7 +76,7 @@ class ListCategoriesUseCaseTest extends UseCaseTest {
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         final var expectedPagination
-                = new Pagination<>(expectedPage, expectedPerPage, 0, categories);
+                = new Pagination<>(expectedPage, expectedPerPage, categories.size(), categories);
 
         final var expectedItemsCount = 0;
         final var expectedResult = expectedPagination.map(CategoryListOutput::from);
@@ -90,7 +90,7 @@ class ListCategoriesUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedResult, actualResult);
         Assertions.assertEquals(expectedPage, actualResult.currentPage());
         Assertions.assertEquals(expectedPerPage, actualResult.perPage());
-        Assertions.assertEquals(0, actualResult.total());
+        Assertions.assertEquals(categories.size(), actualResult.total());
     }
 
     @Test

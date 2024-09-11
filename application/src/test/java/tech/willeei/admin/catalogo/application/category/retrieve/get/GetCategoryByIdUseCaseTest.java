@@ -1,20 +1,21 @@
 package tech.willeei.admin.catalogo.application.category.retrieve.get;
 
-import tech.willeei.admin.catalogo.application.UseCaseTest;
-import tech.willeei.admin.catalogo.domain.category.Category;
-import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
-import tech.willeei.admin.catalogo.domain.category.CategoryID;
-import tech.willeei.admin.catalogo.domain.exceptions.NotFoundException;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import tech.willeei.admin.catalogo.application.UseCaseTest;
+import tech.willeei.admin.catalogo.domain.category.Category;
+import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
+import tech.willeei.admin.catalogo.domain.category.CategoryID;
+import tech.willeei.admin.catalogo.domain.exceptions.NotFoundException;
 
 class GetCategoryByIdUseCaseTest extends UseCaseTest {
 

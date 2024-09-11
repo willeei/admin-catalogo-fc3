@@ -1,18 +1,22 @@
 package tech.willeei.admin.catalogo.application.category.create;
 
-import tech.willeei.admin.catalogo.application.UseCaseTest;
-import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Objects;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.List;
-import java.util.Objects;
-
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Mockito.*;
+import tech.willeei.admin.catalogo.application.UseCaseTest;
+import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
 
 class CreateCategoryUseCaseTest extends UseCaseTest {
 
@@ -27,10 +31,14 @@ class CreateCategoryUseCaseTest extends UseCaseTest {
         return List.of(categoryGateway);
     }
 
+    // 1. Teste do caminho feliz
+    // 2. Teste passando uma propriedade inválida (name)
+    // 3. Teste criando uma categoria inativa
+    // 4. Teste simulando um erro generico vindo do gateway
     @Test
     void givenAValidCommand_whenCallsCreateCategory_shouldReturnCategoryId() {
         final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
 
         final var aCommand
@@ -58,7 +66,7 @@ class CreateCategoryUseCaseTest extends UseCaseTest {
     @Test
     void givenAInvalidName_whenCallsCreateCategory_thenShouldReturnDomainException() {
         final String expectedName = null;
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
@@ -77,7 +85,7 @@ class CreateCategoryUseCaseTest extends UseCaseTest {
     @Test
     void givenAValidCommandWithInactiveCategory_whenCallsCreateCategory_shouldReturnInactiveCategoryId() {
         final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = false;
 
         final var aCommand
@@ -103,12 +111,12 @@ class CreateCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    void givenAValidCommand_whenGatewayThrowsRandomExcption_shouldReturnAException() {
+    void givenAValidCommand_whenGatewayThrowsRandomException_shouldReturnAException() {
         final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais essistida";
+        final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
-        final var expectedErrorMessage = "Gateway error";
         final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "Gateway error";
 
         final var aCommand
                 = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);

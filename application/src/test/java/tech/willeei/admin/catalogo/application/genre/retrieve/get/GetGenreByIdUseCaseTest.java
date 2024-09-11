@@ -35,9 +35,9 @@ class GetGenreByIdUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    void givenAValidId_whenCallsGetGenre_thenShouldReturnGenre() {
-        // given 
-        final var expectedName = "Acao";
+    void givenAValidId_whenCallsGetGenre_shouldReturnGenre() {
+        // given
+        final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.of(
                 CategoryID.from("123"),
@@ -51,8 +51,7 @@ class GetGenreByIdUseCaseTest extends UseCaseTest {
 
         when(genreGateway.findById(any()))
                 .thenReturn(Optional.of(aGenre));
-
-        // when 
+        // when
         final var actualGenre = useCase.execute(expectedId.getValue());
 
         // then
@@ -68,18 +67,19 @@ class GetGenreByIdUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    void givenAValidId_whenCallsGetGenreAndDoesNotExists_thenShouldReturnNotFound() {
-        // given 
+    void givenAValidId_whenCallsGetGenreAndDoesNotExists_shouldReturnNotFound() {
+        // given
         final var expectedErrorMessage = "Genre with ID 123 was not found";
+
         final var expectedId = GenreID.from("123");
 
         when(genreGateway.findById(eq(expectedId)))
                 .thenReturn(Optional.empty());
-        // when 
-        final var actualException = Assertions.assertThrows(
-                NotFoundException.class,
-                () -> useCase.execute(expectedId.getValue())
-        );
+
+        // when
+        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> {
+            useCase.execute(expectedId.getValue());
+        });
 
         // then
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());

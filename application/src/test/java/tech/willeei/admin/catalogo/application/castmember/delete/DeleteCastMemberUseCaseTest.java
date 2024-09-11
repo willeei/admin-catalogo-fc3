@@ -1,6 +1,7 @@
 package tech.willeei.admin.catalogo.application.castmember.delete;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -38,13 +39,14 @@ class DeleteCastMemberUseCaseTest extends UseCaseTest {
 
         final var expectedId = aMember.getId();
 
-        doNothing().when(castMemberGateway).deleteById(any());
+        doNothing()
+                .when(castMemberGateway).deleteById(any());
 
         // when
         Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.getValue()));
 
         // then
-        verify(castMemberGateway).deleteById(expectedId);
+        verify(castMemberGateway).deleteById(eq(expectedId));
     }
 
     @Test
@@ -52,29 +54,30 @@ class DeleteCastMemberUseCaseTest extends UseCaseTest {
         // given
         final var expectedId = CastMemberID.from("123");
 
-        doNothing().when(castMemberGateway).deleteById(any());
+        doNothing()
+                .when(castMemberGateway).deleteById(any());
 
         // when
         Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.getValue()));
 
         // then
-        verify(castMemberGateway).deleteById(expectedId);
+        verify(castMemberGateway).deleteById(eq(expectedId));
     }
 
     @Test
     void givenAValidId_whenCallsDeleteCastMemberAndGatewayThrowsException_shouldReceiveException() {
         // given
-        final var expectedId = CastMemberID.from("123");
+        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
 
-        doThrow(new IllegalStateException("Gateway error")).when(castMemberGateway).deleteById(any());
+        final var expectedId = aMember.getId();
+
+        doThrow(new IllegalStateException("Gateway error"))
+                .when(castMemberGateway).deleteById(any());
 
         // when
-        final var expectedType = IllegalStateException.class;
-        final var actualException = Assertions.assertThrows(expectedType, () -> useCase.execute(expectedId.getValue()));
-
-        Assertions.assertNotNull(actualException);
+        Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(expectedId.getValue()));
 
         // then
-        verify(castMemberGateway).deleteById(expectedId);
+        verify(castMemberGateway).deleteById(eq(expectedId));
     }
 }

@@ -1,21 +1,23 @@
 package tech.willeei.admin.catalogo.application.genre.retrieve.list;
 
-import tech.willeei.admin.catalogo.application.UseCaseTest;
-import tech.willeei.admin.catalogo.domain.genre.Genre;
-import tech.willeei.admin.catalogo.domain.genre.GenreGateway;
-import tech.willeei.admin.catalogo.domain.pagination.Pagination;
-import tech.willeei.admin.catalogo.domain.pagination.SearchQuery;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import tech.willeei.admin.catalogo.application.UseCaseTest;
+import tech.willeei.admin.catalogo.domain.genre.Genre;
+import tech.willeei.admin.catalogo.domain.genre.GenreGateway;
+import tech.willeei.admin.catalogo.domain.pagination.Pagination;
+import tech.willeei.admin.catalogo.domain.pagination.SearchQuery;
 
 class ListGenreUseCaseTest extends UseCaseTest {
 
@@ -31,10 +33,10 @@ class ListGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    void givneAValidQuery_whenCallsListGenre_shouldReturnGenres() {
+    void givenAValidQuery_whenCallsListGenre_shouldReturnGenres() {
         // given
         final var genres = List.of(
-                Genre.newGenre("Acao", true),
+                Genre.newGenre("Ação", true),
                 Genre.newGenre("Aventura", true)
         );
 
@@ -71,11 +73,11 @@ class ListGenreUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        Mockito.verify(genreGateway, times(1)).findAll(aQuery);
+        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
     }
 
     @Test
-    void givneAValidQuery_whenCallsListGenreAndResultIsEmpty_shouldReturnGenres() {
+    void givenAValidQuery_whenCallsListGenreAndResultIsEmpty_shouldReturnGenres() {
         // given
         final var genres = List.<Genre>of();
 
@@ -110,11 +112,11 @@ class ListGenreUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        Mockito.verify(genreGateway, times(1)).findAll(aQuery);
+        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
     }
 
     @Test
-    void givneAValidQuery_whenCallsListGenreAndGatewayThrowsRandomError_shouldReturnException() {
+    void givenAValidQuery_whenCallsListGenreAndGatewayThrowsRandomError_shouldReturnException() {
         // given
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -131,13 +133,14 @@ class ListGenreUseCaseTest extends UseCaseTest {
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
-        final var actualException = Assertions.assertThrows(
-                IllegalStateException.class, () -> useCase.execute(aQuery)
+        final var actualOutput = Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> useCase.execute(aQuery)
         );
 
         // then
-        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+        Assertions.assertEquals(expectedErrorMessage, actualOutput.getMessage());
 
-        Mockito.verify(genreGateway, times(1)).findAll(aQuery);
+        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
     }
 }
