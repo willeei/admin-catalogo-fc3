@@ -15,7 +15,7 @@ plugins {
     id 'org.flywaydb.flyway' version '9.11.0'
 }
 
-group = 'br.com.williamsbarriquero.admin.catalogo.infrastructure'
+group = 'tech.willeei.admin.catalogo.infrastructure'
 version = '1.0-SNAPSHOT'
 
 java {
