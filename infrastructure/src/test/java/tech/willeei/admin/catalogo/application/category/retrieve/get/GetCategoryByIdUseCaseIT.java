@@ -1,5 +1,15 @@
 package tech.willeei.admin.catalogo.application.category.retrieve.get;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+
+import java.util.Arrays;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+
 import tech.willeei.admin.catalogo.IntegrationTest;
 import tech.willeei.admin.catalogo.domain.category.Category;
 import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
@@ -7,15 +17,6 @@ import tech.willeei.admin.catalogo.domain.category.CategoryID;
 import tech.willeei.admin.catalogo.domain.exceptions.NotFoundException;
 import tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
 import tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-
-import java.util.Arrays;
-
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
 
 @IntegrationTest
 class GetCategoryByIdUseCaseIT {

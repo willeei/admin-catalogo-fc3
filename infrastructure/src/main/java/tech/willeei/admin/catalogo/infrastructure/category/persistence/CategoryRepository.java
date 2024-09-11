@@ -11,8 +11,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface CategoryRepository extends JpaRepository<CategoryJpaEntity, String> {
 
-    Page<CategoryJpaEntity> findAll(Specification<CategoryJpaEntity> whereClouse, Pageable page);
+    Page<CategoryJpaEntity> findAll(Specification<CategoryJpaEntity> whereClause, Pageable page);
 
-    @Query(value = "SELECT c.id FROM Category c WHERE c.id in :ids")
+    @Query(value = "select c.id from Category c where c.id in :ids")
     List<String> existsByIds(@Param("ids") List<String> ids);
 }

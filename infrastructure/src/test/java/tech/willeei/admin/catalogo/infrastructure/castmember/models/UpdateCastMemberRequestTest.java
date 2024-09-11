@@ -1,11 +1,12 @@
 package tech.willeei.admin.catalogo.infrastructure.castmember.models;
 
-import tech.willeei.admin.catalogo.domain.Fixture;
-import tech.willeei.admin.catalogo.JacksonTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
+
+import tech.willeei.admin.catalogo.JacksonTest;
+import tech.willeei.admin.catalogo.domain.Fixture;
 
 @JacksonTest
 class UpdateCastMemberRequestTest {
@@ -14,7 +15,7 @@ class UpdateCastMemberRequestTest {
     private JacksonTester<UpdateCastMemberRequest> json;
 
     @Test
-    public void testUnmarshall() throws Exception {
+    void testUnmarshall() throws Exception {
         final var expectedName = Fixture.name();
         final var expectedType = Fixture.CastMembers.type();
 

@@ -1,9 +1,14 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.persistence;
 
-import tech.willeei.admin.catalogo.domain.category.CategoryID;
-
-import javax.persistence.*;
 import java.util.Objects;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
+
+import tech.willeei.admin.catalogo.domain.category.CategoryID;
 
 @Entity
 @Table(name = "genres_categories")
@@ -19,13 +24,13 @@ public class GenreCategoryJpaEntity {
     public GenreCategoryJpaEntity() {
     }
 
-    private GenreCategoryJpaEntity(final GenreJpaEntity aGenre, final CategoryID aCategoryID) {
-        this.id = GenreCategoryID.from(aGenre.getId(), aCategoryID.getValue());
+    private GenreCategoryJpaEntity(final GenreJpaEntity aGenre, final CategoryID aCategoryId) {
+        this.id = GenreCategoryID.from(aGenre.getId(), aCategoryId.getValue());
         this.genre = aGenre;
     }
 
-    public static GenreCategoryJpaEntity from(final GenreJpaEntity aGenre, final CategoryID aCategoryID) {
-        return new GenreCategoryJpaEntity(aGenre, aCategoryID);
+    public static GenreCategoryJpaEntity from(final GenreJpaEntity aGenre, final CategoryID aCategoryId) {
+        return new GenreCategoryJpaEntity(aGenre, aCategoryId);
     }
 
     @Override
@@ -37,27 +42,29 @@ public class GenreCategoryJpaEntity {
             return false;
         }
         final GenreCategoryJpaEntity that = (GenreCategoryJpaEntity) o;
-        return Objects.equals(id, that.getId());
+        return Objects.equals(getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(getId());
     }
 
     public GenreCategoryID getId() {
         return id;
     }
 
-    public void setId(final GenreCategoryID id) {
+    public GenreCategoryJpaEntity setId(GenreCategoryID id) {
         this.id = id;
+        return this;
     }
 
     public GenreJpaEntity getGenre() {
         return genre;
     }
 
-    public void setGenre(final GenreJpaEntity genre) {
+    public GenreCategoryJpaEntity setGenre(GenreJpaEntity genre) {
         this.genre = genre;
+        return this;
     }
 }

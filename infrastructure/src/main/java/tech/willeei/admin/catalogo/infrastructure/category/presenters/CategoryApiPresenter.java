@@ -7,16 +7,6 @@ import tech.willeei.admin.catalogo.infrastructure.category.models.CategoryRespon
 
 public interface CategoryApiPresenter {
 
-//    Function<CategoryOutput, CategoryApiOutput> present =
-//            output -> new CategoryApiOutput(
-//                    output.id().getValue(),
-//                    output.name(),
-//                    output.description(),
-//                    output.isActive(),
-//                    output.createdAt(),
-//                    output.updatedAt(),
-//                    output.deletedAt()
-//            );
     static CategoryResponse present(final CategoryOutput output) {
         return new CategoryResponse(
                 output.id().getValue(),
@@ -36,7 +26,6 @@ public interface CategoryApiPresenter {
                 output.description(),
                 output.isActive(),
                 output.createdAt(),
-                output.updatedAt(),
                 output.deletedAt()
         );
     }

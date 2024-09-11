@@ -1,19 +1,24 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.persistence;
 
-import tech.willeei.admin.catalogo.domain.category.CategoryID;
-import tech.willeei.admin.catalogo.domain.genre.Genre;
-import tech.willeei.admin.catalogo.domain.genre.GenreID;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
-import javax.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.EAGER;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-@Entity
+import tech.willeei.admin.catalogo.domain.category.CategoryID;
+import tech.willeei.admin.catalogo.domain.genre.Genre;
+import tech.willeei.admin.catalogo.domain.genre.GenreID;
+
+@Entity(name = "Genre")
 @Table(name = "genres")
 public class GenreJpaEntity {
 
@@ -48,7 +53,8 @@ public class GenreJpaEntity {
             final boolean isActive,
             final Instant createdAt,
             final Instant updatedAt,
-            final Instant deletedAt) {
+            final Instant deletedAt
+    ) {
         this.id = anId;
         this.name = aName;
         this.active = isActive;
@@ -68,7 +74,8 @@ public class GenreJpaEntity {
                 aGenre.getDeletedAt()
         );
 
-        aGenre.getCategories().forEach(anEntity::addCategory);
+        aGenre.getCategories()
+                .forEach(anEntity::addCategory);
 
         return anEntity;
     }
@@ -90,36 +97,39 @@ public class GenreJpaEntity {
     }
 
     private void removeCategory(final CategoryID anId) {
-        this.categories.add(GenreCategoryJpaEntity.from(this, anId));
+        this.categories.remove(GenreCategoryJpaEntity.from(this, anId));
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public GenreJpaEntity setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public GenreJpaEntity setName(String name) {
         this.name = name;
+        return this;
     }
 
     public boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public GenreJpaEntity setActive(boolean active) {
         this.active = active;
+        return this;
     }
 
     public List<CategoryID> getCategoryIDs() {
         return getCategories().stream()
-                .map(gc -> CategoryID.from(gc.getId().getCategoryId()))
+                .map(it -> CategoryID.from(it.getId().getCategoryId()))
                 .toList();
     }
 
@@ -127,31 +137,35 @@ public class GenreJpaEntity {
         return categories;
     }
 
-    public void setCategories(Set<GenreCategoryJpaEntity> categories) {
+    public GenreJpaEntity setCategories(Set<GenreCategoryJpaEntity> categories) {
         this.categories = categories;
+        return this;
     }
 
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public GenreJpaEntity setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
     public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public GenreJpaEntity setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+        return this;
     }
 
     public Instant getDeletedAt() {
         return deletedAt;
     }
 
-    public void setDeletedAt(Instant deletedAt) {
+    public GenreJpaEntity setDeletedAt(Instant deletedAt) {
         this.deletedAt = deletedAt;
+        return this;
     }
 }

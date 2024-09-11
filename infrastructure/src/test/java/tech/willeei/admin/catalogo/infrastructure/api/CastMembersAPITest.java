@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Objects;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -52,7 +51,7 @@ import tech.willeei.admin.catalogo.infrastructure.castmember.models.CreateCastMe
 import tech.willeei.admin.catalogo.infrastructure.castmember.models.UpdateCastMemberRequest;
 
 @ControllerTest(controllers = CastMemberAPI.class)
-class CastMembersAPITest {
+class CastMemberAPITest {
 
     @Autowired
     private MockMvc mvc;
@@ -82,22 +81,25 @@ class CastMembersAPITest {
         final var expectedType = Fixture.CastMembers.type();
         final var expectedId = CastMemberID.from("o1i2u3i1o");
 
-        final var aCommand = new CreateCastMemberRequest(expectedName, expectedType);
+        final var aCommand
+                = new CreateCastMemberRequest(expectedName, expectedType);
 
-        when(createCastMemberUseCase.execute(any())).thenReturn(CreateCastMemberOutput.from(expectedId));
+        when(createCastMemberUseCase.execute(any()))
+                .thenReturn(CreateCastMemberOutput.from(expectedId));
 
         // when
         final var aRequest = post("/cast_members")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aCommand));
 
-        final var response = this.mvc.perform(aRequest).andDo(print());
+        final var response = this.mvc.perform(aRequest)
+                .andDo(print());
 
         // then
         response.andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/cast_members/" + expectedId.getValue()))
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.id", Matchers.equalTo(expectedId.getValue())));
+                .andExpect(jsonPath("$.id", equalTo(expectedId.getValue())));
 
         verify(createCastMemberUseCase).execute(argThat(actualCmd
                 -> Objects.equals(expectedName, actualCmd.name())
@@ -111,9 +113,10 @@ class CastMembersAPITest {
         final String expectedName = null;
         final var expectedType = Fixture.CastMembers.type();
 
-        final var expectedErrorMessage = "'name' must not be null";
+        final var expectedErrorMessage = "'name' should not be null";
 
-        final var aCommand = new CreateCastMemberRequest(expectedName, expectedType);
+        final var aCommand
+                = new CreateCastMemberRequest(expectedName, expectedType);
 
         when(createCastMemberUseCase.execute(any()))
                 .thenThrow(NotificationException.with(new Error(expectedErrorMessage)));
@@ -123,7 +126,8 @@ class CastMembersAPITest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aCommand));
 
-        final var response = this.mvc.perform(aRequest).andDo(print());
+        final var response = this.mvc.perform(aRequest)
+                .andDo(print());
 
         // then
         response.andExpect(status().isUnprocessableEntity())

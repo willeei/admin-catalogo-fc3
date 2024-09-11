@@ -1,8 +1,8 @@
 package tech.willeei.admin.catalogo.infrastructure.category.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.Instant;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record CategoryResponse(
         @JsonProperty("id")

@@ -45,7 +45,7 @@ public class VideoCastMemberJpaEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final VideoCastMemberJpaEntity that = (VideoCastMemberJpaEntity) o;
+        VideoCastMemberJpaEntity that = (VideoCastMemberJpaEntity) o;
         return Objects.equals(getId(), that.getId()) && Objects.equals(getVideo(), that.getVideo());
     }
 

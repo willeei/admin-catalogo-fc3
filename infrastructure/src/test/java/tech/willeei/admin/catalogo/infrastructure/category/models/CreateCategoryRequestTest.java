@@ -13,18 +13,15 @@ class CreateCategoryRequestTest {
     private JacksonTester<CreateCategoryRequest> json;
 
     @Test
-    void testMarchall() throws Exception {
+    void testMarshall() throws Exception {
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
-        final var expectedIsActive = false;
+        final var expectedIsActive = true;
 
-        final var response = new CreateCategoryRequest(
-                expectedName,
-                expectedDescription,
-                expectedIsActive
-        );
+        final var request
+                = new CreateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
-        final var actualJson = this.json.write(response);
+        final var actualJson = this.json.write(request);
 
         Assertions.assertThat(actualJson)
                 .hasJsonPathValue("$.name", expectedName)
@@ -44,11 +41,7 @@ class CreateCategoryRequestTest {
                   "description": "%s",
                   "is_active": %s
                 }
-                """.formatted(
-                expectedName,
-                expectedDescription,
-                expectedIsActive
-        );
+                """.formatted(expectedName, expectedDescription, expectedIsActive);
 
         final var actualJson = this.json.parse(json);
 
@@ -57,5 +50,4 @@ class CreateCategoryRequestTest {
                 .hasFieldOrPropertyWithValue("description", expectedDescription)
                 .hasFieldOrPropertyWithValue("active", expectedIsActive);
     }
-
 }

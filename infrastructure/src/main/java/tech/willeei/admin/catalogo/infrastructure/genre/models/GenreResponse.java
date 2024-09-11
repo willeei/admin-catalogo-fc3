@@ -1,9 +1,9 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.Instant;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record GenreResponse(
         @JsonProperty("id")

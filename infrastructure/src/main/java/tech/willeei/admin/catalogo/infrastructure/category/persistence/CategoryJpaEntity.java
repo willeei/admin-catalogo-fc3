@@ -46,7 +46,8 @@ public class CategoryJpaEntity {
             final boolean active,
             final Instant createdAt,
             final Instant updatedAt,
-            final Instant deletedAt) {
+            final Instant deletedAt
+    ) {
         this.id = id;
         this.name = name;
         this.description = description;

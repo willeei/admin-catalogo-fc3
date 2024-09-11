@@ -1,18 +1,27 @@
 package tech.willeei.admin.catalogo.infrastructure.api;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import tech.willeei.admin.catalogo.domain.pagination.Pagination;
 import tech.willeei.admin.catalogo.infrastructure.category.models.CategoryListResponse;
 import tech.willeei.admin.catalogo.infrastructure.category.models.CategoryResponse;
 import tech.willeei.admin.catalogo.infrastructure.category.models.CreateCategoryRequest;
 import tech.willeei.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "categories")
 @Tag(name = "Categories")
@@ -29,13 +38,11 @@ public interface CategoryAPI {
         @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),})
     ResponseEntity<?> createCategory(@RequestBody CreateCategoryRequest input);
 
-    @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @GetMapping
     @Operation(summary = "List all categories paginated")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Listed successfully"),
-        @ApiResponse(responseCode = "422", description = "An invalid parameter was received"),
+        @ApiResponse(responseCode = "422", description = "A invalid parameter was received"),
         @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),})
     Pagination<CategoryListResponse> listCategories(
             @RequestParam(name = "search", required = false, defaultValue = "") final String search,
@@ -66,7 +73,7 @@ public interface CategoryAPI {
         @ApiResponse(responseCode = "200", description = "Category updated successfully"),
         @ApiResponse(responseCode = "404", description = "Category was not found"),
         @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),})
-    ResponseEntity<?> updatedById(@PathVariable(name = "id") String id, @RequestBody UpdateCategoryRequest input);
+    ResponseEntity<?> updateById(@PathVariable(name = "id") String id, @RequestBody UpdateCategoryRequest input);
 
     @DeleteMapping(value = "{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -75,5 +82,5 @@ public interface CategoryAPI {
         @ApiResponse(responseCode = "204", description = "Category deleted successfully"),
         @ApiResponse(responseCode = "404", description = "Category was not found"),
         @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),})
-    void deletedById(@PathVariable(name = "id") String id);
+    void deleteById(@PathVariable(name = "id") String id);
 }

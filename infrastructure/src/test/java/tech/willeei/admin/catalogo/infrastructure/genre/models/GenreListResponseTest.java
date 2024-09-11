@@ -1,12 +1,13 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.models;
 
-import tech.willeei.admin.catalogo.JacksonTest;
+import java.time.Instant;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
-import java.time.Instant;
+import tech.willeei.admin.catalogo.JacksonTest;
 
 @JacksonTest
 class GenreListResponseTest {
@@ -15,12 +16,11 @@ class GenreListResponseTest {
     private JacksonTester<GenreListResponse> json;
 
     @Test
-    void testMarchall() throws Exception {
+    void testMarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = "Ação";
         final var expectedIsActive = false;
         final var expectedCreatedAt = Instant.now();
-        final var expectedUpdatedAt = Instant.now();
         final var expectedDeletedAt = Instant.now();
 
         final var response = new GenreListResponse(
@@ -28,7 +28,6 @@ class GenreListResponseTest {
                 expectedName,
                 expectedIsActive,
                 expectedCreatedAt,
-                expectedUpdatedAt,
                 expectedDeletedAt
         );
 
@@ -39,8 +38,6 @@ class GenreListResponseTest {
                 .hasJsonPathValue("$.name", expectedName)
                 .hasJsonPathValue("$.is_active", expectedIsActive)
                 .hasJsonPathValue("$.created_at", expectedCreatedAt.toString())
-                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString())
                 .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString());
     }
-
 }

@@ -20,17 +20,17 @@ import tech.willeei.admin.catalogo.infrastructure.castmember.persistence.CastMem
 import tech.willeei.admin.catalogo.infrastructure.castmember.persistence.CastMemberRepository;
 
 @MySQLGatewayTest
-class CastMembersMySQLGatewayTest {
+class CastMemberMySQLGatewayTest {
 
     @Autowired
-    private CastMemberMySQLGateway castMemberMySQLGateway;
+    private CastMemberMySQLGateway castMemberGateway;
 
     @Autowired
     private CastMemberRepository castMemberRepository;
 
     @Test
     void testDependencies() {
-        Assertions.assertNotNull(castMemberMySQLGateway);
+        Assertions.assertNotNull(castMemberGateway);
         Assertions.assertNotNull(castMemberRepository);
     }
 
@@ -46,7 +46,7 @@ class CastMembersMySQLGatewayTest {
         Assertions.assertEquals(0, castMemberRepository.count());
 
         // when
-        final var actualMember = castMemberMySQLGateway.create(CastMember.with(aMember));
+        final var actualMember = castMemberGateway.create(CastMember.with(aMember));
 
         // then
         Assertions.assertEquals(1, castMemberRepository.count());
@@ -72,17 +72,17 @@ class CastMembersMySQLGatewayTest {
         final var expectedName = name();
         final var expectedType = CastMemberType.ACTOR;
 
-        final var aMember = CastMember.newMember("vin d", CastMemberType.DIRECTOR);
+        final var aMember = CastMember.newMember("vind", CastMemberType.DIRECTOR);
         final var expectedId = aMember.getId();
 
         final var currentMember = castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
         Assertions.assertEquals(1, castMemberRepository.count());
-        Assertions.assertEquals("vin d", currentMember.getName());
+        Assertions.assertEquals("vind", currentMember.getName());
         Assertions.assertEquals(CastMemberType.DIRECTOR, currentMember.getType());
 
         // when
-        final var actualMember = castMemberMySQLGateway.update(
+        final var actualMember = castMemberGateway.update(
                 CastMember.with(aMember).update(expectedName, expectedType)
         );
 
@@ -105,6 +105,26 @@ class CastMembersMySQLGatewayTest {
     }
 
     @Test
+    void givenTwoCastMembersAndOnePersisted_whenCallsExistsByIds_shouldReturnPersistedID() {
+        // given
+        final var aMember = CastMember.newMember("Vin", CastMemberType.DIRECTOR);
+
+        final var expectedItems = 1;
+        final var expectedId = aMember.getId();
+
+        Assertions.assertEquals(0, castMemberRepository.count());
+
+        castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
+
+        // when
+        final var actualMember = castMemberGateway.existsByIds(List.of(CastMemberID.from("123"), expectedId));
+
+        // then
+        Assertions.assertEquals(expectedItems, actualMember.size());
+        Assertions.assertEquals(expectedId.getValue(), actualMember.get(0).getValue());
+    }
+
+    @Test
     void givenAValidCastMember_whenCallsDeleteById_shouldDeleteIt() {
         // given
         final var aMember = CastMember.newMember(name(), type());
@@ -114,14 +134,14 @@ class CastMembersMySQLGatewayTest {
         Assertions.assertEquals(1, castMemberRepository.count());
 
         // when
-        castMemberMySQLGateway.deleteById(aMember.getId());
+        castMemberGateway.deleteById(aMember.getId());
 
         // then
         Assertions.assertEquals(0, castMemberRepository.count());
     }
 
     @Test
-    void givenAnInvalid_whenCallsDeleteById_shouldBeIgnored() {
+    void givenAnInvalidId_whenCallsDeleteById_shouldBeIgnored() {
         // given
         final var aMember = CastMember.newMember(name(), type());
 
@@ -130,7 +150,7 @@ class CastMembersMySQLGatewayTest {
         Assertions.assertEquals(1, castMemberRepository.count());
 
         // when
-        castMemberMySQLGateway.deleteById(CastMemberID.from("123"));
+        castMemberGateway.deleteById(CastMemberID.from("123"));
 
         // then
         Assertions.assertEquals(1, castMemberRepository.count());
@@ -150,7 +170,7 @@ class CastMembersMySQLGatewayTest {
         Assertions.assertEquals(1, castMemberRepository.count());
 
         // when
-        final var actualMember = castMemberMySQLGateway.findById(expectedId).get();
+        final var actualMember = castMemberGateway.findById(expectedId).get();
 
         // then
         Assertions.assertEquals(expectedId, actualMember.getId());
@@ -161,7 +181,7 @@ class CastMembersMySQLGatewayTest {
     }
 
     @Test
-    void givenAnInvalidCastMember_whenCallsFindById_shouldReturnEmpty() {
+    void givenAnInvalidId_whenCallsFindById_shouldReturnEmpty() {
         // given
         final var aMember = CastMember.newMember(name(), type());
 
@@ -170,7 +190,7 @@ class CastMembersMySQLGatewayTest {
         Assertions.assertEquals(1, castMemberRepository.count());
 
         // when
-        final var actualMember = castMemberMySQLGateway.findById(CastMemberID.from("123"));
+        final var actualMember = castMemberGateway.findById(CastMemberID.from("123"));
 
         // then
         Assertions.assertTrue(actualMember.isEmpty());
@@ -190,7 +210,7 @@ class CastMembersMySQLGatewayTest {
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
-        final var actualPage = castMemberMySQLGateway.findAll(aQuery);
+        final var actualPage = castMemberGateway.findAll(aQuery);
 
         // then
         Assertions.assertEquals(expectedPage, actualPage.currentPage());
@@ -210,24 +230,27 @@ class CastMembersMySQLGatewayTest {
             final String expectedTerms,
             final int expectedPage,
             final int expectedPerPage,
-            final int expectedItemCount,
+            final int expectedItemsCount,
             final long expectedTotal,
             final String expectedName
     ) {
         // given
         mockMembers();
 
+        final var expectedSort = "name";
+        final var expectedDirection = "asc";
+
         final var aQuery
-                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, "name", "asc");
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
-        final var actualPage = castMemberMySQLGateway.findAll(aQuery);
+        final var actualPage = castMemberGateway.findAll(aQuery);
 
         // then
         Assertions.assertEquals(expectedPage, actualPage.currentPage());
         Assertions.assertEquals(expectedPerPage, actualPage.perPage());
         Assertions.assertEquals(expectedTotal, actualPage.total());
-        Assertions.assertEquals(expectedItemCount, actualPage.items().size());
+        Assertions.assertEquals(expectedItemsCount, actualPage.items().size());
         Assertions.assertEquals(expectedName, actualPage.items().get(0).getName());
     }
 
@@ -242,7 +265,7 @@ class CastMembersMySQLGatewayTest {
             final String expectedDirection,
             final int expectedPage,
             final int expectedPerPage,
-            final int expectedItemCount,
+            final int expectedItemsCount,
             final long expectedTotal,
             final String expectedName
     ) {
@@ -255,13 +278,13 @@ class CastMembersMySQLGatewayTest {
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
-        final var actualPage = castMemberMySQLGateway.findAll(aQuery);
+        final var actualPage = castMemberGateway.findAll(aQuery);
 
         // then
         Assertions.assertEquals(expectedPage, actualPage.currentPage());
         Assertions.assertEquals(expectedPerPage, actualPage.perPage());
         Assertions.assertEquals(expectedTotal, actualPage.total());
-        Assertions.assertEquals(expectedItemCount, actualPage.items().size());
+        Assertions.assertEquals(expectedItemsCount, actualPage.items().size());
         Assertions.assertEquals(expectedName, actualPage.items().get(0).getName());
     }
 
@@ -273,7 +296,7 @@ class CastMembersMySQLGatewayTest {
     void givenAValidPagination_whenCallsFindAll_shouldReturnPaginated(
             final int expectedPage,
             final int expectedPerPage,
-            final int expectedItemCount,
+            final int expectedItemsCount,
             final long expectedTotal,
             final String expectedNames
     ) {
@@ -288,13 +311,13 @@ class CastMembersMySQLGatewayTest {
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
-        final var actualPage = castMemberMySQLGateway.findAll(aQuery);
+        final var actualPage = castMemberGateway.findAll(aQuery);
 
         // then
         Assertions.assertEquals(expectedPage, actualPage.currentPage());
         Assertions.assertEquals(expectedPerPage, actualPage.perPage());
         Assertions.assertEquals(expectedTotal, actualPage.total());
-        Assertions.assertEquals(expectedItemCount, actualPage.items().size());
+        Assertions.assertEquals(expectedItemsCount, actualPage.items().size());
 
         int index = 0;
         for (final var expectedName : expectedNames.split(";")) {

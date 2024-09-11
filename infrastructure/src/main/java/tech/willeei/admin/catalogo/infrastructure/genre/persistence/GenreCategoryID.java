@@ -1,16 +1,13 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.persistence;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
 @Embeddable
 public class GenreCategoryID implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = -3938413663585662472L;
 
     @Column(name = "genre_id", nullable = false)
     private String genreId;
@@ -39,8 +36,7 @@ public class GenreCategoryID implements Serializable {
             return false;
         }
         final GenreCategoryID that = (GenreCategoryID) o;
-        return Objects.equals(getGenreId(), that.getGenreId())
-                && Objects.equals(getCategoryId(), that.getCategoryId());
+        return Objects.equals(getGenreId(), that.getGenreId()) && Objects.equals(getCategoryId(), that.getCategoryId());
     }
 
     @Override
@@ -52,15 +48,17 @@ public class GenreCategoryID implements Serializable {
         return genreId;
     }
 
-    public void setGenreId(final String genreId) {
+    public GenreCategoryID setGenreId(String genreId) {
         this.genreId = genreId;
+        return this;
     }
 
     public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(final String categoryId) {
+    public GenreCategoryID setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+        return this;
     }
 }

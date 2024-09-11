@@ -1,11 +1,17 @@
 package tech.willeei.admin.catalogo.infrastructure.castmember.persistence;
 
+import java.time.Instant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import tech.willeei.admin.catalogo.domain.castmember.CastMember;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberID;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberType;
-
-import javax.persistence.*;
-import java.time.Instant;
 
 @Entity(name = "CastMember")
 @Table(name = "cast_members")
@@ -44,18 +50,18 @@ public class CastMemberJpaEntity {
         this.updatedAt = updatedAt;
     }
 
-    public static CastMemberJpaEntity from(final CastMember aCastMember) {
+    public static CastMemberJpaEntity from(final CastMember aMember) {
         return new CastMemberJpaEntity(
-                aCastMember.getId().getValue(),
-                aCastMember.getName(),
-                aCastMember.getType(),
-                aCastMember.getCreatedAt(),
-                aCastMember.getUpdatedAt()
+                aMember.getId().getValue(),
+                aMember.getName(),
+                aMember.getType(),
+                aMember.getCreatedAt(),
+                aMember.getUpdatedAt()
         );
     }
 
     public CastMember toAggregate() {
-        return new CastMember(
+        return CastMember.with(
                 CastMemberID.from(getId()),
                 getName(),
                 getType(),
@@ -68,39 +74,44 @@ public class CastMemberJpaEntity {
         return id;
     }
 
-    public void setId(final String id) {
+    public CastMemberJpaEntity setId(final String id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public CastMemberJpaEntity setName(final String name) {
         this.name = name;
+        return this;
     }
 
     public CastMemberType getType() {
         return type;
     }
 
-    public void setType(final CastMemberType type) {
+    public CastMemberJpaEntity setType(final CastMemberType type) {
         this.type = type;
+        return this;
     }
 
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(final Instant createdAt) {
+    public CastMemberJpaEntity setCreatedAt(final Instant createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
     public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(final Instant updatedAt) {
+    public CastMemberJpaEntity setUpdatedAt(final Instant updatedAt) {
         this.updatedAt = updatedAt;
+        return this;
     }
 }

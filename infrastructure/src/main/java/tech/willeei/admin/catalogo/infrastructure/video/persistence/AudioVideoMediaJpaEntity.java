@@ -7,7 +7,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import tech.willeei.admin.catalogo.domain.utils.IdUtils;
 import tech.willeei.admin.catalogo.domain.video.AudioVideoMedia;
 import tech.willeei.admin.catalogo.domain.video.MediaStatus;
 
@@ -17,6 +16,9 @@ public class AudioVideoMediaJpaEntity {
 
     @Id
     private String id;
+
+    @Column(name = "checksum", nullable = false)
+    private String checksum;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -36,12 +38,14 @@ public class AudioVideoMediaJpaEntity {
 
     private AudioVideoMediaJpaEntity(
             final String id,
+            final String checksum,
             final String name,
             final String filePath,
             final String encodedPath,
             final MediaStatus status
     ) {
         this.id = id;
+        this.checksum = checksum;
         this.name = name;
         this.filePath = filePath;
         this.encodedPath = encodedPath;
@@ -50,6 +54,7 @@ public class AudioVideoMediaJpaEntity {
 
     public static AudioVideoMediaJpaEntity from(final AudioVideoMedia media) {
         return new AudioVideoMediaJpaEntity(
+                media.id(),
                 media.checksum(),
                 media.name(),
                 media.rawLocation(),
@@ -61,7 +66,7 @@ public class AudioVideoMediaJpaEntity {
     public AudioVideoMedia toDomain() {
         return AudioVideoMedia.with(
                 getId(),
-                IdUtils.uuid(),
+                getChecksum(),
                 getName(),
                 getFilePath(),
                 getEncodedPath(),
@@ -75,6 +80,15 @@ public class AudioVideoMediaJpaEntity {
 
     public AudioVideoMediaJpaEntity setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public String getChecksum() {
+        return checksum;
+    }
+
+    public AudioVideoMediaJpaEntity setChecksum(String checksum) {
+        this.checksum = checksum;
         return this;
     }
 

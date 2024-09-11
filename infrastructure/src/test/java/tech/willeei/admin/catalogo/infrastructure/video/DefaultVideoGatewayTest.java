@@ -57,7 +57,7 @@ class DefaultVideoGatewayTest {
     private Genre business;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         williams = castMemberGateway.create(Fixture.CastMembers.williams());
         maju = castMemberGateway.create(Fixture.CastMembers.maju());
 

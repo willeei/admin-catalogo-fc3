@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -51,7 +49,6 @@ public class VideoJpaEntity {
     private boolean published;
 
     @Column(name = "rating")
-    @Enumerated(EnumType.STRING)
     private Rating rating;
 
     @Column(name = "duration", precision = 2)
@@ -63,11 +60,11 @@ public class VideoJpaEntity {
     @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
     private Instant updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "video_id")
     private AudioVideoMediaJpaEntity video;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "trailer_id")
     private AudioVideoMediaJpaEntity trailer;
 
@@ -144,17 +141,29 @@ public class VideoJpaEntity {
                 aVideo.getDuration(),
                 aVideo.getCreatedAt(),
                 aVideo.getUpdatedAt(),
-                aVideo.getVideo().map(AudioVideoMediaJpaEntity::from).orElse(null),
-                aVideo.getTrailer().map(AudioVideoMediaJpaEntity::from).orElse(null),
-                aVideo.getBanner().map(ImageMediaJpaEntity::from).orElse(null),
-                aVideo.getThumbnail().map(ImageMediaJpaEntity::from).orElse(null),
-                aVideo.getThumbnailHalf().map(ImageMediaJpaEntity::from).orElse(null)
+                aVideo.getVideo()
+                        .map(AudioVideoMediaJpaEntity::from)
+                        .orElse(null),
+                aVideo.getTrailer()
+                        .map(AudioVideoMediaJpaEntity::from)
+                        .orElse(null),
+                aVideo.getBanner()
+                        .map(ImageMediaJpaEntity::from)
+                        .orElse(null),
+                aVideo.getThumbnail()
+                        .map(ImageMediaJpaEntity::from)
+                        .orElse(null),
+                aVideo.getThumbnailHalf()
+                        .map(ImageMediaJpaEntity::from)
+                        .orElse(null)
         );
 
         aVideo.getCategories()
                 .forEach(entity::addCategory);
+
         aVideo.getGenres()
                 .forEach(entity::addGenre);
+
         aVideo.getCastMembers()
                 .forEach(entity::addCastMember);
 
@@ -173,11 +182,21 @@ public class VideoJpaEntity {
                 getRating(),
                 getCreatedAt(),
                 getUpdatedAt(),
-                Optional.ofNullable(getBanner()).map(ImageMediaJpaEntity::toDomain).orElse(null),
-                Optional.ofNullable(getThumbnail()).map(ImageMediaJpaEntity::toDomain).orElse(null),
-                Optional.ofNullable(getThumbnailHalf()).map(ImageMediaJpaEntity::toDomain).orElse(null),
-                Optional.ofNullable(getTrailer()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
-                Optional.ofNullable(getVideo()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
+                Optional.ofNullable(getBanner())
+                        .map(ImageMediaJpaEntity::toDomain)
+                        .orElse(null),
+                Optional.ofNullable(getThumbnail())
+                        .map(ImageMediaJpaEntity::toDomain)
+                        .orElse(null),
+                Optional.ofNullable(getThumbnailHalf())
+                        .map(ImageMediaJpaEntity::toDomain)
+                        .orElse(null),
+                Optional.ofNullable(getTrailer())
+                        .map(AudioVideoMediaJpaEntity::toDomain)
+                        .orElse(null),
+                Optional.ofNullable(getVideo())
+                        .map(AudioVideoMediaJpaEntity::toDomain)
+                        .orElse(null),
                 getCategories().stream()
                         .map(it -> CategoryID.from(it.getId().getCategoryId()))
                         .collect(Collectors.toSet()),
@@ -203,10 +222,10 @@ public class VideoJpaEntity {
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
-    public VideoJpaEntity setId(final String id) {
+    public VideoJpaEntity setId(String id) {
         this.id = id;
         return this;
     }
@@ -373,8 +392,6 @@ public class VideoJpaEntity {
     }
 
     public Set<CastMemberID> getCastMembersID() {
-        return CollectionUtils.mapTo(
-                getCastMembers(), it -> CastMemberID.from(it.getId().getCastMemberId())
-        );
+        return CollectionUtils.mapTo(getCastMembers(), it -> CastMemberID.from(it.getId().getCastMemberId()));
     }
 }

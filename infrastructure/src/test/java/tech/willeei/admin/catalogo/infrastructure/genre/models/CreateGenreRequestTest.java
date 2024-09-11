@@ -1,32 +1,30 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.models;
 
-import tech.willeei.admin.catalogo.JacksonTest;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
-import java.util.List;
+import tech.willeei.admin.catalogo.JacksonTest;
 
 @JacksonTest
 class CreateGenreRequestTest {
 
     @Autowired
-    private JacksonTester<CreateGenreRequest> jacksonTester;
+    private JacksonTester<CreateGenreRequest> json;
 
     @Test
-    void testMarchall() throws Exception {
+    void testMarshall() throws Exception {
         final var expectedName = "Ação";
         final var expectedCategories = List.of("123", "456");
         final var expectedIsActive = true;
 
-        final var response = new CreateGenreRequest(
-                expectedName,
-                expectedCategories,
-                expectedIsActive
-        );
+        final var request
+                = new CreateGenreRequest(expectedName, expectedCategories, expectedIsActive);
 
-        final var actualJson = this.jacksonTester.write(response);
+        final var actualJson = this.json.write(request);
 
         Assertions.assertThat(actualJson)
                 .hasJsonPathValue("$.name", expectedName)
@@ -36,29 +34,23 @@ class CreateGenreRequestTest {
 
     @Test
     void testUnmarshall() throws Exception {
-        final var expectedName = "Filmes";
-        final var expectedCategories = List.of("123", "456");
+        final var expectedName = "Ação";
+        final var expectedCategory = "123";
         final var expectedIsActive = true;
 
         final var json = """
                 {
                   "name": "%s",
-                  "categories_id": ["%s", "%s"],
+                  "categories_id": ["%s"],
                   "is_active": %s
-                }
-                """.formatted(
-                expectedName,
-                expectedCategories.get(0),
-                expectedCategories.get(1),
-                expectedIsActive
-        );
+                }  
+                """.formatted(expectedName, expectedCategory, expectedIsActive);
 
-        final var actualJson = this.jacksonTester.parse(json);
+        final var actualJson = this.json.parse(json);
 
         Assertions.assertThat(actualJson)
                 .hasFieldOrPropertyWithValue("name", expectedName)
-                .hasFieldOrPropertyWithValue("categories", expectedCategories)
+                .hasFieldOrPropertyWithValue("categories", List.of(expectedCategory))
                 .hasFieldOrPropertyWithValue("active", expectedIsActive);
     }
-
 }

@@ -15,13 +15,12 @@ class CategoryListResponseTest {
     private JacksonTester<CategoryListResponse> json;
 
     @Test
-    void testMarchall() throws Exception {
+    void testMarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = false;
         final var expectedCreatedAt = Instant.now();
-        final var expectedUpdatedAt = Instant.now();
         final var expectedDeletedAt = Instant.now();
 
         final var response = new CategoryListResponse(
@@ -30,7 +29,6 @@ class CategoryListResponseTest {
                 expectedDescription,
                 expectedIsActive,
                 expectedCreatedAt,
-                expectedUpdatedAt,
                 expectedDeletedAt
         );
 
@@ -42,8 +40,6 @@ class CategoryListResponseTest {
                 .hasJsonPathValue("$.description", expectedDescription)
                 .hasJsonPathValue("$.is_active", expectedIsActive)
                 .hasJsonPathValue("$.created_at", expectedCreatedAt.toString())
-                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString())
                 .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString());
     }
-
 }

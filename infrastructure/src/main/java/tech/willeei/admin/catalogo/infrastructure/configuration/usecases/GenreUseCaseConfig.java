@@ -1,5 +1,10 @@
 package tech.willeei.admin.catalogo.infrastructure.configuration.usecases;
 
+import java.util.Objects;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import tech.willeei.admin.catalogo.application.genre.create.CreateGenreUseCase;
 import tech.willeei.admin.catalogo.application.genre.create.DefaultCreateGenreUseCase;
 import tech.willeei.admin.catalogo.application.genre.delete.DefaultDeleteGenreUseCase;
@@ -12,10 +17,6 @@ import tech.willeei.admin.catalogo.application.genre.update.DefaultUpdateGenreUs
 import tech.willeei.admin.catalogo.application.genre.update.UpdateGenreUseCase;
 import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
 import tech.willeei.admin.catalogo.domain.genre.GenreGateway;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.Objects;
 
 @Configuration
 public class GenreUseCaseConfig {
@@ -23,7 +24,10 @@ public class GenreUseCaseConfig {
     private final CategoryGateway categoryGateway;
     private final GenreGateway genreGateway;
 
-    public GenreUseCaseConfig(final CategoryGateway categoryGateway, final GenreGateway genreGateway) {
+    public GenreUseCaseConfig(
+            final CategoryGateway categoryGateway,
+            final GenreGateway genreGateway
+    ) {
         this.categoryGateway = Objects.requireNonNull(categoryGateway);
         this.genreGateway = Objects.requireNonNull(genreGateway);
     }

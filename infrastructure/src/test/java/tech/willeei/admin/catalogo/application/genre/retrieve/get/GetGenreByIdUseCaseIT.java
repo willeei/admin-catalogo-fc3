@@ -31,12 +31,12 @@ class GetGenreByIdUseCaseIT {
     void givenAValidId_whenCallsGetGenre_shouldReturnGenre() {
         // given
         final var series
-                = categoryGateway.create(Category.newCategory("Series", null, true));
+                = categoryGateway.create(Category.newCategory("Séries", null, true));
 
         final var filmes
-                = categoryGateway.create(Category.newCategory("Series", null, true));
+                = categoryGateway.create(Category.newCategory("Filmes", null, true));
 
-        final var expectedName = "Acao";
+        final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.of(series.getId(), filmes.getId());
 
@@ -64,22 +64,22 @@ class GetGenreByIdUseCaseIT {
     }
 
     @Test
-    void givenAValidId_whenCallsGetGenreAndDoesNotExists_thenShouldReturnNotFound() {
+    void givenAValidId_whenCallsGetGenreAndDoesNotExists_shouldReturnNotFound() {
         // given
         final var expectedErrorMessage = "Genre with ID 123 was not found";
+
         final var expectedId = GenreID.from("123");
 
         // when
-        final var actualException = Assertions.assertThrows(
-                NotFoundException.class,
-                () -> useCase.execute(expectedId.getValue())
-        );
+        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> {
+            useCase.execute(expectedId.getValue());
+        });
 
         // then
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
     }
 
-    private List<String> asString(List<CategoryID> ids) {
+    private List<String> asString(final List<CategoryID> ids) {
         return ids.stream()
                 .map(CategoryID::getValue)
                 .toList();

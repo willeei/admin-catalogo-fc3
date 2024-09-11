@@ -13,13 +13,13 @@ import java.util.List;
 class GenreResponseTest {
 
     @Autowired
-    private JacksonTester<GenreResponse> jacksonTester;
+    private JacksonTester<GenreResponse> json;
 
     @Test
-    void testMarchall() throws Exception {
+    void testMarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = "Ação";
-        final var expectedCategories = List.of("123", "456");
+        final var expectedCategories = List.of("123");
         final var expectedIsActive = false;
         final var expectedCreatedAt = Instant.now();
         final var expectedUpdatedAt = Instant.now();
@@ -35,7 +35,7 @@ class GenreResponseTest {
                 expectedDeletedAt
         );
 
-        final var actualJson = this.jacksonTester.write(response);
+        final var actualJson = this.json.write(response);
 
         Assertions.assertThat(actualJson)
                 .hasJsonPathValue("$.id", expectedId)
@@ -43,15 +43,15 @@ class GenreResponseTest {
                 .hasJsonPathValue("$.categories_id", expectedCategories)
                 .hasJsonPathValue("$.is_active", expectedIsActive)
                 .hasJsonPathValue("$.created_at", expectedCreatedAt.toString())
-                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString())
-                .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString());
+                .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString())
+                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString());
     }
 
     @Test
     void testUnmarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = "Ação";
-        final var expectedCategories = List.of("123", "456");
+        final var expectedCategory = "456";
         final var expectedIsActive = false;
         final var expectedCreatedAt = Instant.now();
         final var expectedUpdatedAt = Instant.now();
@@ -61,33 +61,31 @@ class GenreResponseTest {
                 {
                   "id": "%s",
                   "name": "%s",
-                  "categories_id": ["%s", "%s"],
+                  "categories_id": ["%s"],
                   "is_active": %s,
                   "created_at": "%s",
                   "deleted_at": "%s",
                   "updated_at": "%s"
-                }
+                }    
                 """.formatted(
                 expectedId,
                 expectedName,
-                expectedCategories.get(0),
-                expectedCategories.get(1),
+                expectedCategory,
                 expectedIsActive,
                 expectedCreatedAt.toString(),
                 expectedDeletedAt.toString(),
                 expectedUpdatedAt.toString()
         );
 
-        final var actualJson = this.jacksonTester.parse(json);
+        final var actualJson = this.json.parse(json);
 
         Assertions.assertThat(actualJson)
                 .hasFieldOrPropertyWithValue("id", expectedId)
                 .hasFieldOrPropertyWithValue("name", expectedName)
-                .hasFieldOrPropertyWithValue("categories", expectedCategories)
+                .hasFieldOrPropertyWithValue("categories", List.of(expectedCategory))
                 .hasFieldOrPropertyWithValue("active", expectedIsActive)
                 .hasFieldOrPropertyWithValue("createdAt", expectedCreatedAt)
                 .hasFieldOrPropertyWithValue("deletedAt", expectedDeletedAt)
                 .hasFieldOrPropertyWithValue("updatedAt", expectedUpdatedAt);
     }
-
 }

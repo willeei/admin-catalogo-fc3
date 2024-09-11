@@ -35,7 +35,7 @@ public class VideoCategoryID implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final VideoCategoryID that = (VideoCategoryID) o;
+        VideoCategoryID that = (VideoCategoryID) o;
         return Objects.equals(getVideoId(), that.getVideoId()) && Objects.equals(getCategoryId(), that.getCategoryId());
     }
 

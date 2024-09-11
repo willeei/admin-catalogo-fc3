@@ -3,6 +3,7 @@ package tech.willeei.admin.catalogo.infrastructure.castmember;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -41,6 +42,17 @@ public class CastMemberMySQLGateway implements CastMemberGateway {
     }
 
     @Override
+    public Optional<CastMember> findById(final CastMemberID anId) {
+        return this.castMemberRepository.findById(anId.getValue())
+                .map(CastMemberJpaEntity::toAggregate);
+    }
+
+    @Override
+    public CastMember update(final CastMember aCastMember) {
+        return save(aCastMember);
+    }
+
+    @Override
     public Pagination<CastMember> findAll(final SearchQuery aQuery) {
         final var page = PageRequest.of(
                 aQuery.page(),
@@ -53,7 +65,9 @@ public class CastMemberMySQLGateway implements CastMemberGateway {
                 .map(this::assembleSpecification)
                 .orElse(null);
 
-        final var pageResult = this.castMemberRepository.findAll(where, page);
+        final var pageResult
+                = this.castMemberRepository.findAll(where, page);
+
         return new Pagination<>(
                 pageResult.getNumber(),
                 pageResult.getSize(),
@@ -63,26 +77,21 @@ public class CastMemberMySQLGateway implements CastMemberGateway {
     }
 
     @Override
-    public Optional<CastMember> findById(final CastMemberID anId) {
-        return this.castMemberRepository.findById(anId.getValue()).map(CastMemberJpaEntity::toAggregate);
+    public List<CastMemberID> existsByIds(final Iterable<CastMemberID> castMemberIDS) {
+        final var ids = StreamSupport.stream(castMemberIDS.spliterator(), false)
+                .map(CastMemberID::getValue)
+                .toList();
+        return this.castMemberRepository.existsByIds(ids).stream()
+                .map(CastMemberID::from)
+                .toList();
     }
 
-    @Override
-    public CastMember update(final CastMember aCastMember) {
-        return save(aCastMember);
-    }
-
-    private CastMember save(CastMember aCastMember) {
-        return this.castMemberRepository.save(CastMemberJpaEntity.from(aCastMember)).toAggregate();
+    private CastMember save(final CastMember aCastMember) {
+        return this.castMemberRepository.save(CastMemberJpaEntity.from(aCastMember))
+                .toAggregate();
     }
 
     private Specification<CastMemberJpaEntity> assembleSpecification(final String terms) {
         return SpecificationUtils.like("name", terms);
-    }
-
-    @Override
-    public List<CastMemberID> existsByIds(Iterable<CastMemberID> anIds) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'existsByIds'");
     }
 }

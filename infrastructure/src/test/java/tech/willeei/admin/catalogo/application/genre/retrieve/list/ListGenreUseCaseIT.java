@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import tech.willeei.admin.catalogo.IntegrationTest;
 import tech.willeei.admin.catalogo.domain.genre.Genre;
-import tech.willeei.admin.catalogo.domain.genre.GenreGateway;
 import tech.willeei.admin.catalogo.domain.pagination.SearchQuery;
 import tech.willeei.admin.catalogo.infrastructure.genre.persistence.GenreJpaEntity;
 import tech.willeei.admin.catalogo.infrastructure.genre.persistence.GenreRepository;
@@ -20,17 +19,14 @@ class ListGenreUseCaseIT {
     private ListGenreUseCase useCase;
 
     @Autowired
-    private GenreGateway genreGateway;
-
-    @Autowired
     private GenreRepository genreRepository;
 
     @Test
-    void givneAValidQuery_whenCallsListGenre_shouldReturnGenres() {
+    void givenAValidQuery_whenCallsListGenre_shouldReturnGenres() {
         // given
         final var genres = List.of(
-                genreGateway.create(Genre.newGenre("Acao", true)),
-                genreGateway.create(Genre.newGenre("Aventura", true))
+                Genre.newGenre("Ação", true),
+                Genre.newGenre("Aventura", true)
         );
 
         genreRepository.saveAllAndFlush(
@@ -67,7 +63,7 @@ class ListGenreUseCaseIT {
     }
 
     @Test
-    void givneAValidQuery_whenCallsListGenreAndResultIsEmpty_shouldReturnGenres() {
+    void givenAValidQuery_whenCallsListGenreAndResultIsEmpty_shouldReturnGenres() {
         // given
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -78,13 +74,8 @@ class ListGenreUseCaseIT {
 
         final var expectedItems = List.<GenreListOutput>of();
 
-        final var aQuery = new SearchQuery(
-                expectedPage,
-                expectedPerPage,
-                expectedTerms,
-                expectedSort,
-                expectedDirection
-        );
+        final var aQuery
+                = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         // when
         final var actualOutput = useCase.execute(aQuery);

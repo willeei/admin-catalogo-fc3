@@ -1,5 +1,11 @@
 package tech.willeei.admin.catalogo.infrastructure.api.controllers;
 
+import java.net.URI;
+import java.util.Objects;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
 import tech.willeei.admin.catalogo.application.castmember.create.CreateCastMemberCommand;
 import tech.willeei.admin.catalogo.application.castmember.create.CreateCastMemberUseCase;
 import tech.willeei.admin.catalogo.application.castmember.delete.DeleteCastMemberUseCase;
@@ -15,11 +21,6 @@ import tech.willeei.admin.catalogo.infrastructure.castmember.models.CastMemberRe
 import tech.willeei.admin.catalogo.infrastructure.castmember.models.CreateCastMemberRequest;
 import tech.willeei.admin.catalogo.infrastructure.castmember.models.UpdateCastMemberRequest;
 import tech.willeei.admin.catalogo.infrastructure.castmember.presenter.CastMemberPresenter;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.Objects;
 
 @RestController
 public class CastMemberController implements CastMemberAPI {
@@ -46,7 +47,8 @@ public class CastMemberController implements CastMemberAPI {
 
     @Override
     public ResponseEntity<?> create(final CreateCastMemberRequest input) {
-        final var aCommand = CreateCastMemberCommand.with(input.name(), input.type());
+        final var aCommand
+                = CreateCastMemberCommand.with(input.name(), input.type());
 
         final var output = this.createCastMemberUseCase.execute(aCommand);
 
@@ -61,9 +63,8 @@ public class CastMemberController implements CastMemberAPI {
             final String sort,
             final String direction
     ) {
-        return this.listCastMembersUseCase.execute(
-                new SearchQuery(page, perPage, search, sort, direction)
-        ).map(CastMemberPresenter::present);
+        return this.listCastMembersUseCase.execute(new SearchQuery(page, perPage, search, sort, direction))
+                .map(CastMemberPresenter::present);
     }
 
     @Override

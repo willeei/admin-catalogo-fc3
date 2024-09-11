@@ -24,8 +24,9 @@ class DeleteGenreUseCaseIT {
 
     @Test
     void givenAValidGenreId_whenCallsDeleteGenre_shouldDeleteGenre() {
-        //given
-        final var aGenre = genreGateway.create(Genre.newGenre("Acao", true));
+        // given
+        final var aGenre = genreGateway.create(Genre.newGenre("Ação", true));
+
         final var expectedId = aGenre.getId();
 
         Assertions.assertEquals(1, genreRepository.count());
@@ -33,14 +34,14 @@ class DeleteGenreUseCaseIT {
         // when
         Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.getValue()));
 
-        // then
+        // when
         Assertions.assertEquals(0, genreRepository.count());
     }
 
     @Test
     void givenAnInvalidGenreId_whenCallsDeleteGenre_shouldBeOk() {
-        //given
-        genreGateway.create(Genre.newGenre("Acao", true));
+        // given
+        genreGateway.create(Genre.newGenre("Ação", true));
 
         final var expectedId = GenreID.from("123");
 
@@ -49,8 +50,7 @@ class DeleteGenreUseCaseIT {
         // when
         Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.getValue()));
 
-        //then
+        // when
         Assertions.assertEquals(1, genreRepository.count());
     }
-
 }

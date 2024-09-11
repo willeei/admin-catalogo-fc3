@@ -1,8 +1,8 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.Instant;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record GenreListResponse(
         @JsonProperty("id")
@@ -13,8 +13,6 @@ public record GenreListResponse(
         Boolean active,
         @JsonProperty("created_at")
         Instant createdAt,
-        @JsonProperty("updated_at")
-        Instant updatedAt,
         @JsonProperty("deleted_at")
         Instant deletedAt) {
 

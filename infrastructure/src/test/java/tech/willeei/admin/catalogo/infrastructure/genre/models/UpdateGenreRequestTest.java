@@ -1,18 +1,19 @@
 package tech.willeei.admin.catalogo.infrastructure.genre.models;
 
-import tech.willeei.admin.catalogo.JacksonTest;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
-import java.util.List;
+import tech.willeei.admin.catalogo.JacksonTest;
 
 @JacksonTest
 class UpdateGenreRequestTest {
 
     @Autowired
-    private JacksonTester<UpdateGenreRequest> jacksonTester;
+    private JacksonTester<UpdateGenreRequest> json;
 
     @Test
     void testUnmarshall() throws Exception {
@@ -21,23 +22,18 @@ class UpdateGenreRequestTest {
         final var expectedIsActive = true;
 
         final var json = """
-                {
-                  "name": "%s",
-                  "categories_id": ["%s"],
-                  "is_active": %s
-                }
-                """.formatted(
-                expectedName,
-                expectedCategory,
-                expectedIsActive
-        );
+        {
+          "name": "%s",
+          "categories_id": ["%s"],
+          "is_active": %s
+        }
+        """.formatted(expectedName, expectedCategory, expectedIsActive);
 
-        final var actualJson = this.jacksonTester.parse(json);
+        final var actualJson = this.json.parse(json);
 
         Assertions.assertThat(actualJson)
                 .hasFieldOrPropertyWithValue("name", expectedName)
                 .hasFieldOrPropertyWithValue("categories", List.of(expectedCategory))
                 .hasFieldOrPropertyWithValue("active", expectedIsActive);
     }
-
 }

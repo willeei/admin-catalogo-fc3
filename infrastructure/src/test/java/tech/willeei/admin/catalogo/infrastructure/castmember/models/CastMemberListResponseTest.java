@@ -16,7 +16,7 @@ class CastMemberListResponseTest {
     private JacksonTester<CastMemberListResponse> json;
 
     @Test
-    public void testMarshall() throws Exception {
+    void testMarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = Fixture.name();
         final var expectedType = Fixture.CastMembers.type().name();

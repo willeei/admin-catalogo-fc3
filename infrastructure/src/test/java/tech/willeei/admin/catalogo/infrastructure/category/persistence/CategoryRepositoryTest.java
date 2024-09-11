@@ -18,8 +18,8 @@ class CategoryRepositoryTest {
     void givenAnInvalidNullName_whenCallsSave_shouldReturnError() {
         final var expectedPropertyName = "name";
         final var expectedMessage = "not-null property references a null or transient value : tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity.name";
-        final var aCategory
-                = Category.newCategory("Filmes", "A categoria mais assistida", true);
+
+        final var aCategory = Category.newCategory("Filmes", "A categoria mais assistida", true);
 
         final var anEntity = CategoryJpaEntity.from(aCategory);
         anEntity.setName(null);
@@ -38,8 +38,8 @@ class CategoryRepositoryTest {
     void givenAnInvalidNullCreatedAt_whenCallsSave_shouldReturnError() {
         final var expectedPropertyName = "createdAt";
         final var expectedMessage = "not-null property references a null or transient value : tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity.createdAt";
-        final var aCategory
-                = Category.newCategory("Filmes", "A categoria mais assistida", true);
+
+        final var aCategory = Category.newCategory("Filmes", "A categoria mais assistida", true);
 
         final var anEntity = CategoryJpaEntity.from(aCategory);
         anEntity.setCreatedAt(null);
@@ -58,8 +58,8 @@ class CategoryRepositoryTest {
     void givenAnInvalidNullUpdatedAt_whenCallsSave_shouldReturnError() {
         final var expectedPropertyName = "updatedAt";
         final var expectedMessage = "not-null property references a null or transient value : tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity.updatedAt";
-        final var aCategory
-                = Category.newCategory("Filmes", "A categoria mais assistida", true);
+
+        final var aCategory = Category.newCategory("Filmes", "A categoria mais assistida", true);
 
         final var anEntity = CategoryJpaEntity.from(aCategory);
         anEntity.setUpdatedAt(null);

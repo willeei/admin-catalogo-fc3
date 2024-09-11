@@ -1,5 +1,8 @@
 package tech.willeei.admin.catalogo.infrastructure.configuration.usecases;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import tech.willeei.admin.catalogo.application.category.create.CreateCategoryUseCase;
 import tech.willeei.admin.catalogo.application.category.create.DefaultCreateCategoryUseCase;
 import tech.willeei.admin.catalogo.application.category.delete.DefaultDeleteCategoryUseCase;
@@ -11,8 +14,6 @@ import tech.willeei.admin.catalogo.application.category.retrieve.list.ListCatego
 import tech.willeei.admin.catalogo.application.category.update.DefaultUpdateCategoryUseCase;
 import tech.willeei.admin.catalogo.application.category.update.UpdateCategoryUseCase;
 import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CategoryUseCaseConfig {

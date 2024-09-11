@@ -1,5 +1,10 @@
 package tech.willeei.admin.catalogo.infrastructure.configuration.usecases;
 
+import java.util.Objects;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import tech.willeei.admin.catalogo.application.castmember.create.CreateCastMemberUseCase;
 import tech.willeei.admin.catalogo.application.castmember.create.DefaultCreateCastMemberUseCase;
 import tech.willeei.admin.catalogo.application.castmember.delete.DefaultDeleteCastMemberUseCase;
@@ -11,10 +16,6 @@ import tech.willeei.admin.catalogo.application.castmember.retrieve.list.ListCast
 import tech.willeei.admin.catalogo.application.castmember.update.DefaultUpdateCastMemberUseCase;
 import tech.willeei.admin.catalogo.application.castmember.update.UpdateCastMemberUseCase;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberGateway;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.Objects;
 
 @Configuration
 public class CastMemberUseCaseConfig {

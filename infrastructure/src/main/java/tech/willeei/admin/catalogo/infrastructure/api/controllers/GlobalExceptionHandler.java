@@ -1,14 +1,15 @@
 package tech.willeei.admin.catalogo.infrastructure.api.controllers;
 
-import tech.willeei.admin.catalogo.domain.exceptions.DomainException;
-import tech.willeei.admin.catalogo.domain.exceptions.NotFoundException;
-import tech.willeei.admin.catalogo.domain.validation.Error;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
+import tech.willeei.admin.catalogo.domain.exceptions.DomainException;
+import tech.willeei.admin.catalogo.domain.exceptions.NotFoundException;
+import tech.willeei.admin.catalogo.domain.validation.Error;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

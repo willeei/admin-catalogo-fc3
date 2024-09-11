@@ -45,7 +45,7 @@ public class VideoGenreJpaEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final VideoGenreJpaEntity that = (VideoGenreJpaEntity) o;
+        VideoGenreJpaEntity that = (VideoGenreJpaEntity) o;
         return Objects.equals(getId(), that.getId()) && Objects.equals(getVideo(), that.getVideo());
     }
 

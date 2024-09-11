@@ -1,4 +1,4 @@
-package tech.willeei.admin.catalogo.infrastructure.category.persistence;
+package tech.willeei.admin.catalogo.infrastructure.category;
 
 import static tech.willeei.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
 
@@ -17,14 +17,16 @@ import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
 import tech.willeei.admin.catalogo.domain.category.CategoryID;
 import tech.willeei.admin.catalogo.domain.pagination.Pagination;
 import tech.willeei.admin.catalogo.domain.pagination.SearchQuery;
+import tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
+import tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 
 @Component
 public class CategoryMySQLGateway implements CategoryGateway {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryRepository repository;
 
-    public CategoryMySQLGateway(final CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryMySQLGateway(final CategoryRepository repository) {
+        this.repository = repository;
     }
 
     @Override
@@ -34,15 +36,16 @@ public class CategoryMySQLGateway implements CategoryGateway {
 
     @Override
     public void deleteById(final CategoryID anId) {
-        final var anIdValue = anId.getValue();
-        if (this.categoryRepository.existsById(anIdValue)) {
-            this.categoryRepository.deleteById(anIdValue);
+        final String anIdValue = anId.getValue();
+        if (this.repository.existsById(anIdValue)) {
+            this.repository.deleteById(anIdValue);
         }
     }
 
     @Override
     public Optional<Category> findById(final CategoryID anId) {
-        return this.categoryRepository.findById(anId.getValue()).map(CategoryJpaEntity::toAggregate);
+        return this.repository.findById(anId.getValue())
+                .map(CategoryJpaEntity::toAggregate);
     }
 
     @Override
@@ -52,22 +55,22 @@ public class CategoryMySQLGateway implements CategoryGateway {
 
     @Override
     public Pagination<Category> findAll(final SearchQuery aQuery) {
-
-        final var sort = Sort.by(Direction.fromString(aQuery.direction()), aQuery.sort());
-
+        // Paginação
         final var page = PageRequest.of(
                 aQuery.page(),
                 aQuery.perPage(),
-                sort
+                Sort.by(Direction.fromString(aQuery.direction()), aQuery.sort())
         );
 
+        // Busca dinamica pelo criterio terms (name ou description)
         final var specifications = Optional.ofNullable(aQuery.terms())
                 .filter(str -> !str.isBlank())
                 .map(this::assembleSpecification)
                 .orElse(null);
 
         final var pageResult
-                = this.categoryRepository.findAll(Specification.where(specifications), page);
+                = this.repository.findAll(Specification.where(specifications), page);
+
         return new Pagination<>(
                 pageResult.getNumber(),
                 pageResult.getSize(),
@@ -81,13 +84,13 @@ public class CategoryMySQLGateway implements CategoryGateway {
         final var ids = StreamSupport.stream(categoryIDs.spliterator(), false)
                 .map(CategoryID::getValue)
                 .toList();
-        return this.categoryRepository.existsByIds(ids).stream()
+        return this.repository.existsByIds(ids).stream()
                 .map(CategoryID::from)
                 .toList();
     }
 
     private Category save(final Category aCategory) {
-        return this.categoryRepository.save(CategoryJpaEntity.from(aCategory)).toAggregate();
+        return this.repository.save(CategoryJpaEntity.from(aCategory)).toAggregate();
     }
 
     private Specification<CategoryJpaEntity> assembleSpecification(final String str) {

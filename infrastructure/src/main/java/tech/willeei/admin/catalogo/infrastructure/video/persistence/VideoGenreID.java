@@ -35,7 +35,7 @@ public class VideoGenreID implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final VideoGenreID that = (VideoGenreID) o;
+        VideoGenreID that = (VideoGenreID) o;
         return Objects.equals(videoId, that.videoId) && Objects.equals(genreId, that.genreId);
     }
 

@@ -13,7 +13,7 @@ import tech.willeei.admin.catalogo.infrastructure.category.persistence.CategoryR
 import tech.willeei.admin.catalogo.infrastructure.genre.persistence.GenreRepository;
 import tech.willeei.admin.catalogo.infrastructure.video.persistence.VideoRepository;
 
-class MySQLCleanUpExtension implements BeforeEachCallback {
+public class MySQLCleanUpExtension implements BeforeEachCallback {
 
     @Override
     public void beforeEach(final ExtensionContext context) {
@@ -27,7 +27,6 @@ class MySQLCleanUpExtension implements BeforeEachCallback {
         ));
     }
 
-    @SuppressWarnings("rawtypes")
     private void cleanUp(final Collection<CrudRepository> repositories) {
         repositories.forEach(CrudRepository::deleteAll);
     }

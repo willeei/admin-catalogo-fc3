@@ -1,21 +1,22 @@
 package tech.willeei.admin.catalogo.infrastructure.category.models;
 
-import tech.willeei.admin.catalogo.JacksonTest;
+import java.time.Instant;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
-import java.time.Instant;
+import tech.willeei.admin.catalogo.JacksonTest;
 
 @JacksonTest
-class CategoryRespondeTest {
+class CategoryResponseTest {
 
     @Autowired
     private JacksonTester<CategoryResponse> json;
 
     @Test
-    void testMarchall() throws Exception {
+    void testMarshall() throws Exception {
         final var expectedId = "123";
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -42,8 +43,8 @@ class CategoryRespondeTest {
                 .hasJsonPathValue("$.description", expectedDescription)
                 .hasJsonPathValue("$.is_active", expectedIsActive)
                 .hasJsonPathValue("$.created_at", expectedCreatedAt.toString())
-                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString())
-                .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString());
+                .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString())
+                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString());
     }
 
     @Test
@@ -57,16 +58,16 @@ class CategoryRespondeTest {
         final var expectedDeletedAt = Instant.now();
 
         final var json = """
-                {
-                  "id": "%s",
-                  "name": "%s",
-                  "description": "%s",
-                  "is_active": %s,
-                  "created_at": "%s",
-                  "deleted_at": "%s",
-                  "updated_at": "%s"
-                }
-                """.formatted(
+        {
+          "id": "%s",
+          "name": "%s",
+          "description": "%s",
+          "is_active": %s,
+          "created_at": "%s",
+          "deleted_at": "%s",
+          "updated_at": "%s"
+        }
+        """.formatted(
                 expectedId,
                 expectedName,
                 expectedDescription,
@@ -87,5 +88,4 @@ class CategoryRespondeTest {
                 .hasFieldOrPropertyWithValue("deletedAt", expectedDeletedAt)
                 .hasFieldOrPropertyWithValue("updatedAt", expectedUpdatedAt);
     }
-
 }
