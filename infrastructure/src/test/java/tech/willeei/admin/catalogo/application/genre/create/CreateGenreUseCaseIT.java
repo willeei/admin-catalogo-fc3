@@ -1,16 +1,10 @@
 package tech.willeei.admin.catalogo.application.genre.create;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-
 import tech.willeei.admin.catalogo.IntegrationTest;
 import tech.willeei.admin.catalogo.domain.category.Category;
 import tech.willeei.admin.catalogo.domain.category.CategoryGateway;
@@ -19,10 +13,15 @@ import tech.willeei.admin.catalogo.domain.exceptions.NotificationException;
 import tech.willeei.admin.catalogo.domain.genre.GenreGateway;
 import tech.willeei.admin.catalogo.infrastructure.genre.persistence.GenreRepository;
 
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+
 @IntegrationTest
 class CreateGenreUseCaseIT {
 
-    @Autowired
+    @SpyBean
     private CreateGenreUseCase useCase;
 
     @SpyBean
@@ -31,7 +30,7 @@ class CreateGenreUseCaseIT {
     @SpyBean
     private GenreGateway genreGateway;
 
-    @Autowired
+    @SpyBean
     private GenreRepository genreRepository;
 
     @Test
@@ -60,7 +59,7 @@ class CreateGenreUseCaseIT {
         Assertions.assertEquals(expectedIsActive, actualGenre.isActive());
         Assertions.assertTrue(
                 expectedCategories.size() == actualGenre.getCategoryIDs().size()
-                && expectedCategories.containsAll(actualGenre.getCategoryIDs())
+                        && expectedCategories.containsAll(actualGenre.getCategoryIDs())
         );
         Assertions.assertNotNull(actualGenre.getCreatedAt());
         Assertions.assertNotNull(actualGenre.getUpdatedAt());
@@ -90,7 +89,7 @@ class CreateGenreUseCaseIT {
         Assertions.assertEquals(expectedIsActive, actualGenre.isActive());
         Assertions.assertTrue(
                 expectedCategories.size() == actualGenre.getCategoryIDs().size()
-                && expectedCategories.containsAll(actualGenre.getCategoryIDs())
+                        && expectedCategories.containsAll(actualGenre.getCategoryIDs())
         );
         Assertions.assertNotNull(actualGenre.getCreatedAt());
         Assertions.assertNotNull(actualGenre.getUpdatedAt());
@@ -120,7 +119,7 @@ class CreateGenreUseCaseIT {
         Assertions.assertEquals(expectedIsActive, actualGenre.isActive());
         Assertions.assertTrue(
                 expectedCategories.size() == actualGenre.getCategoryIDs().size()
-                && expectedCategories.containsAll(actualGenre.getCategoryIDs())
+                        && expectedCategories.containsAll(actualGenre.getCategoryIDs())
         );
         Assertions.assertNotNull(actualGenre.getCreatedAt());
         Assertions.assertNotNull(actualGenre.getUpdatedAt());

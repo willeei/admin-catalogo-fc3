@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.function.Function;
 
@@ -196,9 +197,11 @@ public interface MockDsl {
     }
 
     private <T> T retrieve(final String url, final Identifier anId, final Class<T> clazz) throws Exception {
+        final var applicationJsonUTF8 = new MediaType("application", "json", StandardCharsets.UTF_8);
+
         final var aRequest = get(url + anId.getValue())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .accept(applicationJsonUTF8)
+                .contentType(applicationJsonUTF8);
 
         final var json = this.mvc().perform(aRequest)
                 .andExpect(status().isOk())

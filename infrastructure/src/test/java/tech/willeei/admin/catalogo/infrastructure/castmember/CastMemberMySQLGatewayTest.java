@@ -1,16 +1,10 @@
 package tech.willeei.admin.catalogo.infrastructure.castmember;
 
-import static tech.willeei.admin.catalogo.domain.Fixture.name;
-import static tech.willeei.admin.catalogo.domain.Fixture.CastMembers.type;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import tech.willeei.admin.catalogo.MySQLGatewayTest;
 import tech.willeei.admin.catalogo.domain.castmember.CastMember;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberID;
@@ -18,6 +12,11 @@ import tech.willeei.admin.catalogo.domain.castmember.CastMemberType;
 import tech.willeei.admin.catalogo.domain.pagination.SearchQuery;
 import tech.willeei.admin.catalogo.infrastructure.castmember.persistence.CastMemberJpaEntity;
 import tech.willeei.admin.catalogo.infrastructure.castmember.persistence.CastMemberRepository;
+
+import java.util.List;
+
+import static tech.willeei.admin.catalogo.domain.Fixture.CastMembers.type;
+import static tech.willeei.admin.catalogo.domain.Fixture.name;
 
 @MySQLGatewayTest
 class CastMemberMySQLGatewayTest {
@@ -117,7 +116,8 @@ class CastMemberMySQLGatewayTest {
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
         // when
-        final var actualMember = castMemberGateway.existsByIds(List.of(CastMemberID.from("123"), expectedId));
+        final var actualMember =
+                castMemberGateway.existsByIds(List.of(CastMemberID.from("123"), expectedId));
 
         // then
         Assertions.assertEquals(expectedItems, actualMember.size());
@@ -221,11 +221,11 @@ class CastMemberMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-        "vin,0,10,1,1,Vin Diesel",
-        "taran,0,10,1,1,Quentin Tarantino",
-        "jas,0,10,1,1,Jason Momoa",
-        "har,0,10,1,1,Kit Harington",
-        "MAR,0,10,1,1,Martin Scorsese",})
+            "vin,0,10,1,1,Vin Diesel",
+            "taran,0,10,1,1,Quentin Tarantino",
+            "jas,0,10,1,1,Jason Momoa",
+            "har,0,10,1,1,Kit Harington",
+            "MAR,0,10,1,1,Martin Scorsese",})
     void givenAValidTerm_whenCallsFindAll_shouldReturnFiltered(
             final String expectedTerms,
             final int expectedPage,
@@ -256,10 +256,10 @@ class CastMemberMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-        "name,asc,0,10,5,5,Jason Momoa",
-        "name,desc,0,10,5,5,Vin Diesel",
-        "createdAt,asc,0,10,5,5,Kit Harington",
-        "createdAt,desc,0,10,5,5,Martin Scorsese",})
+            "name,asc,0,10,5,5,Jason Momoa",
+            "name,desc,0,10,5,5,Vin Diesel",
+            "createdAt,asc,0,10,5,5,Kit Harington",
+            "createdAt,desc,0,10,5,5,Martin Scorsese",})
     void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnSorted(
             final String expectedSort,
             final String expectedDirection,
@@ -290,9 +290,9 @@ class CastMemberMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-        "0,2,2,5,Jason Momoa;Kit Harington",
-        "1,2,2,5,Martin Scorsese;Quentin Tarantino",
-        "2,2,1,5,Vin Diesel",})
+            "0,2,2,5,Jason Momoa;Kit Harington",
+            "1,2,2,5,Martin Scorsese;Quentin Tarantino",
+            "2,2,1,5,Vin Diesel",})
     void givenAValidPagination_whenCallsFindAll_shouldReturnPaginated(
             final int expectedPage,
             final int expectedPerPage,

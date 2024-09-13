@@ -1,14 +1,10 @@
 package tech.willeei.admin.catalogo.infrastructure.genre;
 
-import java.util.Comparator;
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import tech.willeei.admin.catalogo.MySQLGatewayTest;
 import tech.willeei.admin.catalogo.domain.category.Category;
 import tech.willeei.admin.catalogo.domain.category.CategoryID;
@@ -18,6 +14,9 @@ import tech.willeei.admin.catalogo.domain.pagination.SearchQuery;
 import tech.willeei.admin.catalogo.infrastructure.category.CategoryMySQLGateway;
 import tech.willeei.admin.catalogo.infrastructure.genre.persistence.GenreJpaEntity;
 import tech.willeei.admin.catalogo.infrastructure.genre.persistence.GenreRepository;
+
+import java.util.Comparator;
+import java.util.List;
 
 @MySQLGatewayTest
 class GenreMySQLGatewayTest {
@@ -40,22 +39,22 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAValidGenre_whenCallsCreateGenre_shouldPersistGenre() {
-        // given 
+        // given
         final var filmes
                 = categoryGateway.create(Category.newCategory("Filmes", null, true));
- 
+
         final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.of(filmes.getId());
- 
+
         final var aGenre = Genre.newGenre(expectedName, expectedIsActive);
         aGenre.addCategories(expectedCategories);
- 
+
         final var expectedId = aGenre.getId();
 
         Assertions.assertEquals(0, genreRepository.count());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.create(aGenre);
 
         // then
@@ -69,7 +68,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(aGenre.getUpdatedAt(), actualGenre.getUpdatedAt());
         Assertions.assertEquals(aGenre.getDeletedAt(), actualGenre.getDeletedAt());
         Assertions.assertNull(actualGenre.getDeletedAt());
- 
+
         final var persistedGenre = genreRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedName, persistedGenre.getName());
@@ -83,18 +82,18 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAValidGenreWithoutCategories_whenCallsCreateGenre_shouldPersistGenre() {
-        // given 
+        // given
         final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.<CategoryID>of();
- 
+
         final var aGenre = Genre.newGenre(expectedName, expectedIsActive);
- 
+
         final var expectedId = aGenre.getId();
 
         Assertions.assertEquals(0, genreRepository.count());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.create(aGenre);
 
         // then
@@ -108,7 +107,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(aGenre.getUpdatedAt(), actualGenre.getUpdatedAt());
         Assertions.assertEquals(aGenre.getDeletedAt(), actualGenre.getDeletedAt());
         Assertions.assertNull(actualGenre.getDeletedAt());
- 
+
         final var persistedGenre = genreRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedName, persistedGenre.getName());
@@ -122,19 +121,19 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAValidGenreWithoutCategories_whenCallsUpdateGenreWithCategories_shouldPersistGenre() {
-        // given 
+        // given
         final var filmes
                 = categoryGateway.create(Category.newCategory("Filmes", null, true));
- 
+
         final var series
                 = categoryGateway.create(Category.newCategory("Séries", null, true));
- 
+
         final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.of(filmes.getId(), series.getId());
- 
+
         final var aGenre = Genre.newGenre("ac", expectedIsActive);
- 
+
         final var expectedId = aGenre.getId();
 
         Assertions.assertEquals(0, genreRepository.count());
@@ -144,7 +143,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals("ac", aGenre.getName());
         Assertions.assertEquals(0, aGenre.getCategories().size());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.update(
                 Genre.with(aGenre)
                         .update(expectedName, expectedIsActive, expectedCategories)
@@ -160,7 +159,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(aGenre.getCreatedAt(), actualGenre.getCreatedAt());
         Assertions.assertTrue(aGenre.getUpdatedAt().isBefore(actualGenre.getUpdatedAt()));
         Assertions.assertEquals(aGenre.getDeletedAt(), actualGenre.getDeletedAt());
- 
+
         final var persistedGenre = genreRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedName, persistedGenre.getName());
@@ -174,20 +173,20 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAValidGenreWithCategories_whenCallsUpdateGenreCleaningCategories_shouldPersistGenre() {
-        // given 
+        // given
         final var filmes
                 = categoryGateway.create(Category.newCategory("Filmes", null, true));
- 
+
         final var series
                 = categoryGateway.create(Category.newCategory("Séries", null, true));
- 
+
         final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.<CategoryID>of();
- 
+
         final var aGenre = Genre.newGenre("ac", expectedIsActive);
         aGenre.addCategories(List.of(filmes.getId(), series.getId()));
- 
+
         final var expectedId = aGenre.getId();
 
         Assertions.assertEquals(0, genreRepository.count());
@@ -197,7 +196,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals("ac", aGenre.getName());
         Assertions.assertEquals(2, aGenre.getCategories().size());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.update(
                 Genre.with(aGenre)
                         .update(expectedName, expectedIsActive, expectedCategories)
@@ -213,7 +212,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(aGenre.getCreatedAt(), actualGenre.getCreatedAt());
         Assertions.assertTrue(aGenre.getUpdatedAt().isBefore(actualGenre.getUpdatedAt()));
         Assertions.assertEquals(aGenre.getDeletedAt(), actualGenre.getDeletedAt());
- 
+
         final var persistedGenre = genreRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedName, persistedGenre.getName());
@@ -227,13 +226,13 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAValidGenreInactive_whenCallsUpdateGenreActivating_shouldPersistGenre() {
-        // given 
+        // given
         final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.<CategoryID>of();
- 
+
         final var aGenre = Genre.newGenre(expectedName, false);
- 
+
         final var expectedId = aGenre.getId();
 
         Assertions.assertEquals(0, genreRepository.count());
@@ -243,7 +242,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertFalse(aGenre.isActive());
         Assertions.assertNotNull(aGenre.getDeletedAt());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.update(
                 Genre.with(aGenre)
                         .update(expectedName, expectedIsActive, expectedCategories)
@@ -259,7 +258,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(aGenre.getCreatedAt(), actualGenre.getCreatedAt());
         Assertions.assertTrue(aGenre.getUpdatedAt().isBefore(actualGenre.getUpdatedAt()));
         Assertions.assertNull(actualGenre.getDeletedAt());
- 
+
         final var persistedGenre = genreRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedName, persistedGenre.getName());
@@ -272,13 +271,13 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAValidGenreActive_whenCallsUpdateGenreInactivating_shouldPersistGenre() {
-        // given 
+        // given
         final var expectedName = "Ação";
         final var expectedIsActive = false;
         final var expectedCategories = List.<CategoryID>of();
- 
+
         final var aGenre = Genre.newGenre(expectedName, true);
- 
+
         final var expectedId = aGenre.getId();
 
         Assertions.assertEquals(0, genreRepository.count());
@@ -288,7 +287,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertTrue(aGenre.isActive());
         Assertions.assertNull(aGenre.getDeletedAt());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.update(
                 Genre.with(aGenre)
                         .update(expectedName, expectedIsActive, expectedCategories)
@@ -304,7 +303,7 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(aGenre.getCreatedAt(), actualGenre.getCreatedAt());
         Assertions.assertTrue(aGenre.getUpdatedAt().isBefore(actualGenre.getUpdatedAt()));
         Assertions.assertNotNull(actualGenre.getDeletedAt());
- 
+
         final var persistedGenre = genreRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedName, persistedGenre.getName());
@@ -317,9 +316,9 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenTwoGenresAndOnePersisted_whenCallsExistsByIds_shouldReturnPersistedID() {
-        // given 
+        // given
         final var aGenre = Genre.newGenre("Genre 1", true);
- 
+
         final var expectedItems = 1;
         final var expectedId = aGenre.getId();
 
@@ -327,7 +326,7 @@ class GenreMySQLGatewayTest {
 
         genreRepository.saveAndFlush(GenreJpaEntity.from(aGenre));
 
-        // when 
+        // when
         final var actualGenre = genreGateway.existsByIds(List.of(GenreID.from("123"), expectedId));
 
         // then
@@ -337,7 +336,7 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAPrePersistedGenre_whenCallsDeleteById_shouldDeleteGenre() {
-        // given 
+        // given
         final var aGenre = Genre.newGenre("Ação", true);
 
         genreRepository.saveAndFlush(GenreJpaEntity.from(aGenre));
@@ -365,27 +364,27 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAPrePersistedGenre_whenCallsFindById_shouldReturnGenre() {
-        // given 
+        // given
         final var filmes
                 = categoryGateway.create(Category.newCategory("Filmes", null, true));
- 
+
         final var series
                 = categoryGateway.create(Category.newCategory("Séries", null, true));
- 
+
         final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.of(filmes.getId(), series.getId());
- 
+
         final var aGenre = Genre.newGenre(expectedName, expectedIsActive);
         aGenre.addCategories(expectedCategories);
- 
+
         final var expectedId = aGenre.getId();
 
         genreRepository.saveAndFlush(GenreJpaEntity.from(aGenre));
 
         Assertions.assertEquals(1, genreRepository.count());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.findById(expectedId).get();
 
         // then
@@ -400,12 +399,12 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenAInvalidGenreId_whenCallsFindById_shouldReturnEmpty() {
-        // given 
+        // given
         final var expectedId = GenreID.from("123");
 
         Assertions.assertEquals(0, genreRepository.count());
 
-        // when 
+        // when
         final var actualGenre = genreGateway.findById(expectedId);
 
         // then
@@ -414,18 +413,18 @@ class GenreMySQLGatewayTest {
 
     @Test
     void givenEmptyGenres_whenCallFindAll_shouldReturnEmptyList() {
-        // given 
+        // given
         final var expectedPage = 0;
         final var expectedPerPage = 1;
         final var expectedTerms = "";
         final var expectedSort = "name";
         final var expectedDirection = "asc";
         final var expectedTotal = 0;
- 
+
         final var aQuery
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        // when 
+        // when
         final var actualPage = genreGateway.findAll(aQuery);
 
         // then
@@ -437,11 +436,11 @@ class GenreMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-        "aç,0,10,1,1,Ação",
-        "dr,0,10,1,1,Drama",
-        "com,0,10,1,1,Comédia romântica",
-        "cien,0,10,1,1,Ficção científica",
-        "terr,0,10,1,1,Terror",})
+            "aç,0,10,1,1,Ação",
+            "dr,0,10,1,1,Drama",
+            "com,0,10,1,1,Comédia romântica",
+            "cien,0,10,1,1,Ficção científica",
+            "terr,0,10,1,1,Terror",})
     void givenAValidTerm_whenCallsFindAll_shouldReturnFiltered(
             final String expectedTerms,
             final int expectedPage,
@@ -451,14 +450,14 @@ class GenreMySQLGatewayTest {
             final String expectedGenreName
     ) {
         // given
-        mockGenre ();
+        mockGenres();
         final var expectedSort = "name";
         final var expectedDirection = "asc";
- 
+
         final var aQuery
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        // when 
+        // when
         final var actualPage = genreGateway.findAll(aQuery);
 
         // then
@@ -471,10 +470,10 @@ class GenreMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-        "name,asc,0,10,5,5,Ação",
-        "name,desc,0,10,5,5,Terror",
-        "createdAt,asc,0,10,5,5,Comédia romântica",
-        "createdAt,desc,0,10,5,5,Ficção científica",})
+            "name,asc,0,10,5,5,Ação",
+            "name,desc,0,10,5,5,Terror",
+            "createdAt,asc,0,10,5,5,Comédia romântica",
+            "createdAt,desc,0,10,5,5,Ficção científica",})
     void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnOrdered(
             final String expectedSort,
             final String expectedDirection,
@@ -485,13 +484,13 @@ class GenreMySQLGatewayTest {
             final String expectedGenreName
     ) {
         // given
-        mockGenre ();
+        mockGenres();
         final var expectedTerms = "";
- 
+
         final var aQuery
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        // when 
+        // when
         final var actualPage = genreGateway.findAll(aQuery);
 
         // then
@@ -504,9 +503,9 @@ class GenreMySQLGatewayTest {
 
     @ParameterizedTest
     @CsvSource({
-        "0,2,2,5,Ação;Comédia romântica",
-        "1,2,2,5,Drama;Ficção científica",
-        "2,2,1,5,Terror",})
+            "0,2,2,5,Ação;Comédia romântica",
+            "1,2,2,5,Drama;Ficção científica",
+            "2,2,1,5,Terror",})
     void givenAValidPaging_whenCallsFindAll_shouldReturnPaged(
             final int expectedPage,
             final int expectedPerPage,
@@ -515,15 +514,15 @@ class GenreMySQLGatewayTest {
             final String expectedGenres
     ) {
         // given
-        mockGenre ();
+        mockGenres();
         final var expectedTerms = "";
         final var expectedSort = "name";
         final var expectedDirection = "asc";
- 
+
         final var aQuery
                 = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        // when 
+        // when
         final var actualPage = genreGateway.findAll(aQuery);
 
         // then
@@ -532,8 +531,8 @@ class GenreMySQLGatewayTest {
         Assertions.assertEquals(expectedTotal, actualPage.total());
         Assertions.assertEquals(expectedItemsCount, actualPage.items().size());
 
-        int index = 0; 
-        for (final va  expectedName : expectedGenres.split(";")) {
+        int index = 0;
+        for (final var expectedName : expectedGenres.split(";")) {
             final var actualName = actualPage.items().get(index).getName();
             Assertions.assertEquals(expectedName, actualName);
             index++;
