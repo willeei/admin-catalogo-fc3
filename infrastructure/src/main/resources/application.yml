@@ -1,3 +1,22 @@
+google:
+  cloud:
+    credentials: ${GOOGLE_CLOUD_CREDENTIALS}
+    project-id: ${GOOGLE_CLOUD_PROJECT_ID}
+    storage:
+      catalogo-video:
+        bucket: willeei_catalogo_videos
+        connectionTimeout: 1000
+        readTimeout: 2000
+        retryDelay: 50
+        retryMaxAttempts: 2
+        retryMaxDelay: 50
+        retryMultiplier: 1.0
+
+logging:
+  level:
+    ROOT: INFO
+    tech.willeei.admin.catalogo: DEBUG
+
 server:
   compression:
     enabled: true # Whether response compression is enabled.

@@ -39,7 +39,10 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
-    implementation 'io.vavr:vavr:0.10.4'
+    implementation ('com.google.cloud:google-cloud-storage:2.42.0')
+    implementation ('com.google.guava:guava:33.3.0-jre')
+
+    implementation ('io.vavr:vavr:0.10.4')
 
     implementation('mysql:mysql-connector-java')
 
@@ -50,12 +53,12 @@ dependencies {
         exclude module: 'spring-boot-starter-tomcat'
     }
 
-    implementation 'org.springframework.boot:spring-boot-starter-undertow'
+    implementation ('org.springframework.boot:spring-boot-starter-undertow')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 
     implementation('com.fasterxml.jackson.module:jackson-module-afterburner')
 
-    testImplementation 'org.flywaydb:flyway-core'
+    testImplementation ('org.flywaydb:flyway-core')
     testImplementation('org.flywaydb:flyway-mysql')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
