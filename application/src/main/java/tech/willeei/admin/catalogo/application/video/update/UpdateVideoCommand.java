@@ -3,7 +3,7 @@ package tech.willeei.admin.catalogo.application.video.update;
 import java.util.Optional;
 import java.util.Set;
 
-import tech.willeei.admin.catalogo.domain.video.Resource;
+import tech.willeei.admin.catalogo.domain.resource.Resource;
 
 public record UpdateVideoCommand(
         String id,

@@ -18,7 +18,7 @@ import tech.willeei.admin.catalogo.domain.utils.IdUtils;
 import tech.willeei.admin.catalogo.domain.video.AudioVideoMedia;
 import tech.willeei.admin.catalogo.domain.video.ImageMedia;
 import tech.willeei.admin.catalogo.domain.video.Rating;
-import tech.willeei.admin.catalogo.domain.video.Resource;
+import tech.willeei.admin.catalogo.domain.resource.Resource;
 import tech.willeei.admin.catalogo.domain.video.Video;
 import tech.willeei.admin.catalogo.domain.video.VideoMediaType;
 

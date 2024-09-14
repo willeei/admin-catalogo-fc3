@@ -1,4 +1,4 @@
-package tech.willeei.admin.catalogo.domain.video;
+package tech.willeei.admin.catalogo.domain.resource;
 
 import java.util.Objects;
 

@@ -32,7 +32,7 @@ import tech.willeei.admin.catalogo.domain.genre.GenreID;
 import tech.willeei.admin.catalogo.domain.video.AudioVideoMedia;
 import tech.willeei.admin.catalogo.domain.video.ImageMedia;
 import tech.willeei.admin.catalogo.domain.video.MediaResourceGateway;
-import tech.willeei.admin.catalogo.domain.video.Resource;
+import tech.willeei.admin.catalogo.domain.resource.Resource;
 import tech.willeei.admin.catalogo.domain.video.VideoGateway;
 import tech.willeei.admin.catalogo.domain.video.VideoMediaType;
 import tech.willeei.admin.catalogo.domain.video.VideoResource;

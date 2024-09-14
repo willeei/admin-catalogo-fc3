@@ -1,12 +1,9 @@
 package tech.willeei.admin.catalogo.infrastructure.service.local;
 
-import tech.willeei.admin.catalogo.domain.video.Resource;
+import tech.willeei.admin.catalogo.domain.resource.Resource;
 import tech.willeei.admin.catalogo.infrastructure.service.StorageService;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryStorageService implements StorageService {
@@ -31,8 +28,8 @@ public class InMemoryStorageService implements StorageService {
     }
 
     @Override
-    public Resource get(final String name) {
-        return this.storage.get(name);
+    public Optional<Resource> get(final String name) {
+        return Optional.ofNullable(this.storage.get(name));
     }
 
     @Override

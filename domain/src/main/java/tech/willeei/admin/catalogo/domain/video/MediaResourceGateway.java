@@ -1,5 +1,7 @@
 package tech.willeei.admin.catalogo.domain.video;
 
+import tech.willeei.admin.catalogo.domain.resource.Resource;
+
 import java.util.Optional;
 
 public interface MediaResourceGateway {

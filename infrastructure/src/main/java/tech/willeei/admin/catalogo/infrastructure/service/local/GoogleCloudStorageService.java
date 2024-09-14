@@ -3,7 +3,7 @@ package tech.willeei.admin.catalogo.infrastructure.service.local;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import tech.willeei.admin.catalogo.domain.video.Resource;
+import tech.willeei.admin.catalogo.domain.resource.Resource;
 import tech.willeei.admin.catalogo.infrastructure.service.StorageService;
 
 import java.util.Collection;
@@ -49,7 +49,7 @@ public class GoogleCloudStorageService implements StorageService {
     public void store(final String name, final Resource resource) {
         final var blobInfo = BlobInfo.newBuilder(this.bucket, name)
                 .setContentType(resource.contentType())
-                .setCrc32cFromHexString("")
+                .setCrc32cFromHexString(resource.checksum())
                 .build();
         this.storage.create(blobInfo, resource.content());
     }

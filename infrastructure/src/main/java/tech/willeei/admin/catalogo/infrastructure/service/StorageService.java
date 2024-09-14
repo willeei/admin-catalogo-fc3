@@ -1,6 +1,6 @@
 package tech.willeei.admin.catalogo.infrastructure.service;
 
-import tech.willeei.admin.catalogo.domain.video.Resource;
+import tech.willeei.admin.catalogo.domain.resource.Resource;
 
 import java.util.Collection;
 import java.util.List;
