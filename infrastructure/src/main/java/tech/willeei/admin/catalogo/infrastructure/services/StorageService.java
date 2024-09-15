@@ -1,4 +1,4 @@
-package tech.willeei.admin.catalogo.infrastructure.service;
+package tech.willeei.admin.catalogo.infrastructure.services;
 
 import tech.willeei.admin.catalogo.domain.resource.Resource;
 

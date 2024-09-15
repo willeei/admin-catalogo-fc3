@@ -1,10 +1,10 @@
-package tech.willeei.admin.catalogo.infrastructure.service.local;
+package tech.willeei.admin.catalogo.infrastructure.services.impl;
 
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import tech.willeei.admin.catalogo.domain.resource.Resource;
-import tech.willeei.admin.catalogo.infrastructure.service.StorageService;
+import tech.willeei.admin.catalogo.infrastructure.services.StorageService;
 
 import java.util.Collection;
 import java.util.List;

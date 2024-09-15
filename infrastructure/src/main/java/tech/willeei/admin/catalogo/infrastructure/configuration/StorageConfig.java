@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import tech.willeei.admin.catalogo.infrastructure.configuration.properties.GoogleStorageProperties;
-import tech.willeei.admin.catalogo.infrastructure.service.StorageService;
-import tech.willeei.admin.catalogo.infrastructure.service.local.GoogleCloudStorageService;
-import tech.willeei.admin.catalogo.infrastructure.service.local.InMemoryStorageService;
+import tech.willeei.admin.catalogo.infrastructure.services.StorageService;
+import tech.willeei.admin.catalogo.infrastructure.services.impl.GoogleCloudStorageService;
+import tech.willeei.admin.catalogo.infrastructure.services.local.InMemoryStorageService;
 
 @Configuration
 public class StorageConfig {

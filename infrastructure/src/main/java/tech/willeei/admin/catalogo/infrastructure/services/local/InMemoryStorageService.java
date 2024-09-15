@@ -1,7 +1,7 @@
-package tech.willeei.admin.catalogo.infrastructure.service.local;
+package tech.willeei.admin.catalogo.infrastructure.services.local;
 
 import tech.willeei.admin.catalogo.domain.resource.Resource;
-import tech.willeei.admin.catalogo.infrastructure.service.StorageService;
+import tech.willeei.admin.catalogo.infrastructure.services.StorageService;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +18,7 @@ public class InMemoryStorageService implements StorageService {
         return this.storage;
     }
 
-    public void reset() {
+    public void clear() {
         this.storage.clear();
     }
 
