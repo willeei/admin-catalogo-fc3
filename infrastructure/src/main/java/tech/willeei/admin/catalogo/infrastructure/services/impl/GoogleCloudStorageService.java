@@ -32,7 +32,12 @@ public class GoogleCloudStorageService implements StorageService {
     @Override
     public Optional<Resource> get(final String name) {
         return Optional.ofNullable(this.storage.get(this.bucket, name))
-                .map(blob -> Resource.with(blob.getContent(), blob.getCrc32cToHexString(), blob.getContentType(), name));
+                .map(blob -> Resource.with(
+                        blob.getContent(),
+                        blob.getCrc32cToHexString(),
+                        blob.getContentType(),
+                        blob.getName()
+                ));
     }
 
     @Override
