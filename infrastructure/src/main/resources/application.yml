@@ -3,7 +3,7 @@ google:
     credentials: ${GOOGLE_CLOUD_CREDENTIALS}
     project-id: ${GOOGLE_CLOUD_PROJECT_ID}
     storage:
-      catalogo-video:
+      catalogo-videos:
         bucket: willeei_catalogo_videos
         connectionTimeout: 1000
         readTimeout: 2000
@@ -53,3 +53,8 @@ spring:
       "[hibernate.connection.provider_disables_autocommit]": true
       # Para aumentar a performance ao máximo, desabilitamos o auto-commit e o open-in-view.
       # https://vladmihalcea.com/why-you-should-always-use-hibernate-connection-provider_disables_autocommit-for-resource-local-jpa-transactions/
+
+storage:
+  catalogo-video:
+    filename-pattern: type-{type}
+    location-pattern: videoId-{videoId}

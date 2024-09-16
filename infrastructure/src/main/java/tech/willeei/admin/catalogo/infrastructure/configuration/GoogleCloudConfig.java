@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.threeten.bp.Duration;
-import tech.willeei.admin.catalogo.infrastructure.configuration.properties.GoogleCloudProperties;
-import tech.willeei.admin.catalogo.infrastructure.configuration.properties.GoogleStorageProperties;
+import tech.willeei.admin.catalogo.infrastructure.configuration.properties.google.GoogleCloudProperties;
+import tech.willeei.admin.catalogo.infrastructure.configuration.properties.google.GoogleStorageProperties;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class GoogleCloudConfig {
     }
 
     @Bean
-    @ConfigurationProperties("google.cloud.storage.catalogo-video")
+    @ConfigurationProperties("google.cloud.storage.catalogo-videos")
     public GoogleStorageProperties googleStorageProperties() {
         return new GoogleStorageProperties();
     }
