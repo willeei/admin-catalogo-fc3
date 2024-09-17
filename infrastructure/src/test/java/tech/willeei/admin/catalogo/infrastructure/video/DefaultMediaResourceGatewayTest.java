@@ -24,7 +24,7 @@ class DefaultMediaResourceGatewayTest {
     private StorageService storageService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         storageService().clear();
     }
 
@@ -38,7 +38,7 @@ class DefaultMediaResourceGatewayTest {
     }
 
     @Test
-    void givenAValidResource_whenCallsStorageAudioVideo_shouldStoreIt() {
+    void givenValidResource_whenCallsStorageAudioVideo_shouldStoreIt() {
         // given
         final var expectedVideoId = VideoID.unique();
         final var expectedType = VideoMediaType.VIDEO;
@@ -67,7 +67,7 @@ class DefaultMediaResourceGatewayTest {
     }
 
     @Test
-    void givenAValidResource_whenCallsStorageImage_shouldStoreIt() {
+    void givenValidResource_whenCallsStorageImage_shouldStoreIt() {
         // given
         final var expectedVideoId = VideoID.unique();
         final var expectedType = VideoMediaType.BANNER;
@@ -92,12 +92,66 @@ class DefaultMediaResourceGatewayTest {
     }
 
     @Test
-    void givenAValidVideoId_whenCallsClearResources_shouldDeleteAll() {
+    void givenValidVideoId_whenCallsGetResource_shouldReturnIt() {
+        // given
+        final var videoOne = VideoID.unique();
+        final var expectedType = VideoMediaType.VIDEO;
+        final var expectedResource = resource(expectedType);
+
+        storageService().store("videoId-%s/type-%s".formatted(videoOne.getValue(), expectedType), expectedResource);
+        storageService().store(
+                "videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.TRAILER.name()),
+                resource(mediaType())
+        );
+        storageService().store(
+                "videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.BANNER.name()),
+                resource(mediaType())
+        );
+
+        Assertions.assertEquals(3, storageService().storage().size());
+
+        // when
+        final var actualResult = this.mediaResourceGateway.getResource(videoOne, expectedType).get();
+
+        // then
+        Assertions.assertEquals(expectedResource, actualResult);
+    }
+
+    @Test
+    void givenInvalidType_whenCallsGetResource_shouldReturnEmpty() {
+        // given
+        final var videoOne = VideoID.unique();
+        final var expectedType = VideoMediaType.THUMBNAIL;
+
+        storageService().store(
+                "videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.VIDEO.name()),
+                resource(mediaType())
+        );
+        storageService().store(
+                "videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.TRAILER.name()),
+                resource(mediaType())
+        );
+        storageService().store(
+                "videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.BANNER.name()),
+                resource(mediaType())
+        );
+
+        Assertions.assertEquals(3, storageService().storage().size());
+
+        // when
+        final var actualResult = this.mediaResourceGateway.getResource(videoOne, expectedType);
+
+        // then
+        Assertions.assertTrue(actualResult.isEmpty());
+    }
+
+    @Test
+    void givenValidVideoId_whenCallsClearResources_shouldDeleteAll() {
         // given
         final var videoOne = VideoID.unique();
         final var videoTwo = VideoID.unique();
 
-        final var expectedValues = getExpectedValues(videoOne, videoTwo);
+        final var expectedValues = getValues(videoOne, videoTwo);
 
         Assertions.assertEquals(5, storageService().storage().size());
 
@@ -110,11 +164,11 @@ class DefaultMediaResourceGatewayTest {
         final var actualKeys = storageService().storage().keySet();
 
         Assertions.assertTrue(
-                expectedValues.size() == actualKeys.size() && expectedValues.containsAll(actualKeys)
+                expectedValues.size() == actualKeys.size() && actualKeys.containsAll(expectedValues)
         );
     }
 
-    private ArrayList<String> getExpectedValues(VideoID videoOne, VideoID videoTwo) {
+    private ArrayList<String> getValues(VideoID videoOne, VideoID videoTwo) {
         final var toBeDeleted = new ArrayList<String>();
         toBeDeleted.add("videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.VIDEO.name()));
         toBeDeleted.add("videoId-%s/type-%s".formatted(videoOne.getValue(), VideoMediaType.TRAILER.name()));

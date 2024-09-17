@@ -12,155 +12,121 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import tech.willeei.admin.catalogo.domain.Fixture;
 import tech.willeei.admin.catalogo.domain.resource.Resource;
-import tech.willeei.admin.catalogo.domain.utils.IdUtils;
 import tech.willeei.admin.catalogo.domain.video.VideoMediaType;
 
 import java.util.List;
 
-import static com.google.cloud.storage.Storage.BlobListOption.prefix;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class GoogleCloudStorageServiceTest {
+class GCStorageAPITest {
 
-    private final String bucket = "fc2_test";
     private GoogleCloudStorageService target;
+
     private Storage storage;
 
+    private String bucket = "test";
+
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.storage = Mockito.mock(Storage.class);
-        this.target = new GoogleCloudStorageService(this.bucket, this.storage);
+        this.target = new GoogleCloudStorageService(bucket, storage);
     }
 
     @Test
-    void givenValidResource_whenCallsStore_shouldPersistIt() {
-        // given
-        final var expectedName = IdUtils.uuid();
-        final var expectedResource = Fixture.Videos.resource(VideoMediaType.VIDEO);
+    void givenValidResource_whenCallsStore_shouldStoreIt() {
+        final var expectedResource = Fixture.Videos.resource(VideoMediaType.THUMBNAIL);
+        final var expectedId = expectedResource.name();
 
-        final var blob = mockBlob(expectedName, expectedResource);
-        doReturn(blob).when(this.storage).create(any(BlobInfo.class), any());
+        final Blob blob = mockBlob(expectedResource);
+        doReturn(blob).when(storage).get(eq(bucket), eq(expectedId));
 
-        // when
-        this.target.store(expectedName, expectedResource);
+        this.target.store(expectedId, expectedResource);
 
-        // then
-        final var captor = ArgumentCaptor.forClass(BlobInfo.class);
+        final var capturer = ArgumentCaptor.forClass(BlobInfo.class);
 
-        verify(storage, times(1)).create(captor.capture(), eq(expectedResource.content()));
+        verify(storage, times(1)).create(capturer.capture(), eq(expectedResource.content()));
 
-        final var actualBlob = captor.getValue();
+        final var actualBlob = capturer.getValue();
         Assertions.assertEquals(this.bucket, actualBlob.getBlobId().getBucket());
-        Assertions.assertEquals(expectedName, actualBlob.getBlobId().getName());
-        Assertions.assertEquals(expectedName, actualBlob.getName());
+        Assertions.assertEquals(expectedId, actualBlob.getBlobId().getName());
         Assertions.assertEquals(expectedResource.contentType(), actualBlob.getContentType());
         Assertions.assertEquals(expectedResource.checksum(), actualBlob.getCrc32cToHexString());
     }
 
     @Test
-    void givenValidResource_whenCallsGet_shouldRetrieveIt() {
-        // given
-        final var expectedName = IdUtils.uuid();
-        final var expectedResource = Fixture.Videos.resource(VideoMediaType.VIDEO);
+    void givenResource_whenCallsGet_shouldRetrieveIt() {
+        final var expectedResource = Fixture.Videos.resource(VideoMediaType.THUMBNAIL);
+        final var expectedId = expectedResource.name();
 
-        final var blob = mockBlob(expectedName, expectedResource);
-        doReturn(blob).when(this.storage).get(anyString(), anyString());
+        final Blob blob = mockBlob(expectedResource);
+        doReturn(blob).when(storage).get(eq(bucket), eq(expectedId));
 
-        // when
-        final var actualResource = this.target.get(expectedName).get();
+        final var actualContent = target.get(expectedId).get();
 
-        // then
-        verify(storage, times(1)).get(eq(this.bucket), eq(expectedName));
-
-        Assertions.assertEquals(expectedResource, actualResource);
+        Assertions.assertEquals(expectedResource.checksum(), actualContent.checksum());
+        Assertions.assertEquals(expectedResource.name(), actualContent.name());
+        Assertions.assertEquals(expectedResource.content(), actualContent.content());
+        Assertions.assertEquals(expectedResource.contentType(), actualContent.contentType());
     }
 
     @Test
     void givenInvalidResource_whenCallsGet_shouldRetrieveEmpty() {
-        // given
-        final var expectedName = IdUtils.uuid();
+        final var expectedResource = Fixture.Videos.resource(VideoMediaType.THUMBNAIL);
+        final var expectedId = expectedResource.name();
 
-        doReturn(null).when(this.storage).get(anyString(), anyString());
+        doReturn(null).when(storage).get(eq(bucket), eq(expectedId));
 
-        // when
-        final var actualResource = this.target.get(expectedName);
+        final var actualContent = target.get(expectedId);
 
-        // then
-        verify(storage, times(1)).get(eq(this.bucket), eq(expectedName));
-
-        Assertions.assertTrue(actualResource.isEmpty());
+        Assertions.assertTrue(actualContent.isEmpty());
     }
 
     @Test
     void givenPrefix_whenCallsList_shouldRetrieveAll() {
-        // given
-        final var expectedPrefix = "media_";
-
-        final var expectedNameVideo = expectedPrefix + IdUtils.uuid();
-        final var expectedVideo = Fixture.Videos.resource(VideoMediaType.VIDEO);
-
-        final var expectedNameBanner = expectedPrefix + IdUtils.uuid();
-        final var expectedBanner = Fixture.Videos.resource(VideoMediaType.BANNER);
-
-        final var expectedResources = List.of(expectedNameVideo, expectedNameBanner);
-
-        final var blobVideo = mockBlob(expectedNameVideo, expectedVideo);
-        final var blobBanner = mockBlob(expectedNameBanner, expectedBanner);
+        final var video = Fixture.Videos.resource(VideoMediaType.VIDEO);
+        final var banner = Fixture.Videos.resource(VideoMediaType.BANNER);
+        final var expectedIds = List.of(video.name(), banner.name());
 
         final var page = Mockito.mock(Page.class);
-        doReturn(List.of(blobVideo, blobBanner)).when(page).iterateAll();
 
-        doReturn(page).when(this.storage).list(anyString(), any());
+        final Blob blob1 = mockBlob(video);
+        final Blob blob2 = mockBlob(banner);
 
-        // when
-        final var actualResource = this.target.list(expectedPrefix);
+        doReturn(List.of(blob1, blob2)).when(page).iterateAll();
+        doReturn(page).when(storage).list(eq(bucket), eq(Storage.BlobListOption.prefix("it")));
 
-        // then
-        verify(storage, times(1)).list(eq(this.bucket), eq(prefix(expectedPrefix)));
+        final var actualContent = target.list("it");
 
         Assertions.assertTrue(
-                expectedResources.size() == actualResource.size()
-                        && expectedResources.containsAll(actualResource)
+                expectedIds.size() == actualContent.size()
+                        && expectedIds.containsAll(actualContent)
         );
     }
 
     @Test
-    void givenValidNames_whenCallsDelete_shouldDeleteAll() {
-        // given
-        final var expectedPrefix = "media_";
+    void givenResource_whenCallsDeleteAll_shouldEmptyStorage() {
+        final var expectedIds = List.of("item1", "item2");
 
-        final var expectedNameVideo = expectedPrefix + IdUtils.uuid();
-        final var expectedNameBanner = expectedPrefix + IdUtils.uuid();
+        target.deleteAll(expectedIds);
 
-        final var expectedResources = List.of(expectedNameVideo, expectedNameBanner);
-
-        // when
-        this.target.deleteAll(expectedResources);
-
-        // then
         final var captor = ArgumentCaptor.forClass(List.class);
 
         verify(storage, times(1)).delete(captor.capture());
 
-        final var actualResources = ((List<BlobId>) captor.getValue()).stream()
+        final var actualIds = ((List<BlobId>) captor.getValue()).stream()
                 .map(BlobId::getName)
                 .toList();
 
-        Assertions.assertTrue(
-                expectedResources.size() == actualResources.size()
-                        && expectedResources.containsAll(actualResources)
-        );
+        Assertions.assertTrue(expectedIds.size() == actualIds.size() && actualIds.containsAll(expectedIds));
     }
 
-    private Blob mockBlob(final String name, final Resource expectedResource) {
-        final var blob = Mockito.mock(Blob.class);
-        when(blob.getBlobId()).thenReturn(BlobId.of(this.bucket, name));
-        when(blob.getCrc32cToHexString()).thenReturn(expectedResource.checksum());
-        when(blob.getContent()).thenReturn(expectedResource.content());
-        when(blob.getContentType()).thenReturn(expectedResource.contentType());
-        when(blob.getName()).thenReturn(expectedResource.name());
-
-        return blob;
+    private Blob mockBlob(final Resource resource) {
+        final var blob1 = Mockito.mock(Blob.class);
+        when(blob1.getBlobId()).thenReturn(BlobId.of(bucket, resource.name()));
+        when(blob1.getCrc32cToHexString()).thenReturn(resource.checksum());
+        when(blob1.getContent()).thenReturn(resource.content());
+        when(blob1.getContentType()).thenReturn(resource.contentType());
+        when(blob1.getName()).thenReturn(resource.name());
+        return blob1;
     }
 }

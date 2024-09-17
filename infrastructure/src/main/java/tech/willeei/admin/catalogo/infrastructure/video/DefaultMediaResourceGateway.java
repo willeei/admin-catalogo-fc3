@@ -22,30 +22,30 @@ public class DefaultMediaResourceGateway implements MediaResourceGateway {
     }
 
     @Override
-    public AudioVideoMedia storeAudioVideo(VideoID anId, VideoResource videoResource) {
-        final var filepath = filepath(anId, videoResource);
+    public void clearResources(final VideoID anId) {
+        final var ids = this.storageService.list(folder(anId));
+        this.storageService.deleteAll(ids);
+    }
+
+    @Override
+    public Optional<Resource> getResource(final VideoID anId, final VideoMediaType type) {
+        return this.storageService.get(filepath(anId, type));
+    }
+
+    @Override
+    public AudioVideoMedia storeAudioVideo(final VideoID anId, final VideoResource videoResource) {
+        final var filepath = filepath(anId, videoResource.type());
         final var aResource = videoResource.resource();
         store(filepath, aResource);
         return AudioVideoMedia.with(aResource.checksum(), aResource.name(), filepath);
     }
 
     @Override
-    public ImageMedia storeImage(VideoID anId, VideoResource videoResource) {
-        final var filepath = filepath(anId, videoResource);
+    public ImageMedia storeImage(final VideoID anId, final VideoResource videoResource) {
+        final var filepath = filepath(anId, videoResource.type());
         final var aResource = videoResource.resource();
         store(filepath, aResource);
         return ImageMedia.with(aResource.checksum(), aResource.name(), filepath);
-    }
-
-    @Override
-    public void clearResources(VideoID anId) {
-        final var ids = this.storageService.list(folder(anId));
-        this.storageService.deleteAll(ids);
-    }
-
-    @Override
-    public Optional<Resource> getResource(VideoID anId, VideoMediaType type) {
-        return Optional.empty();
     }
 
     private String filename(final VideoMediaType aType) {
@@ -56,10 +56,10 @@ public class DefaultMediaResourceGateway implements MediaResourceGateway {
         return locationPattern.replace("{videoId}", anId.getValue());
     }
 
-    private String filepath(VideoID anId, VideoResource aResource) {
+    private String filepath(final VideoID anId, final VideoMediaType aType) {
         return folder(anId)
                 .concat("/")
-                .concat(filename(aResource.type()));
+                .concat(filename(aType));
     }
 
     private void store(final String filepath, final Resource aResource) {
