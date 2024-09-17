@@ -1,18 +1,18 @@
 package tech.willeei.admin.catalogo.domain.video;
 
-import java.time.Instant;
-import java.time.Year;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 import tech.willeei.admin.catalogo.domain.AggregateRoot;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberID;
 import tech.willeei.admin.catalogo.domain.category.CategoryID;
 import tech.willeei.admin.catalogo.domain.genre.GenreID;
 import tech.willeei.admin.catalogo.domain.utils.InstantUtils;
 import tech.willeei.admin.catalogo.domain.validation.ValidationHandler;
+
+import java.time.Instant;
+import java.time.Year;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class Video extends AggregateRoot<VideoID> {
 
@@ -77,6 +77,107 @@ public class Video extends AggregateRoot<VideoID> {
         this.categories = categories;
         this.genres = genres;
         this.castMembers = members;
+    }
+
+    public static Video newVideo(
+            final String aTitle,
+            final String aDescription,
+            final Year aLaunchYear,
+            final double aDuration,
+            final boolean wasOpened,
+            final boolean wasPublished,
+            final Rating aRating,
+            final Set<CategoryID> categories,
+            final Set<GenreID> genres,
+            final Set<CastMemberID> members
+    ) {
+        final var now = InstantUtils.now();
+        final var anId = VideoID.unique();
+        return new Video(
+                anId,
+                aTitle,
+                aDescription,
+                aLaunchYear,
+                aDuration,
+                wasOpened,
+                wasPublished,
+                aRating,
+                now,
+                now,
+                null,
+                null,
+                null,
+                null,
+                null,
+                categories,
+                genres,
+                members
+        );
+    }
+
+    public static Video with(final Video aVideo) {
+        return new Video(
+                aVideo.getId(),
+                aVideo.getTitle(),
+                aVideo.getDescription(),
+                aVideo.getLaunchedAt(),
+                aVideo.getDuration(),
+                aVideo.getOpened(),
+                aVideo.getPublished(),
+                aVideo.getRating(),
+                aVideo.getCreatedAt(),
+                aVideo.getUpdatedAt(),
+                aVideo.getBanner().orElse(null),
+                aVideo.getThumbnail().orElse(null),
+                aVideo.getThumbnailHalf().orElse(null),
+                aVideo.getTrailer().orElse(null),
+                aVideo.getVideo().orElse(null),
+                new HashSet<>(aVideo.getCategories()),
+                new HashSet<>(aVideo.getGenres()),
+                new HashSet<>(aVideo.getCastMembers())
+        );
+    }
+
+    public static Video with(
+            final VideoID anId,
+            final String aTitle,
+            final String aDescription,
+            final Year aLaunchYear,
+            final double aDuration,
+            final boolean wasOpened,
+            final boolean wasPublished,
+            final Rating aRating,
+            final Instant aCreationDate,
+            final Instant aUpdateDate,
+            final ImageMedia aBanner,
+            final ImageMedia aThumb,
+            final ImageMedia aThumbHalf,
+            final AudioVideoMedia aTrailer,
+            final AudioVideoMedia aVideo,
+            final Set<CategoryID> categories,
+            final Set<GenreID> genres,
+            final Set<CastMemberID> members
+    ) {
+        return new Video(
+                anId,
+                aTitle,
+                aDescription,
+                aLaunchYear,
+                aDuration,
+                wasOpened,
+                wasPublished,
+                aRating,
+                aCreationDate,
+                aUpdateDate,
+                aBanner,
+                aThumb,
+                aThumbHalf,
+                aTrailer,
+                aVideo,
+                categories,
+                genres,
+                members
+        );
     }
 
     @Override
@@ -180,12 +281,24 @@ public class Video extends AggregateRoot<VideoID> {
         return categories != null ? Collections.unmodifiableSet(categories) : Collections.emptySet();
     }
 
+    private void setCategories(final Set<CategoryID> categories) {
+        this.categories = categories != null ? new HashSet<>(categories) : Collections.emptySet();
+    }
+
     public Set<GenreID> getGenres() {
         return genres != null ? Collections.unmodifiableSet(genres) : Collections.emptySet();
     }
 
+    private void setGenres(final Set<GenreID> genres) {
+        this.genres = genres != null ? new HashSet<>(genres) : Collections.emptySet();
+    }
+
     public Set<CastMemberID> getCastMembers() {
         return castMembers != null ? Collections.unmodifiableSet(castMembers) : Collections.emptySet();
+    }
+
+    private void setCastMembers(final Set<CastMemberID> castMembers) {
+        this.castMembers = castMembers != null ? new HashSet<>(castMembers) : Collections.emptySet();
     }
 
     public Optional<AudioVideoMedia> getVideo() {
@@ -208,116 +321,23 @@ public class Video extends AggregateRoot<VideoID> {
         return Optional.ofNullable(thumbnailHalf);
     }
 
-    private void setCategories(final Set<CategoryID> categories) {
-        this.categories = categories != null ? new HashSet<>(categories) : Collections.emptySet();
+    public Video processing(final VideoMediaType aType) {
+        if (VideoMediaType.VIDEO == aType) {
+            getVideo().ifPresent(media -> updateVideoMedia(media.processing()));
+        } else if (VideoMediaType.TRAILER == aType) {
+            getTrailer().ifPresent(media -> updateTrailerMedia(media.processing()));
+        }
+
+        return this;
     }
 
-    private void setGenres(final Set<GenreID> genres) {
-        this.genres = genres != null ? new HashSet<>(genres) : Collections.emptySet();
-    }
+    public Video completed(final VideoMediaType aType, final String encodedPath) {
+        if (VideoMediaType.VIDEO == aType) {
+            getVideo().ifPresent(media -> updateVideoMedia(media.completed(encodedPath)));
+        } else if (VideoMediaType.TRAILER == aType) {
+            getTrailer().ifPresent(media -> updateTrailerMedia(media.completed(encodedPath)));
+        }
 
-    private void setCastMembers(final Set<CastMemberID> castMembers) {
-        this.castMembers = castMembers != null ? new HashSet<>(castMembers) : Collections.emptySet();
-    }
-
-    public static Video newVideo(
-            final String aTitle,
-            final String aDescription,
-            final Year aLaunchYear,
-            final double aDuration,
-            final boolean wasOpened,
-            final boolean wasPublished,
-            final Rating aRating,
-            final Set<CategoryID> categories,
-            final Set<GenreID> genres,
-            final Set<CastMemberID> members
-    ) {
-        final var now = InstantUtils.now();
-        final var anId = VideoID.unique();
-        return new Video(
-                anId,
-                aTitle,
-                aDescription,
-                aLaunchYear,
-                aDuration,
-                wasOpened,
-                wasPublished,
-                aRating,
-                now,
-                now,
-                null,
-                null,
-                null,
-                null,
-                null,
-                categories,
-                genres,
-                members
-        );
-    }
-
-    public static Video with(final Video aVideo) {
-        return new Video(
-                aVideo.getId(),
-                aVideo.getTitle(),
-                aVideo.getDescription(),
-                aVideo.getLaunchedAt(),
-                aVideo.getDuration(),
-                aVideo.getOpened(),
-                aVideo.getPublished(),
-                aVideo.getRating(),
-                aVideo.getCreatedAt(),
-                aVideo.getUpdatedAt(),
-                aVideo.getBanner().orElse(null),
-                aVideo.getThumbnail().orElse(null),
-                aVideo.getThumbnailHalf().orElse(null),
-                aVideo.getTrailer().orElse(null),
-                aVideo.getVideo().orElse(null),
-                new HashSet<>(aVideo.getCategories()),
-                new HashSet<>(aVideo.getGenres()),
-                new HashSet<>(aVideo.getCastMembers())
-        );
-    }
-
-    public static Video with(
-            final VideoID anId,
-            final String aTitle,
-            final String aDescription,
-            final Year aLaunchYear,
-            final double aDuration,
-            final boolean wasOpened,
-            final boolean wasPublished,
-            final Rating aRating,
-            final Instant aCreationDate,
-            final Instant aUpdateDate,
-            final ImageMedia aBanner,
-            final ImageMedia aThumb,
-            final ImageMedia aThumbHalf,
-            final AudioVideoMedia aTrailer,
-            final AudioVideoMedia aVideo,
-            final Set<CategoryID> categories,
-            final Set<GenreID> genres,
-            final Set<CastMemberID> members
-    ) {
-        return new Video(
-                anId,
-                aTitle,
-                aDescription,
-                aLaunchYear,
-                aDuration,
-                wasOpened,
-                wasPublished,
-                aRating,
-                aCreationDate,
-                aUpdateDate,
-                aBanner,
-                aThumb,
-                aThumbHalf,
-                aTrailer,
-                aVideo,
-                categories,
-                genres,
-                members
-        );
+        return this;
     }
 }
