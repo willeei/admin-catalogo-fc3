@@ -43,8 +43,7 @@ class DefaultMediaResourceGatewayTest {
         final var expectedVideoId = VideoID.unique();
         final var expectedType = VideoMediaType.VIDEO;
         final var expectedResource = resource(expectedType);
-        final var expectedLocation =
-                "videoId-%s/type-%s".formatted(expectedVideoId.getValue(), expectedType.name());
+        final var expectedLocation = "videoId-%s/type-%s".formatted(expectedVideoId.getValue(), expectedType.name());
         final var expectedStatus = MediaStatus.PENDING;
         final var expectedEncodedLocation = "";
 

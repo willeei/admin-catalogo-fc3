@@ -55,8 +55,7 @@ class GetMediaUseCaseTest extends UseCaseTest {
         final var expectedId = VideoID.unique();
         final var expectedType = Fixture.Videos.mediaType();
 
-        final var expectedMessage =
-                "Resource %s not found for video %s".formatted(expectedType, expectedId.getValue());
+        final var expectedMessage = "Resource %s not found for video %s".formatted(expectedType, expectedId.getValue());
 
         when(mediaResourceGateway.getResource(expectedId, expectedType))
                 .thenReturn(Optional.empty());
