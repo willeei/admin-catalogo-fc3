@@ -44,7 +44,9 @@ class GetMediaUseCaseTest extends UseCaseTest {
         final var actualResult = this.useCase.execute(aCmd);
 
         // then
-        Assertions.assertEquals(expectedResource, actualResult);
+        Assertions.assertEquals(expectedResource.name(), actualResult.name());
+        Assertions.assertEquals(expectedResource.content(), actualResult.content());
+        Assertions.assertEquals(expectedResource.contentType(), actualResult.contentType());
     }
 
     @Test
@@ -52,7 +54,9 @@ class GetMediaUseCaseTest extends UseCaseTest {
         // given
         final var expectedId = VideoID.unique();
         final var expectedType = Fixture.Videos.mediaType();
-        final var expectedResource = Fixture.Videos.resource(expectedType);
+
+        final var expectedMessage =
+                "Resource %s not found for video %s".formatted(expectedType, expectedId.getValue());
 
         when(mediaResourceGateway.getResource(expectedId, expectedType))
                 .thenReturn(Optional.empty());
@@ -60,6 +64,28 @@ class GetMediaUseCaseTest extends UseCaseTest {
         final var aCmd = GetMediaCommand.with(expectedId.getValue(), expectedType.name());
 
         // when
-        Assertions.assertThrows(NotFoundException.class, () -> this.useCase.execute(aCmd));
+        final var actualException = Assertions.assertThrows(
+                NotFoundException.class, () -> this.useCase.execute(aCmd)
+        );
+
+        // then
+        Assertions.assertEquals(expectedMessage, actualException.getMessage());
+    }
+
+    @Test
+    void givenVideoIdAndType_whenTypeDoesntExists_shouldReturnNotFoundException() {
+        // given
+        final var expectedId = VideoID.unique();
+        final var expectedMessage = "Media type QUALQUER doesn't exists";
+
+        final var aCmd = GetMediaCommand.with(expectedId.getValue(), "QUALQUER");
+
+        // when
+        final var actualException = Assertions.assertThrows(
+                NotFoundException.class, () -> this.useCase.execute(aCmd)
+        );
+
+        // then
+        Assertions.assertEquals(expectedMessage, actualException.getMessage());
     }
 }
