@@ -1,23 +1,20 @@
 package tech.willeei.admin.catalogo.application.video.delete;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import tech.willeei.admin.catalogo.application.UseCaseTest;
 import tech.willeei.admin.catalogo.domain.exceptions.InternalErrorException;
 import tech.willeei.admin.catalogo.domain.video.MediaResourceGateway;
 import tech.willeei.admin.catalogo.domain.video.VideoGateway;
 import tech.willeei.admin.catalogo.domain.video.VideoID;
+
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 class DeleteVideoUseCaseTest extends UseCaseTest {
 
