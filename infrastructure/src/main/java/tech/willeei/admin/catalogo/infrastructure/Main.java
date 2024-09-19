@@ -2,10 +2,10 @@ package tech.willeei.admin.catalogo.infrastructure;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.AbstractEnvironment;
-
 import tech.willeei.admin.catalogo.infrastructure.configuration.WebServerConfig;
 
 @SpringBootApplication
@@ -17,6 +17,11 @@ public class Main {
         LOG.info("[step:to-be-init] [id:1] Inicializando o Spring");
         System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, "development");
         SpringApplication.run(WebServerConfig.class, args);
-        LOG.info("[step:inittialized] [id:2] Spring inicializado..");
+        LOG.info("[step:initialized] [id:2] Spring inicializado..");
+    }
+
+    @RabbitListener(queues = "video.encoded.queue")
+    void dummyListener() {
+        LOG.info("Received message");
     }
 }
