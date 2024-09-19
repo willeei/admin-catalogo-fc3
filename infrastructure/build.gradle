@@ -55,12 +55,14 @@ dependencies {
 
     implementation ('org.springframework.boot:spring-boot-starter-undertow')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-starter-amqp')
 
     implementation('com.fasterxml.jackson.module:jackson-module-afterburner')
 
     testImplementation ('org.flywaydb:flyway-core')
     testImplementation('org.flywaydb:flyway-mysql')
 
+    testImplementation 'org.springframework.amqp:spring-rabbit-test:2.4.4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     testImplementation(project(path: ':domain', configuration: 'testClasses'))

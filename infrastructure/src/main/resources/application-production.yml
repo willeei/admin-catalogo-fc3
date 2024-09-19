@@ -1,3 +1,9 @@
+amqp:
+  host: ${AMQP_RABBITMQ_HOST}
+  port: ${AMQP_RABBITMQ_PORT}
+  username: ${AMQP_RABBITMQ_USERNAME}
+  password: ${AMQP_RABBITMQ_PASSWORD}
+
 mysql:
   username: ${DATABASE_MYSQL_USERNAME:root}
   password: ${DATABASE_MYSQL_PASSWORD:9655}
