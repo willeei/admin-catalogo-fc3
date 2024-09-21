@@ -1,16 +1,16 @@
 package tech.willeei.admin.catalogo.domain.video;
 
-import java.time.Year;
-import java.util.Set;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import tech.willeei.admin.catalogo.domain.UnitTest;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberID;
 import tech.willeei.admin.catalogo.domain.category.CategoryID;
 import tech.willeei.admin.catalogo.domain.genre.GenreID;
+import tech.willeei.admin.catalogo.domain.utils.InstantUtils;
 import tech.willeei.admin.catalogo.domain.validation.handler.ThrowsValidationHandler;
+
+import java.time.Year;
+import java.util.Set;
 
 class VideoTest extends UnitTest {
 
@@ -68,6 +68,7 @@ class VideoTest extends UnitTest {
         Assertions.assertTrue(actualVideo.getBanner().isEmpty());
         Assertions.assertTrue(actualVideo.getThumbnail().isEmpty());
         Assertions.assertTrue(actualVideo.getThumbnailHalf().isEmpty());
+        Assertions.assertTrue(actualVideo.getDomainEvents().isEmpty());
 
         Assertions.assertDoesNotThrow(() -> actualVideo.validate(new ThrowsValidationHandler()));
     }
@@ -87,6 +88,8 @@ class VideoTest extends UnitTest {
         final var expectedOpened = false;
         final var expectedPublished = false;
         final var expectedRating = Rating.L;
+        final var expectedEvent = new VideoMediaCreated("ID", "file");
+        final var expectedEventCount = 1;
         final var expectedCategories = Set.of(CategoryID.unique());
         final var expectedGenres = Set.of(GenreID.unique());
         final var expectedMembers = Set.of(CastMemberID.unique());
@@ -103,6 +106,8 @@ class VideoTest extends UnitTest {
                 Set.of(),
                 Set.of()
         );
+
+        aVideo.registerEvent(expectedEvent);
 
         // when
         final var actualVideo = Video.with(aVideo).update(
@@ -138,6 +143,9 @@ class VideoTest extends UnitTest {
         Assertions.assertTrue(actualVideo.getBanner().isEmpty());
         Assertions.assertTrue(actualVideo.getThumbnail().isEmpty());
         Assertions.assertTrue(actualVideo.getThumbnailHalf().isEmpty());
+
+        Assertions.assertEquals(expectedEventCount, actualVideo.getDomainEvents().size());
+        Assertions.assertEquals(expectedEvent, actualVideo.getDomainEvents().get(0));
 
         Assertions.assertDoesNotThrow(() -> actualVideo.validate(new ThrowsValidationHandler()));
     }
@@ -450,5 +458,50 @@ class VideoTest extends UnitTest {
         Assertions.assertEquals(aThumbMedia, actualVideo.getThumbnailHalf().get());
 
         Assertions.assertDoesNotThrow(() -> actualVideo.validate(new ThrowsValidationHandler()));
+    }
+
+    @Test
+    void givenValidVideo_whenCallsWith_shouldCreateWithoutEvents() {
+        // given
+        final var expectedTitle = "System Design Interviews";
+        final var expectedDescription = """
+                Disclaimer: o estudo de caso apresentado tem fins educacionais e representa nossas opiniões pessoais.
+                Esse vídeo faz parte da Imersão Full Stack && Full Cycle.
+                Para acessar todas as aulas, lives e desafios, acesse:
+                https://imersao.fullcycle.com.br/
+                """;
+        final var expectedLaunchedAt = Year.of(2022);
+        final var expectedDuration = 120.10;
+        final var expectedOpened = false;
+        final var expectedPublished = false;
+        final var expectedRating = Rating.L;
+        final var expectedCategories = Set.of(CategoryID.unique());
+        final var expectedGenres = Set.of(GenreID.unique());
+        final var expectedMembers = Set.of(CastMemberID.unique());
+
+        // when
+        final var actualVideo = Video.with(
+                VideoID.unique(),
+                expectedTitle,
+                expectedDescription,
+                expectedLaunchedAt,
+                expectedDuration,
+                expectedOpened,
+                expectedPublished,
+                expectedRating,
+                InstantUtils.now(),
+                InstantUtils.now(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                expectedCategories,
+                expectedGenres,
+                expectedMembers
+        );
+
+        // then
+        Assertions.assertNotNull(actualVideo.getDomainEvents());
     }
 }
