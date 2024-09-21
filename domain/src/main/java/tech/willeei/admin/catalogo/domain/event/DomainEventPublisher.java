@@ -1,7 +1,7 @@
 package tech.willeei.admin.catalogo.domain.event;
 
 @FunctionalInterface
-public interface DomainEventPublisher {
+public interface DomainEventPublisher<T extends DomainEvent> {
 
-    <T extends DomainEvent> void publishEvent(T event);
+    void publishEvent(T event);
 }
