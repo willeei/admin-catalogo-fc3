@@ -1,20 +1,5 @@
 package tech.willeei.admin.catalogo.application.video.update;
 
-import static tech.willeei.admin.catalogo.domain.video.VideoMediaType.BANNER;
-import static tech.willeei.admin.catalogo.domain.video.VideoMediaType.THUMBNAIL;
-import static tech.willeei.admin.catalogo.domain.video.VideoMediaType.THUMBNAIL_HALF;
-import static tech.willeei.admin.catalogo.domain.video.VideoMediaType.TRAILER;
-import static tech.willeei.admin.catalogo.domain.video.VideoMediaType.VIDEO;
-
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
 import tech.willeei.admin.catalogo.domain.Identifier;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberGateway;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberID;
@@ -29,12 +14,18 @@ import tech.willeei.admin.catalogo.domain.genre.GenreID;
 import tech.willeei.admin.catalogo.domain.validation.Error;
 import tech.willeei.admin.catalogo.domain.validation.ValidationHandler;
 import tech.willeei.admin.catalogo.domain.validation.handler.Notification;
-import tech.willeei.admin.catalogo.domain.video.MediaResourceGateway;
-import tech.willeei.admin.catalogo.domain.video.Rating;
-import tech.willeei.admin.catalogo.domain.video.Video;
-import tech.willeei.admin.catalogo.domain.video.VideoGateway;
-import tech.willeei.admin.catalogo.domain.video.VideoID;
-import tech.willeei.admin.catalogo.domain.video.VideoResource;
+import tech.willeei.admin.catalogo.domain.video.*;
+
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import static tech.willeei.admin.catalogo.domain.video.VideoMediaType.*;
 
 public class DefaultUpdateVideoUseCase extends UpdateVideoUseCase {
 
@@ -61,8 +52,8 @@ public class DefaultUpdateVideoUseCase extends UpdateVideoUseCase {
     @Override
     public UpdateVideoOutput execute(final UpdateVideoCommand aCommand) {
         final var anId = VideoID.from(aCommand.id());
-        final var aRating = Rating.of(aCommand.rating()).orElse(null);
         final var aLaunchYear = aCommand.launchedAt() != null ? Year.of(aCommand.launchedAt()) : null;
+        final var aRating = Rating.of(aCommand.rating()).orElse(null);
         final var categories = toIdentifier(aCommand.categories(), CategoryID::from);
         final var genres = toIdentifier(aCommand.genres(), GenreID::from);
         final var members = toIdentifier(aCommand.members(), CastMemberID::from);
@@ -101,24 +92,24 @@ public class DefaultUpdateVideoUseCase extends UpdateVideoUseCase {
         final var anId = aVideo.getId();
 
         try {
-            final var aVideoMedia = aCommand.getVideo()
-                    .map(it -> this.mediaResourceGateway.storeAudioVideo(anId, VideoResource.with(VIDEO, it)))
-                    .orElse(null);
-
-            final var aTrailerMedia = aCommand.getTrailer()
-                    .map(it -> this.mediaResourceGateway.storeAudioVideo(anId, VideoResource.with(TRAILER, it)))
-                    .orElse(null);
-
-            final var aBannerMedia = aCommand.getBanner()
-                    .map(it -> this.mediaResourceGateway.storeImage(anId, VideoResource.with(BANNER, it)))
-                    .orElse(null);
-
             final var aThumbnailMedia = aCommand.getThumbnail()
                     .map(it -> this.mediaResourceGateway.storeImage(anId, VideoResource.with(THUMBNAIL, it)))
                     .orElse(null);
 
             final var aThumbHalfMedia = aCommand.getThumbnailHalf()
                     .map(it -> this.mediaResourceGateway.storeImage(anId, VideoResource.with(THUMBNAIL_HALF, it)))
+                    .orElse(null);
+
+            final var aBannerMedia = aCommand.getBanner()
+                    .map(it -> this.mediaResourceGateway.storeImage(anId, VideoResource.with(BANNER, it)))
+                    .orElse(null);
+
+            final var aVideoMedia = aCommand.getVideo()
+                    .map(it -> this.mediaResourceGateway.storeAudioVideo(anId, VideoResource.with(VIDEO, it)))
+                    .orElse(null);
+
+            final var aTrailerMedia = aCommand.getTrailer()
+                    .map(it -> this.mediaResourceGateway.storeAudioVideo(anId, VideoResource.with(TRAILER, it)))
                     .orElse(null);
 
             return this.videoGateway.update(
