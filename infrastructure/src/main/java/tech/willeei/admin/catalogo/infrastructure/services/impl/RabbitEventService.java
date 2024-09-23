@@ -19,7 +19,7 @@ public class RabbitEventService implements EventService {
     }
 
     @Override
-    public void send(Object event) {
+    public void send(final Object event) {
         this.ops.convertAndSend(this.exchange, this.routingKey, Json.writeValueAsString(event));
     }
 }

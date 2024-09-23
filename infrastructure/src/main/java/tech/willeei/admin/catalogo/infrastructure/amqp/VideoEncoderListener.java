@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Component;
 import tech.willeei.admin.catalogo.application.video.media.update.UpdateMediaStatusCommand;
 import tech.willeei.admin.catalogo.application.video.media.update.UpdateMediaStatusUseCase;
 import tech.willeei.admin.catalogo.domain.video.MediaStatus;
@@ -14,12 +15,11 @@ import tech.willeei.admin.catalogo.infrastructure.video.models.VideoEncoderResul
 
 import java.util.Objects;
 
+@Component
 public class VideoEncoderListener {
 
+    static final String LISTENER_ID = "videoEncodedListener";
     private static final Logger log = LoggerFactory.getLogger(VideoEncoderListener.class);
-
-    private static final String LISTENER_ID = "videoEncodedListener";
-
     private final UpdateMediaStatusUseCase updateMediaStatusUseCase;
 
     public VideoEncoderListener(final UpdateMediaStatusUseCase updateMediaStatusUseCase) {
