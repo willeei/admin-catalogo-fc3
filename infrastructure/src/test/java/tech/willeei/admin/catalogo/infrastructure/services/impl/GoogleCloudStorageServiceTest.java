@@ -18,13 +18,13 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-class GCStorageAPITest {
+class GoogleCloudStorageServiceTest {
 
     private GoogleCloudStorageService target;
 
     private Storage storage;
 
-    private String bucket = "test";
+    private final String bucket = "test";
 
     @BeforeEach
     void setUp() {
