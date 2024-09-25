@@ -1,34 +1,11 @@
 package tech.willeei.admin.catalogo.infrastructure.api;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-import java.util.Objects;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import tech.willeei.admin.catalogo.ControllerTest;
 import tech.willeei.admin.catalogo.application.castmember.create.CreateCastMemberOutput;
 import tech.willeei.admin.catalogo.application.castmember.create.DefaultCreateCastMemberUseCase;
@@ -49,6 +26,17 @@ import tech.willeei.admin.catalogo.domain.pagination.Pagination;
 import tech.willeei.admin.catalogo.domain.validation.Error;
 import tech.willeei.admin.catalogo.infrastructure.castmember.models.CreateCastMemberRequest;
 import tech.willeei.admin.catalogo.infrastructure.castmember.models.UpdateCastMemberRequest;
+
+import java.util.List;
+import java.util.Objects;
+
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ControllerTest(controllers = CastMemberAPI.class)
 class CastMemberAPITest {
@@ -81,8 +69,7 @@ class CastMemberAPITest {
         final var expectedType = Fixture.CastMembers.type();
         final var expectedId = CastMemberID.from("o1i2u3i1o");
 
-        final var aCommand
-                = new CreateCastMemberRequest(expectedName, expectedType);
+        final var aCommand = new CreateCastMemberRequest(expectedName, expectedType);
 
         when(createCastMemberUseCase.execute(any()))
                 .thenReturn(CreateCastMemberOutput.from(expectedId));

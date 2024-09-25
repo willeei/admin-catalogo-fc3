@@ -52,7 +52,7 @@ class RabbitEventServiceTest {
     @Component
     static class VideoCreatedNewsListener {
 
-        @RabbitListener(id = LISTENER, queues = "${amqp.queues.video-created.routing-key}")
+        @RabbitListener(id = LISTENER, queues = "video.created")
         void onVideoCreated(@Payload String message) {
             System.out.println(message);
         }
