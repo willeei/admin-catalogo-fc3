@@ -9,6 +9,7 @@ buildscript {
 
 plugins {
     id 'java-conventions'
+    id 'jacoco-report-aggregation'
     id 'application'
     id 'org.springframework.boot' version '2.7.7'
     id 'io.spring.dependency-management' version '1.1.0'
@@ -27,10 +28,10 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
-    implementation ('com.google.cloud:google-cloud-storage:2.42.0')
-    implementation ('com.google.guava:guava:33.3.0-jre')
+    implementation('com.google.cloud:google-cloud-storage:2.42.0')
+    implementation('com.google.guava:guava:33.3.0-jre')
 
-    implementation ('io.vavr:vavr:0.10.4')
+    implementation('io.vavr:vavr:0.10.4')
 
     implementation('mysql:mysql-connector-java')
 
@@ -41,13 +42,13 @@ dependencies {
         exclude module: 'spring-boot-starter-tomcat'
     }
 
-    implementation ('org.springframework.boot:spring-boot-starter-undertow')
+    implementation('org.springframework.boot:spring-boot-starter-undertow')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-amqp')
 
     implementation('com.fasterxml.jackson.module:jackson-module-afterburner')
 
-    testImplementation ('org.flywaydb:flyway-core')
+    testImplementation('org.flywaydb:flyway-core')
     testImplementation('org.flywaydb:flyway-mysql')
 
     testImplementation 'org.springframework.amqp:spring-rabbit-test:2.4.4'
@@ -66,4 +67,22 @@ flyway {
     user = System.getenv('FLYWAY_USER') ?: 'root'
     password = System.getenv('FLYWAY_PASS') ?: '9655'
     cleanDisabled = false
+}
+
+testCodeCoverageReport {
+    reports {
+        xml {
+            enabled true
+            destination file("${rootProject.rootDir}/build/reports/jacoco/test/jacocoTestReport.xml")
+        }
+
+        html {
+            enabled true
+            destination file("${rootProject.rootDir}/build/reports/jacoco/test/")
+        }
+    }
+}
+
+tasks.named('jacocoTestReport') {
+    dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
 }
