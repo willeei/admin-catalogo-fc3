@@ -62,21 +62,6 @@ flyway {
     cleanDisabled = false
 }
 
-test {
-    useJUnitPlatform()
-    doFirst {
-        testClassesDirs = files(testClassesDirs.files.sort { fileOne, fileTwo ->
-            if (fileOne.name.contains('RabbitEventServiceTest')) {
-                return -1
-            } else if (fileTwo.name.contains('RabbitEventServiceTest')) {
-                return 1
-            } else {
-                return 0
-            }
-        })
-    }
-}
-
 testCodeCoverageReport {
     reports {
         xml {

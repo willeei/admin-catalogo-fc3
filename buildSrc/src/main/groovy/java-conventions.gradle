@@ -23,11 +23,6 @@ jacoco {
     toolVersion = "0.8.12"
 }
 
-task runFirstTest(type: Test) {
-    useJUnitPlatform()
-    include '**/RabbitEventServiceTest.class'
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
@@ -50,5 +45,3 @@ task e2eTests(type: Test, group: 'verification') {
         includeTags('e2eTest')
     }
 }
-
-tasks.test.finalizedBy(runFirstTest)
