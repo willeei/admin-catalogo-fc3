@@ -8,7 +8,9 @@ group = 'tech.willeei.admin.catalogo.application'
 dependencies {
     implementation(project(":domain"))
 
-    implementation 'org.yaml:snakeyaml:2.3'
+    implementation('org.yaml:snakeyaml:2.3') {
+        version {strictly('2.3')}
+    }
 
     testImplementation(project(path: ':domain', configuration: 'testClasses'))
 

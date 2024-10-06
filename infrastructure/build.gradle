@@ -1,19 +1,10 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.flywaydb:flyway-mysql:9.11.0'
-    }
-}
-
 plugins {
     id 'java-conventions'
     id 'jacoco-report-aggregation'
     id 'application'
-    id 'org.springframework.boot' version '2.7.7'
-    id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.flywaydb.flyway' version '9.11.0'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.flywaydb.flyway' version '10.18.2'
 }
 
 group = 'tech.willeei.admin.catalogo.infrastructure'
@@ -28,15 +19,13 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
-    implementation('com.google.cloud:google-cloud-storage:2.42.0')
-    implementation('com.google.guava:guava:33.3.0-jre')
+    implementation('com.google.cloud:google-cloud-storage:2.43.1')
+    implementation('com.google.guava:guava:33.3.1-jre')
 
-    implementation('io.vavr:vavr:0.10.4')
+    implementation('mysql:mysql-connector-java:8.0.33')
 
-    implementation('mysql:mysql-connector-java')
-
-    implementation('org.springdoc:springdoc-openapi-webmvc-core:1.7.0')
-    implementation('org.springdoc:springdoc-openapi-ui:1.7.0')
+    implementation('org.springdoc:springdoc-openapi-webmvc-core:1.8.0')
+    implementation('org.springdoc:springdoc-openapi-ui:1.8.0')
 
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-tomcat'
@@ -51,13 +40,17 @@ dependencies {
     testImplementation('org.flywaydb:flyway-core')
     testImplementation('org.flywaydb:flyway-mysql')
 
-    testImplementation 'org.springframework.amqp:spring-rabbit-test:2.4.4'
+    implementation('org.yaml:snakeyaml:2.3') {
+        version {strictly('2.3')}
+    }
+
+    testImplementation 'org.springframework.amqp:spring-rabbit-test:2.4.17'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     testImplementation(project(path: ':domain', configuration: 'testClasses'))
-    testImplementation('org.testcontainers:testcontainers:1.20.1')
-    testImplementation('org.testcontainers:mysql:1.20.1')
-    testImplementation('org.testcontainers:junit-jupiter:1.20.1')
+    testImplementation('org.testcontainers:testcontainers:1.20.2')
+    testImplementation('org.testcontainers:mysql:1.20.2')
+    testImplementation('org.testcontainers:junit-jupiter:1.20.2')
 
     testRuntimeOnly('com.h2database:h2')
 }
