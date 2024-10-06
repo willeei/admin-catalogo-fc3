@@ -1,7 +1,6 @@
 package tech.willeei.admin.catalogo.infrastructure.services.impl;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.test.RabbitListenerTestHarness;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import tech.willeei.admin.catalogo.infrastructure.services.EventService;
 import java.util.concurrent.TimeUnit;
 
 @AmqpTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RabbitEventServiceTest {
 
     private static final String LISTENER = "video.created";
@@ -28,6 +28,7 @@ class RabbitEventServiceTest {
     private RabbitListenerTestHarness harness;
 
     @Test
+    @Order(1)
     void shouldSendMessage() throws InterruptedException {
         // given
         final var notification = new VideoMediaCreated("resource", "filepath");
@@ -52,7 +53,7 @@ class RabbitEventServiceTest {
     @Component
     static class VideoCreatedNewsListener {
 
-        @RabbitListener(id = LISTENER, queues = "video.created")
+        @RabbitListener(id = LISTENER, queues = "${amqp.queues.video-created.routing-key}")
         void onVideoCreated(@Payload String message) {
             System.out.println(message);
         }

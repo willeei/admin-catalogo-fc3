@@ -95,15 +95,12 @@ class VideoEncoderListenerTest {
         Assertions.assertNotNull(invocationData.getArguments());
 
         final var actualMessage = (String) invocationData.getArguments()[0];
-
         Assertions.assertEquals(expectedMessage, actualMessage);
 
         final var cmdCaptor = ArgumentCaptor.forClass(UpdateMediaStatusCommand.class);
-
         verify(updateMediaStatusUseCase).execute(cmdCaptor.capture());
 
         final var actualCommand = cmdCaptor.getValue();
-
         Assertions.assertEquals(expectedStatus, actualCommand.status());
         Assertions.assertEquals(expectedId, actualCommand.videoId());
         Assertions.assertEquals(expectedResourceId, actualCommand.resourceId());
