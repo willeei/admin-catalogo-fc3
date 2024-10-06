@@ -23,21 +23,13 @@ jacoco {
     toolVersion = "0.8.12"
 }
 
-tasks.named('test') {
-    useJUnitPlatform {
-        doFirst {
-            testClassesDirs = files(testClassesDirs.files.sort { fileOne, fileTwo ->
-                if (fileOne.name.contains('RabbitEventServiceTest')) {
-                    -1
-                } else if (fileTwo.name.contains('RabbitEventServiceTest')) {
-                    1
-                } else {
-                    0
-                }
-            })
-        }
-    }
+task runFirstTest(type: Test) {
+    useJUnitPlatform()
+    include '**/RabbitEventServiceTest.class'
+}
 
+tasks.named('test') {
+    useJUnitPlatform()
 }
 
 task unitTests(type: Test, group: 'verification') {
@@ -47,6 +39,7 @@ task unitTests(type: Test, group: 'verification') {
 }
 
 task integrationTests(type: Test, group: 'verification') {
+    dependsOn('runFirstTest')
     useJUnitPlatform {
         includeTags('integrationTest')
     }
@@ -57,3 +50,5 @@ task e2eTests(type: Test, group: 'verification') {
         includeTags('e2eTest')
     }
 }
+
+tasks.test.finalizedBy(runFirstTest)
