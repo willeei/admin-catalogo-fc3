@@ -19,27 +19,25 @@ dependencies {
 
 }
 
-test {
-    useJUnitPlatform()
-    doFirst {
-        testClassesDirs = files(testClassesDirs.files.sort { fileOne, fileTwo ->
-            if (fileOne.name.contains('RabbitEventServiceTest')) {
-                return -1
-            } else if (fileTwo.name.contains('RabbitEventServiceTest')) {
-                return 1
-            } else {
-                return 0
-            }
-        })
-    }
-}
-
 jacoco {
     toolVersion = "0.8.12"
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        doFirst {
+            testClassesDirs = files(testClassesDirs.files.sort { fileOne, fileTwo ->
+                if (fileOne.name.contains('RabbitEventServiceTest')) {
+                    -1
+                } else if (fileTwo.name.contains('RabbitEventServiceTest')) {
+                    1
+                } else {
+                    0
+                }
+            })
+        }
+    }
+
 }
 
 task unitTests(type: Test, group: 'verification') {
