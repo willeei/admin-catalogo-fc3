@@ -34,6 +34,8 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-undertow')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-amqp')
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
 
     implementation('com.fasterxml.jackson.module:jackson-module-afterburner')
 
@@ -41,7 +43,7 @@ dependencies {
     testImplementation('org.flywaydb:flyway-mysql')
 
     implementation('org.yaml:snakeyaml:2.3') {
-        version {strictly('2.3')}
+        version { strictly('2.3') }
     }
 
     testImplementation 'org.springframework.amqp:spring-rabbit-test:2.4.17'

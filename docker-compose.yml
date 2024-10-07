@@ -4,7 +4,7 @@ services:
   app:
     container_name: adm_videos_app
     build: .
-    profiles: ["app"]
+    profiles: [ "app" ]
     restart: unless-stopped
     env_file:
       - .env
@@ -40,6 +40,19 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - adm_videos_network
+
+  keycloak:
+    container_name: adm_videos_keycloak
+    image: quay.io/keycloak/keycloak:26.0.0
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8443:8080"
+    command:
+      - start-dev
     networks:
       - adm_videos_network
 
