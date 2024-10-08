@@ -17,6 +17,7 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import tech.willeei.admin.catalogo.ApiTest;
 import tech.willeei.admin.catalogo.E2ETest;
 import tech.willeei.admin.catalogo.domain.category.CategoryID;
 import tech.willeei.admin.catalogo.e2e.MockDsl;
@@ -176,6 +177,7 @@ public class CategoryE2ETest implements MockDsl {
         Assertions.assertEquals(0, categoryRepository.count());
 
         final var aRequest = get("/categories/123")
+                .with(ApiTest.VIDEOS_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 

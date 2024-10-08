@@ -1,19 +1,10 @@
 package tech.willeei.admin.catalogo.e2e;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.function.Function;
-
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
+import tech.willeei.admin.catalogo.ApiTest;
 import tech.willeei.admin.catalogo.domain.Identifier;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberID;
 import tech.willeei.admin.catalogo.domain.castmember.CastMemberType;
@@ -29,6 +20,13 @@ import tech.willeei.admin.catalogo.infrastructure.configuration.json.Json;
 import tech.willeei.admin.catalogo.infrastructure.genre.models.CreateGenreRequest;
 import tech.willeei.admin.catalogo.infrastructure.genre.models.GenreResponse;
 import tech.willeei.admin.catalogo.infrastructure.genre.models.UpdateGenreRequest;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.function.Function;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public interface MockDsl {
 
@@ -156,6 +154,7 @@ public interface MockDsl {
 
     private String given(final String url, final Object body) throws Exception {
         final var aRequest = post(url)
+                .with(ApiTest.VIDEOS_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Json.writeValueAsString(body));
 
@@ -178,13 +177,15 @@ public interface MockDsl {
     private ResultActions givenResult(final String url, final Object body) throws Exception {
         final var aRequest = post(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValueAsString(body));
+                .content(Json.writeValueAsString(body))
+                .with(ApiTest.VIDEOS_JWT);
 
         return this.mvc().perform(aRequest);
     }
 
     private ResultActions list(final String url, final int page, final int perPage, final String search, final String sort, final String direction) throws Exception {
         final var aRequest = get(url)
+                .with(ApiTest.VIDEOS_JWT)
                 .queryParam("page", String.valueOf(page))
                 .queryParam("perPage", String.valueOf(perPage))
                 .queryParam("search", search)
@@ -200,6 +201,7 @@ public interface MockDsl {
         final var applicationJsonUTF8 = new MediaType("application", "json", StandardCharsets.UTF_8);
 
         final var aRequest = get(url + anId.getValue())
+                .with(ApiTest.VIDEOS_JWT)
                 .accept(applicationJsonUTF8)
                 .contentType(applicationJsonUTF8);
 
@@ -213,6 +215,7 @@ public interface MockDsl {
 
     private ResultActions retrieveResult(final String url, final Identifier anId) throws Exception {
         final var aRequest = get(url + anId.getValue())
+                .with(ApiTest.VIDEOS_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -221,6 +224,7 @@ public interface MockDsl {
 
     private ResultActions delete(final String url, final Identifier anId) throws Exception {
         final var aRequest = MockMvcRequestBuilders.delete(url + anId.getValue())
+                .with(ApiTest.VIDEOS_JWT)
                 .contentType(MediaType.APPLICATION_JSON);
 
         return this.mvc().perform(aRequest);
@@ -228,6 +232,7 @@ public interface MockDsl {
 
     private ResultActions update(final String url, final Identifier anId, final Object aRequestBody) throws Exception {
         final var aRequest = put(url + anId.getValue())
+                .with(ApiTest.VIDEOS_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Json.writeValueAsString(aRequestBody));
 
