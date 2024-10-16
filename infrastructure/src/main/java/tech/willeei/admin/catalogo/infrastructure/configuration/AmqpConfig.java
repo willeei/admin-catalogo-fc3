@@ -4,13 +4,14 @@ import org.springframework.amqp.core.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import tech.willeei.admin.catalogo.infrastructure.configuration.annotations.VideoCreatedQueue;
 import tech.willeei.admin.catalogo.infrastructure.configuration.annotations.VideoEncodedQueue;
 import tech.willeei.admin.catalogo.infrastructure.configuration.annotations.VideoEvents;
 import tech.willeei.admin.catalogo.infrastructure.configuration.properties.amqp.QueueProperties;
 
 @Configuration
-public class AmpqConfig {
+public class AmqpConfig {
 
     @Bean
     @ConfigurationProperties("amqp.queues.video-created")

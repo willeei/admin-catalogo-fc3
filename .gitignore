@@ -4,6 +4,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+
 ### IntelliJ IDEA ###
 .idea
 .idea/modules.xml
@@ -43,3 +44,5 @@ bin/
 .DS_Store
 
 .env
+.env.local
+sandbox/.docker

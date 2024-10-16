@@ -16,23 +16,23 @@ import tech.willeei.admin.catalogo.infrastructure.services.local.InMemoryStorage
 public class StorageConfig {
 
     @Bean
-    @ConfigurationProperties(value = "storage.catalogo-video")
+    @ConfigurationProperties(value = "storage.catalogo-videos")
     public StorageProperties storageProperties() {
         return new StorageProperties();
     }
 
-    @Bean(name = "storageService")
+    @Bean
+    @Profile({"development", "test-integration", "test-e2e"})
+    public StorageService localStorageAPI() {
+        return new InMemoryStorageService();
+    }
+
+    @Bean
     @ConditionalOnMissingBean
-    public StorageService gcStorageService(
+    public StorageService gcStorageAPI(
             final GoogleStorageProperties props,
             final Storage storage
     ) {
         return new GoogleCloudStorageService(props.getBucket(), storage);
-    }
-
-    @Bean(name = "storageService")
-    @Profile({"development", "test-integration", "test-e2e"})
-    public StorageService inMemoryStorageService() {
-        return new InMemoryStorageService();
     }
 }
